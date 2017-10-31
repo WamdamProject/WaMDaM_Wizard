@@ -1,0 +1,18 @@
+This folder contains the files that do the heavy lifting
+it reads, validates, and loads data into the db.
+
+There are five components (steps)
+stp0_loadCVs.py
+
+stp1_loadMetadata.py
+
+stp2_loadDataStructure.py
+
+stp3_loadNetworks.py
+
+stp4_loadDataValues folder which contains all its sub .py files
+
+
+It also contains other files for utilities that does pivot and transofrm
+time series, seasonal, and shapefiles data into the required structure of
+WaMDaM workbook template

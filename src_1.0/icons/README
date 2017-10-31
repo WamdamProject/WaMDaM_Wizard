@@ -1,0 +1,5 @@
+Has all the icons used in the Wizard
+Converts the .PNG icons to bitmaps icons because
+PyInstaller that creates WaMDaM executable does not work with JPEG or PNG extensions and instead it required the bit versions of the images.
+See the file img2py.py inside the icons folder. it was used to convert the images from PNG to python bits
+The python bit version of the images are stored in the icons.py file inside the icons folder.
