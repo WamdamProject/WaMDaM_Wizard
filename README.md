@@ -36,4 +36,9 @@ stp4_loadDataValues.py
 
 It's important to note that the controlled vocabulary (CV) data in the stp0_loadCVs.py are called from the online registry http://vocabulary.wamdam.org/ while the data for the rest of the steps are obtained form the provided spreadsheet template or other source of data. The Wizard implements dozens of validations and checks on the imported data to make sure it complies with WaMDaM business rules The Wizard either loads all the dataset and it's metadata etc or nothing.
 
-![](https://github.com/WamdamProject/WaMDaM_Wizard/blob/master/Wizard_flowchart.jpg)
+
+<p align="center">
+  <img src="https://github.com/WamdamProject/WaMDaM_Wizard/blob/master/Wizard_flowchart.jpg">
+</p>
+
+
