@@ -10,7 +10,9 @@ Here is the schema that the Wizard works within http://amabdallah.github.io/test
 4. In the view in (3) above, browse for the folder src_v0.1/Test_Data and select the excel file WEAP_April4.xlsm
 the Wizard should load all the data and give you a message of successful loading. You're set now!
 
-![](https://github.com/WamdamProject/WaMDaM_Wizard/blob/master/Wizard.PNG)
+<img align="center" width="449" height="352" src="https://github.com/WamdamProject/WaMDaM_Wizard/blob/master/Wizard.PNG">
+
+![]()
 
 ## WaMDaM_Wizard Architecture
 
