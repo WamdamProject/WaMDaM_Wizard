@@ -10,6 +10,8 @@ Here is the schema that the Wizard works within http://amabdallah.github.io/test
 4. In the view in (3) above, browse for the folder src_v0.1/Test_Data and select the excel file WEAP_April4.xlsm
 the Wizard should load all the data and give you a message of successful loading. You're set now!
 
+![](https://github.com/WamdamProject/WaMDaM_Wizard/blob/master/Wizard.PNG)
+
 ## WaMDaM_Wizard Architecture
 
 WaMDaM Wizard software follows the Model–View–Controller (MVC) architecture. The Model represents the data access layer and the select, update queries to database. The View represents the GUI presentation with buttons and renders the Model data. The Controller represents the business logic that defines the application behavior based on the user interactions in the View layer. Separating the three layers from each other allows for flexibility to update each layer without major changes in the other layers.
