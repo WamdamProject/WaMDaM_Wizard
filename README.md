@@ -27,7 +27,7 @@ Install on your pc, get an icon shortcut on your desktop and run WaMDaM Wizard
 the Wizard should load all the data and give you a message of successful loading. You're set now! 
 
 <p align="center">
-  <img width="449" height="352" src="https://github.com/WamdamProject/WaMDaM_Wizard/blob/master/Wizard.PNG">
+  <img width="449" height="352" src="(/Wizard.PNG)">
 </p>
 
 
