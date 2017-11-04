@@ -53,7 +53,7 @@ It's important to note that the controlled vocabulary (CV) data in the stp0_load
 
 
 <p align="center">
-  <img src="https://github.com/WamdamProject/WaMDaM_Wizard/blob/master/Wizard_flowchart.jpg">
+  <img src="/Wizard_flowchart.jpg">
 </p>
 
 
