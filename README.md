@@ -58,9 +58,8 @@ It's important to note that the controlled vocabulary (CV) data in the stp0_load
 
 
 ### Licensing  
-WaM-DaM and materials in this GitHub repository are disturbed under a BSD 3-Clause license (see[LICENSE](https://github.com/amabdallah/WaM-DaM/blob/master/LICENSE.md)). 
+WaM-DaM and materials in this GitHub repository are disturbed under a BSD 3-Clause [LICENSE](/LICENSE). 
 For alternative licensing arrangements, contact Adel M. Abdallah or David E. Rosenberg directly.    
-
 
 
 ### Sponsors and Credit  
