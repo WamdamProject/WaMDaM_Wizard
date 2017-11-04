@@ -1,6 +1,6 @@
 # WaMDaM_Wizard
 WaMDaM Wizard is a desktop data loader from a spreadsheet template to a SQLite database. The SQLite database is built based on a data model called WaMDaM. The data model is designed to organzie and integrate different water management datasets.
-Here is the schema that the Wizard works within: [aMDaM Schema](https://wamdamproject.github.io/WaMDaM_Information_Model/diagrams/01_WaMDaM.html") {:target="_blank"} 
+Here is the schema that the Wizard works within: [WaMDaM Schema](https://wamdamproject.github.io/WaMDaM_Information_Model/diagrams/01_WaMDaM.html) 
 
 
 ## Why WaMDaM Wizard?   
