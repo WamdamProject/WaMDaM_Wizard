@@ -11,6 +11,10 @@ The Wizard mainly allows users to automatically:
 **iv)**  Use pre-defined functions to query and compare scenario data from multiple datasets loaded in WaMDaM   
 **v)**   Export data loaded into WaMDaM to multiple supported models (in-progress)  
 
+## Download the Wizard GUI for Windows 
+**Windows executable .exe (No-Installer)** [232 MB] Allows the user to run WaMDaM_Wizard without installing it on your local machine. 
+**Windows Installer .msi** [26 MB] Install on your pc, get an icon shortcut on your desktop and run WaMDaM Wizard
+
 
 ## Run WaMDaM_Wizard from Source Code 
 1. Install the dependences 
