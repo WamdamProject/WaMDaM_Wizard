@@ -12,9 +12,9 @@ The Wizard mainly allows users to automatically:
 **v)**   Export data loaded into WaMDaM to multiple supported models (in-progress)  
 
 ## Download the Wizard GUI for Windows 
-* **Windows executable .exe (No-Installer)** [232 MB]  
+* **[Windows executable .exe (No-Installer)](https://github.com/WamdamProject/WaMDaM_Wizard/releases/download/v1.0_beta/wamdam.exe)** [232 MB]  
 Allows the user to run WaMDaM_Wizard without installing it on your local machine.   
-* **Windows Installer .msi** [26 MB]  
+* **[Windows Installer .msi](https://github.com/WamdamProject/WaMDaM_Wizard/releases/download/v1.0_beta/WaMDaM_Main_Setup-1.0.0-amd64.msi)** [26 MB]  
 Install on your pc, get an icon shortcut on your desktop and run WaMDaM Wizard  
 
 
