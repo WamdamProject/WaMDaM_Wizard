@@ -81,12 +81,10 @@ class LoadTimeSeries(Parse_Excel_File, LoadingUtils):
                     timeseries_rows = sheet_rows[row_id + 4:]
                     break
 
-            # if len(timeseries_rows) < 1:
-            #     continue
+            # if timeseries sheet is not empty, we get data which will be used for comparison.
             if len(timeseries_rows) > 0:
-                temp_row = [cell.value for cell in timeseries_rows[0]]
-                # temp_row.pop(2)
-                stored_rows = [temp_row]
+                temp_row = [cell.value for cell in timeseries_rows[0]]  # get all first row which will be a reference
+                stored_rows = [temp_row]  # stored rows will be used to determine if a row is different or similar
                 mapx = {str(temp_row[:3]): False}
                 scenario_name = temp[0][2]
 
@@ -137,6 +135,7 @@ class LoadTimeSeries(Parse_Excel_File, LoadingUtils):
                     temp_row = [cell.value for cell in row[:]]
                     temp_row.pop(2)
 
+                    # determine if a row falls under the category of similar or different
                     for each in stored_rows[:]:
                         if temp_row[:3] == each[:3]:
                             if row[2].value != scenario_name.value:
@@ -184,6 +183,8 @@ class LoadTimeSeries(Parse_Excel_File, LoadingUtils):
                 except:
                     diff_scene = False
 
+                # If the mapperID exists for the attribs in the current row, we then search if the value exists for
+                # the row is stored in the db, if yes we then try to match with the mappingid to get datavaluemapper
                 datavalues = self.__session.query(SqlAlchemy.Mapping).filter(
                     and_(
                         SqlAlchemy.Mapping.AttributeID == attrib_id,
@@ -212,6 +213,7 @@ class LoadTimeSeries(Parse_Excel_File, LoadingUtils):
                     if not datavalues or not diff_scene:
                         raise Exception
 
+                    # try getting the datavalue_id based on the required value to try getting the required mappingID
                     datavalues_id = self.__session.query(SqlAlchemy.TimeSeries).filter(
                         and_(
                             SqlAlchemy.TimeSeries.AggregationStatisticCV == self.__session.query(
@@ -239,6 +241,8 @@ class LoadTimeSeries(Parse_Excel_File, LoadingUtils):
                                 found = True
                                 break
 
+                    # if the current value datvaluesmapperID is not found matching.
+                    # if its not found, new entry is created
                     if not found:
                         raise Exception
 
@@ -248,14 +252,15 @@ class LoadTimeSeries(Parse_Excel_File, LoadingUtils):
                     datavalues_id = None
 
                 # if current row params are not already on the mapping table a new entry added
+                # Creating New entry, datavaluemapperID and mappingID
                 if not datavalues:
-                    #print 'it is in one'
                     datavalmapper = self.load_data_values(self.__session)
                     dataval_map = SqlAlchemy.Mapping()
                     dataval_map.AttributeID = attrib_id
                     dataval_map.InstanceID = instance_id
                     dataval_map.SourceID = source_id
                     dataval_map.MethodID = method_id
+                    # Creating new datavaluemapper if its the start of another block
                     if datavalues_id is None:
                         self.setup.push_data(datavalmapper)
                         datavalues_id = datavalmapper.DataValuesMapperID
@@ -265,10 +270,11 @@ class LoadTimeSeries(Parse_Excel_File, LoadingUtils):
                     self.setup.push_data(dataval_map)
 
                 else:
-                    #print 'it is here ********++++++++++'
                     datavalues_id = datavalues.DataValuesMapperID
 
-                # adding scenario mapping
+                # Creating new scenariomapping if scenarioID-mappingID does not exists.
+                # Starts by searchine for the mappingID in case its just been created, then tests to see if a
+                # scenarioID-mappingID exists, if yes, it skips, if no, it creates an entry
                 scenariomap = SqlAlchemy.ScenarioMapping()
                 scenariomap.ScenarioID = scenario_id
 
@@ -316,7 +322,7 @@ class LoadTimeSeries(Parse_Excel_File, LoadingUtils):
                     raise Exception('Error in "TimeSeries_table" of sheet "{}"\nField named "AggregationInterval" is empty.\nThis field should not be empty.\nPlease fill this field to a value'
                                     .format(sheet_name))
                 if row[5].value and row[6].value and row[7].value and row[8].value:
-                    # if the value does not already exist, we add it to the db
+                    # if the value does not already exist, we add it to the db else we skip
                     if not value or not diff_scene:
                         timeseries.WaterOrCalendarYear = row[6].value
                         timeseries.AggregationStatisticCV = self.__session.query(
@@ -387,17 +393,19 @@ class LoadTimeSeriesValue(Parse_Excel_File, LoadingUtils):
             if len(temp) < 1:
                 continue
 
-            # test to see if timeseries has data loaded in it.
+            # test to see if timeseries has data loaded in it's table, if yes, we load the series values
             try:
                 self.__session.query(SqlAlchemy.TimeSeries).first().TimeSeriesID
             except:
                 continue
 
-            temp_row = [cell.value for cell in temp[0]]
+            # get data which will be used to determine if a row is similar or different.
+            temp_row = [cell.value for cell in temp[0]]  # getting first row of the timeseriesvalue sheet
             temp_row.pop(2)
             stored_rows = [temp_row]
             scenario_name = temp[0][2]
 
+            # init_instance is used in storing dates in the time series
             init_instance = temp[0][1].value if len(temp) > 0 else False
             dates = []
             for row_id, row in enumerate(temp):
@@ -472,6 +480,7 @@ class LoadTimeSeriesValue(Parse_Excel_File, LoadingUtils):
                 temp_row = [cell.value for cell in row[:]]
                 temp_row.pop(2)
 
+                # Checking row against stored rows to determine if its different or similar
                 for each in stored_rows[:]:
                     if temp_row == each:
                         if row[2].value != scenario_name.value:
@@ -537,6 +546,7 @@ class LoadTimeSeriesValue(Parse_Excel_File, LoadingUtils):
                     if result is None:
                         raise Exception('Error, No TimeSeries was found with "{}"/"{}" '
                                         'attribue and instance combination'.format(row[3].value, row[1].value))
+                    # Adding new entery for time series values
                     timeserieval.TimeSeriesID = result.TimeSeriesID
                     timeserieval.Value = row[5].value
                     try:

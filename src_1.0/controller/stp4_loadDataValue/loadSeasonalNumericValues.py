@@ -227,6 +227,8 @@ class LoadSeasonalNumericValues(Parse_Excel_File, LoadingUtils):
                 scenariomap = SqlAlchemy.ScenarioMapping()
                 scenariomap.ScenarioID = scenario_id
 
+                # try to get the mappingid for the scenario if an entry already exist
+                # else we get the most recent MappingID
                 if datavalues:
                     scenariomap.MappingID = datavalues.MappingID
                 else:
@@ -240,7 +242,8 @@ class LoadSeasonalNumericValues(Parse_Excel_File, LoadingUtils):
                         )
                     ).first().MappingID
 
-                # test to ensure there is no scenarioID-mappingID relationship existing yet.
+                # test if the mappingid - scenarioid already exists in scenario table
+                # if yes, then nothing is added, else, we add new entry based of diff_scene var.
                 try:
                     test = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
                         and_(

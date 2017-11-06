@@ -7,6 +7,8 @@ from .. import *
 from sqlalchemy import and_
 from model import SqlAlchemy
 import define
+
+
 class LoadingUtils():
     """
         This is a helper class for each data value clases.
@@ -146,7 +148,7 @@ class LoadingUtils():
             msg = "Methods|{}".format(params[3])
             raise Exception(msg)
         dummy_map.DataValuesMapperID = params[4]
-        
+
         try:
             test = session.query(SqlAlchemy.Mapping).filter(
                 and_(
@@ -159,7 +161,7 @@ class LoadingUtils():
             return None, dummy_id
         except:
             return dummy_map, dummy_id
-		
+
     @staticmethod
     def get_ids_from_names(data_list, session):
         '''
@@ -181,8 +183,9 @@ class LoadingUtils():
                 )
             ).first().AttributeID
         except Exception as e:
-            raise Exception("Could not find the combination of attribute and objectType '{}' / '{}' in Attributes table".
-                            format(data_list['AttributeName'], data_list['ObjectType']))
+            raise Exception(
+                "Could not find the combination of attribute and objectType '{}' / '{}' in Attributes table".
+                format(data_list['AttributeName'], data_list['ObjectType']))
 
         try:
             instance_id = session.query(SqlAlchemy.Instances).filter(
@@ -213,7 +216,7 @@ class LoadingUtils():
             raise Exception("Could not find '{}' in the Methods table".format(data_list['MethodName']))
 
         return attrib_id, instance_id, scenario_id, source_id, method_id
-		
+
     @staticmethod
     def get_ids(row, session, sheet_name, row_id):
         '''
@@ -231,17 +234,19 @@ class LoadingUtils():
                     SqlAlchemy.Attributes.AttributeName == row[3].value,
                     SqlAlchemy.Attributes.ObjectTypeID == session.query(SqlAlchemy.ObjectTypes).filter(
                         and_(
-                        SqlAlchemy.ObjectTypes.ObjectType == row[0].value,
-                        SqlAlchemy.ObjectTypes.DatasetID == session.query(SqlAlchemy.Datasets).filter(SqlAlchemy.Datasets.DatasetAcronym == define.datasetName
-                                        ).first().DatasetID
+                            SqlAlchemy.ObjectTypes.ObjectType == row[0].value,
+                            SqlAlchemy.ObjectTypes.DatasetID == session.query(SqlAlchemy.Datasets).filter(
+                                SqlAlchemy.Datasets.DatasetAcronym == define.datasetName
+                                ).first().DatasetID
                         )
                     ).first().ObjectTypeID
                 )
             ).first().AttributeID
         except:
-            raise Exception("The combination of attribute and objectType ('{}' / '{}')\n does not exist as defined in the 2.2_Attributes."
-                            "\n(Please reference row '{}' in '{}' sheet)".
-                            format(row[3].value, row[0].value, row_id, sheet_name))
+            raise Exception(
+                "The combination of attribute and objectType ('{}' / '{}')\n does not exist as defined in the 2.2_Attributes."
+                "\n(Please reference row '{}' in '{}' sheet)".
+                format(row[3].value, row[0].value, row_id, sheet_name))
 
         # Get InstanceID id based on InstanceName. Here, row[1].value--InstanceName
         try:
@@ -253,28 +258,39 @@ class LoadingUtils():
             instance_type = session.query(SqlAlchemy.ObjectTypes).filter(
                 SqlAlchemy.ObjectTypes.ObjectType == row[0].value
             ).first().ObjectTypologyCV
-            raise Exception("In the '{}' table,\nCould not find '{}' that existing in row '{}' of '{}' sheet.".format(instance_type, row[1].value, row_id, sheet_name))
+            raise Exception(
+                "In the '{}' table,\nCould not find '{}' that existing in row '{}' of '{}' sheet.".format(instance_type,
+                                                                                                          row[1].value,
+                                                                                                          row_id,
+                                                                                                          sheet_name))
 
         try:
             scenario_id = session.query(SqlAlchemy.Scenarios).filter(
                 SqlAlchemy.Scenarios.ScenarioName == row[2].value
             ).first().ScenarioID
         except:
-            raise Exception("Could not find '{}' in the Scenarios table.\n(Please reference row '{}' in '{}' sheet)".format(row[2].value, row_id, sheet_name))
+            raise Exception(
+                "Could not find '{}' in the Scenarios table.\n(Please reference row '{}' in '{}' sheet)".format(
+                    row[2].value, row_id, sheet_name))
 
         try:
             source_id = session.query(SqlAlchemy.Sources).filter(
                 SqlAlchemy.Sources.SourceName == row[4].value
             ).first().SourceID
         except:
-            raise Exception("Could not find '{}' in the Sources table.\n(Please reference row '{}' in '{}' sheet)".format(row[4].value, row_id, sheet_name))
+            raise Exception(
+                "Could not find '{}' in the Sources table.\n(Please reference row '{}' in '{}' sheet)".format(
+                    row[4].value, row_id, sheet_name))
 
         try:
             method_id = session.query(SqlAlchemy.Methods).filter(
                 SqlAlchemy.Methods.MethodName == row[5].value
             ).first().MethodID
         except:
-            raise Exception("Could not find '{}' in Methods table.\n(Please reference row '{}' in '{}' sheet)".format(row[5].value, row_id, sheet_name))
+            raise Exception(
+                "Could not find '{}' in Methods table.\n(Please reference row '{}' in '{}' sheet)".format(row[5].value,
+                                                                                                          row_id,
+                                                                                                          sheet_name))
 
         return attrib_id, instance_id, scenario_id, source_id, method_id
 
@@ -321,5 +337,5 @@ class LoadingUtils():
             raise Exception('Error in Sheet {}\nObjectType {} is not associated to Attribute {}'.
                             format(sheet_name, row[0].value, row[3].value))
 
-        # TODO: test instance - objectType existence  [[lets do it ]]
+            # TODO: test instance - objectType existence  [[lets do it ]]
 
