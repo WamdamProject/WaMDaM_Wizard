@@ -3,15 +3,6 @@ WaMDaM Wizard is a desktop data loader from a spreadsheet template to a SQLite d
 Here is the schema that the Wizard works within: [WaMDaM Schema](https://wamdamproject.github.io/WaMDaM_Information_Model/diagrams/01_WaMDaM.html) 
 The Wizard is built using Python 2.7 and the [wxPython](https://www.wxpython.org/) GUI library with the help of [wxFormBuilder](https://github.com/wxFormBuilder/wxFormBuilder).  
 
-## Why WaMDaM Wizard?   
-The WaMDaM Wizard is an open-source, cross-platform, Python-based graphical user software to interact with WaMDaM database. By using the Wizard, users are not expected to understand the underlying WaMDaM database of schema. Users just need to understand how to fit their data into these concepts: ObjectType, Attribute, Instance, Network, and Scenario. 
-The Wizard mainly allows users to automatically:    
-**i)**   Read, validate, and load data from a spreadsheet template in SQLite  
-**ii)**  Use data preparation tools to help manipulate and transform users data to fit into the spreadsheet template.  
-**iii)** Import data directly from supported web-services (e.g., time series data from CUAHSI)  
-**iv)**  Use pre-defined functions to query and compare scenario data from multiple datasets loaded in WaMDaM   
-**v)**   Export data loaded into WaMDaM to multiple supported models (in-progress)  
-
 ## Download the Wizard GUI for Windows [7 and 10] 64 bit operating systems
 * **[Windows executable .exe (No-Installer)](https://github.com/WamdamProject/WaMDaM_Wizard/releases/download/v1.0_beta/wamdam.exe)** [232 MB]  
 Allows the user to run WaMDaM_Wizard without installing it on your local machine.   
@@ -29,6 +20,16 @@ the Wizard should load all the data and give you a message of successful loading
 <p align="center">
   <img width="449" height="352" src="/Wizard.PNG">
 </p>
+
+
+## Why WaMDaM Wizard?   
+The WaMDaM Wizard is an open-source, cross-platform, Python-based graphical user software to interact with WaMDaM database. By using the Wizard, users are not expected to understand the underlying WaMDaM database of schema. Users just need to understand how to fit their data into these concepts: ObjectType, Attribute, Instance, Network, and Scenario. 
+The Wizard mainly allows users to automatically:    
+**i)**   Read, validate, and load data from a spreadsheet template in SQLite  
+**ii)**  Use data preparation tools to help manipulate and transform users data to fit into the spreadsheet template.  
+**iii)** Import data directly from supported web-services (e.g., time series data from CUAHSI)  
+**iv)**  Use pre-defined functions to query and compare scenario data from multiple datasets loaded in WaMDaM   
+**v)**   Export data loaded into WaMDaM to multiple supported models (in-progress)  
 
 
 ## WaMDaM_Wizard Architecture
