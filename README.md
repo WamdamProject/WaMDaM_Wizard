@@ -1,5 +1,5 @@
 # WaMDaM_Wizard
-WaMDaM Wizard is a desktop data loader from a spreadsheet template to a SQLite database. The SQLite database is built based on a data model called WaMDaM. The data model is designed to organzie and integrate different water management datasets.
+WaMDaM Wizard is a desktop data loader from a spreadsheet template to a SQLite database. The SQLite database is built based on a data model called WaMDaM. The data model is designed to organize and integrate different water management datasets.
 Here is the schema that the Wizard works within: [WaMDaM Schema](https://wamdamproject.github.io/WaMDaM_Information_Model/diagrams/01_WaMDaM.html) 
 The Wizard is built using Python 2.7 and the [wxPython](https://www.wxpython.org/) GUI library with the help of [wxFormBuilder](https://github.com/wxFormBuilder/wxFormBuilder).  
 
@@ -68,4 +68,4 @@ For alternative licensing arrangements, contact Adel M. Abdallah or David E. Ros
 WaMDaM and related software development have been developed under funding from several different sources. It was primarily supported by the National Science Foundation <a href="http://www.nsf.gov/awardsearch/showAward?AWD_ID=1135482" target="_blank">CI-Water Project</a> and later from the <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1208732" target="_blank">iUtah Project</a>. 
 Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.    
 
-WaMDaM has been developed at and also additionally funded by the Utah Water Research Lab at Utah State University, Logan Utah during the period of August, 2012-2017. Thanks Stephanie Reeder, Larry Kevin, and Kwang Yingjien for their help to design this Wizard and intensively test it. Thanks to Dr. Steven Burian at the Unviversity of Utah, Salt Lake City Utah for hosting Adel Abdallah as a visiting scholar 2014-2017 during WaMDaM's development.  
+WaMDaM has been developed at and also additionally funded by the Utah Water Research Lab at Utah State University, Logan Utah during the period of August, 2012-2017. Thanks Stephanie Reeder, Larry Kevin, and Kwang Yingjien for their help to design this Wizard and intensively test it. Thanks to Dr. Steven Burian at the University of Utah, Salt Lake City Utah for hosting Adel Abdallah as a visiting scholar 2014-2017 during WaMDaM's development.  
