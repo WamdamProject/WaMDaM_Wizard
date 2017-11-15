@@ -3,6 +3,11 @@ WaMDaM Wizard is a desktop data loader from a spreadsheet template to a SQLite d
 Here is the schema that the Wizard works within: [WaMDaM Schema](https://wamdamproject.github.io/WaMDaM_Information_Model/diagrams/01_WaMDaM.html) 
 The Wizard is built using Python 2.7 and the [wxPython](https://www.wxpython.org/) GUI library with the help of [wxFormBuilder](https://github.com/wxFormBuilder/wxFormBuilder).  
 
+## Download the WaMDaM Excel Workbook Templates for Input Data  
+1. [Excel Workbook template](https://github.com/WamdamProject/WaMDaM_UseCases/raw/master/UseCases_files/0WorkbookTemplates/InputData_Template/WaMDaM_InputData_template.xlsm) to prepare your data into it. Each dataset into one workbook
+
+
+
 ## Download the Wizard GUI for Windows [7 and 10] 64 bit operating systems
 * **[Windows executable .exe (No-Installer)](https://github.com/WamdamProject/WaMDaM_Wizard/releases/download/v1.0_beta/wamdam.exe)** [232 MB]  
 Allows the user to run WaMDaM_Wizard without installing it on your local machine.   
