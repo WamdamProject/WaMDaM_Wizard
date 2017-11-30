@@ -1,16 +1,12 @@
 # WaMDaM_Wizard
-WaMDaM Wizard is a desktop data loader from a spreadsheet template to a SQLite database. The SQLite database is built based on a data model called WaMDaM. The data model is designed to organzie and integrate different water management datasets.
+WaMDaM Wizard is a desktop data loader from a spreadsheet template to a SQLite database. The SQLite database is built based on a data model called WaMDaM. The data model is designed to organize and integrate different water management datasets.
 Here is the schema that the Wizard works within: [WaMDaM Schema](https://wamdamproject.github.io/WaMDaM_Information_Model/diagrams/01_WaMDaM.html) 
 The Wizard is built using Python 2.7 and the [wxPython](https://www.wxpython.org/) GUI library with the help of [wxFormBuilder](https://github.com/wxFormBuilder/wxFormBuilder).  
 
-## Why WaMDaM Wizard?   
-The WaMDaM Wizard is an open-source, cross-platform, Python-based graphical user software to interact with WaMDaM database. By using the Wizard, users are not expected to understand the underlying WaMDaM database of schema. Users just need to understand how to fit their data into these concepts: ObjectType, Attribute, Instance, Network, and Scenario. 
-The Wizard mainly allows users to automatically:    
-**i)**   Read, validate, and load data from a spreadsheet template in SQLite  
-**ii)**  Use data preparation tools to help manipulate and transform users data to fit into the spreadsheet template.  
-**iii)** Import data directly from supported web-services (e.g., time series data from CUAHSI)  
-**iv)**  Use pre-defined functions to query and compare scenario data from multiple datasets loaded in WaMDaM   
-**v)**   Export data loaded into WaMDaM to multiple supported models (in-progress)  
+## Download the WaMDaM Excel Workbook Templates for Input Data  
+1. [Excel Workbook template](https://github.com/WamdamProject/WaMDaM_UseCases/raw/master/UseCases_files/0WorkbookTemplates/InputData_Template/WaMDaM_InputData_template.xlsm) to prepare your data into it. Each dataset into one workbook
+
+
 
 ## Download the Wizard GUI for Windows [7 and 10] 64 bit operating systems
 * **[Windows executable .exe (No-Installer)](https://github.com/WamdamProject/WaMDaM_Wizard/releases/download/v1.0_beta/wamdam.exe)** [232 MB]  
@@ -29,6 +25,16 @@ the Wizard should load all the data and give you a message of successful loading
 <p align="center">
   <img width="449" height="352" src="/Wizard.PNG">
 </p>
+
+
+## Why WaMDaM Wizard?   
+The WaMDaM Wizard is an open-source, cross-platform, Python-based graphical user software to interact with WaMDaM database. By using the Wizard, users are not expected to understand the underlying WaMDaM database of schema. Users just need to understand how to fit their data into these concepts: ObjectType, Attribute, Instance, Network, and Scenario. 
+The Wizard mainly allows users to automatically:    
+**i)**   Read, validate, and load data from a spreadsheet template in SQLite  
+**ii)**  Use data preparation tools to help manipulate and transform users data to fit into the spreadsheet template.  
+**iii)** Import data directly from supported web-services (e.g., time series data from CUAHSI)  
+**iv)**  Use pre-defined functions to query and compare scenario data from multiple datasets loaded in WaMDaM   
+**v)**   Export data loaded into WaMDaM to multiple supported models (in-progress)  
 
 
 ## WaMDaM_Wizard Architecture
@@ -53,7 +59,7 @@ It's important to note that the controlled vocabulary (CV) data in the stp0_load
 
 
 <p align="center">
-  <img src="/Wizard_flowchart.jpg">
+  <img src="/Wizard_Architecture.jpg">
 </p>
 
 
@@ -67,4 +73,4 @@ For alternative licensing arrangements, contact Adel M. Abdallah or David E. Ros
 WaMDaM and related software development have been developed under funding from several different sources. It was primarily supported by the National Science Foundation <a href="http://www.nsf.gov/awardsearch/showAward?AWD_ID=1135482" target="_blank">CI-Water Project</a> and later from the <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1208732" target="_blank">iUtah Project</a>. 
 Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.    
 
-WaMDaM has been developed at and also additionally funded by the Utah Water Research Lab at Utah State University, Logan Utah during the period of August, 2012-2017. Thanks Stephanie Reeder, Larry Kevin, and Kwang Yingjien for their help to design this Wizard and intensively test it. Thanks to Dr. Steven Burian at the Unviversity of Utah, Salt Lake City Utah for hosting Adel Abdallah as a visiting scholar 2014-2017 during WaMDaM's development.  
+WaMDaM has been developed at and also additionally funded by the Utah Water Research Lab at Utah State University, Logan Utah during the period of August, 2012-2017. Thanks Stephanie Reeder, Larry Kevin, and Kwang Yingjien for their help to design this Wizard and intensively test it. Thanks to Dr. Steven Burian at the University of Utah, Salt Lake City Utah for hosting Adel Abdallah as a visiting scholar 2014-2017 during WaMDaM's development.  
