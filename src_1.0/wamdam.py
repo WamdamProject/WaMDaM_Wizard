@@ -3,8 +3,6 @@
 
 # Wamdam.py
 
-#Adel Abdallah
-# November 2017
 
 """
 Wamdam.py is the key calling/initializing function for the Wizard. 
@@ -29,11 +27,8 @@ folder. For example, clicking at the button "From Excel" under the GUI homepage 
 dlg_ImportSpreadsheetBasic.py which exist in the viewer Folder. Then when the user
 clicks at "load Data" in this dialog box, a function calls one or all the sub-data importers
 for the checked boxes from the controller folder: 
-stp0_loadCVs.py
-stp1_loadMetadata.py
-stp2_loadDataStructure.py
-stp3_loadNetworks.py
-stp4_loadDataValues.py
+stp0_loadCVs.py, stp1_loadMetadata.py, stp2_loadDataStructure.py, 
+stp3_loadNetworks.py, and stp4_loadDataValues.py
 
 stp0_loadCVs.py, load_step_1.py, load_step_2.py, load_step_3.py, stp4_loadDataValues.py
 It's important to note that the controlled vocabulary (CV) data in the stp0_loadCVs.py 

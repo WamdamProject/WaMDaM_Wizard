@@ -131,14 +131,14 @@ class LoadSeasonalNumericValues(Parse_Excel_File, LoadingUtils):
                 # getting datavaluemapper id using the above params from Mapping table
                 # this will be used to a datavaluemapperid to be reused if it already exists
 
-                datavalues = self.__session.query(SqlAlchemy.Mapping).filter(
+                datavalues = self.__session.query(SqlAlchemy.Mappings).filter(
                     and_(
-                        SqlAlchemy.Mapping.AttributeID == attrib_id,
-                        SqlAlchemy.Mapping.InstanceID == instance_id,
-                        SqlAlchemy.Mapping.SourceID == source_id,
-                        SqlAlchemy.Mapping.MethodID == method_id
+                        SqlAlchemy.Mappings.AttributeID == attrib_id,
+                        SqlAlchemy.Mappings.InstanceID == instance_id,
+                        SqlAlchemy.Mappings.SourceID == source_id,
+                        SqlAlchemy.Mappings.MethodID == method_id
                     )
-                ).order_by(SqlAlchemy.Mapping.MappingID.desc()).all()
+                ).order_by(SqlAlchemy.Mappings.MappingID.desc()).all()
 
                 '''
                     The Idea in creating link used here is to query the datavalue
@@ -183,7 +183,7 @@ class LoadSeasonalNumericValues(Parse_Excel_File, LoadingUtils):
                             if found:
                                 break
                             for each in result[:]:
-                                print 'it found something.'
+                                #print 'it found something.'
                                 if mapping.DataValuesMapperID == each:
                                     datavalues = mapping
                                     found = True
@@ -204,7 +204,7 @@ class LoadSeasonalNumericValues(Parse_Excel_File, LoadingUtils):
                 # Creating New entry, datavaluemapperID and mappingID
                 if not datavalues and not diff_scene:
                     datavalmapper = self.load_data_values(self.__session)
-                    dataval_map = SqlAlchemy.Mapping()
+                    dataval_map = SqlAlchemy.Mappings()
                     dataval_map.AttributeID = attrib_id
                     dataval_map.InstanceID = instance_id
                     dataval_map.SourceID = source_id
@@ -224,7 +224,7 @@ class LoadSeasonalNumericValues(Parse_Excel_File, LoadingUtils):
                 # Creating new scenariomapping if scenarioID-mappingID does not exists.
                 # Starts by searchine for the mappingID in case its just been created, then tests to see if a
                 # scenarioID-mappingID exists, if yes, it skips, if no, it creates an entry
-                scenariomap = SqlAlchemy.ScenarioMapping()
+                scenariomap = SqlAlchemy.ScenarioMappings()
                 scenariomap.ScenarioID = scenario_id
 
                 # try to get the mappingid for the scenario if an entry already exist
@@ -232,23 +232,23 @@ class LoadSeasonalNumericValues(Parse_Excel_File, LoadingUtils):
                 if datavalues:
                     scenariomap.MappingID = datavalues.MappingID
                 else:
-                    scenariomap.MappingID = self.__session.query(SqlAlchemy.Mapping).filter(
+                    scenariomap.MappingID = self.__session.query(SqlAlchemy.Mappings).filter(
                         and_(
-                            SqlAlchemy.Mapping.AttributeID == attrib_id,
-                            SqlAlchemy.Mapping.InstanceID == instance_id,
-                            SqlAlchemy.Mapping.SourceID == source_id,
-                            SqlAlchemy.Mapping.MethodID == method_id,
-                            SqlAlchemy.Mapping.DataValuesMapperID == datavalues_id
+                            SqlAlchemy.Mappings.AttributeID == attrib_id,
+                            SqlAlchemy.Mappings.InstanceID == instance_id,
+                            SqlAlchemy.Mappings.SourceID == source_id,
+                            SqlAlchemy.Mappings.MethodID == method_id,
+                            SqlAlchemy.Mappings.DataValuesMapperID == datavalues_id
                         )
                     ).first().MappingID
 
                 # test if the mappingid - scenarioid already exists in scenario table
                 # if yes, then nothing is added, else, we add new entry based of diff_scene var.
                 try:
-                    test = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
+                    test = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                         and_(
-                            SqlAlchemy.ScenarioMapping.MappingID == scenariomap.MappingID,
-                            SqlAlchemy.ScenarioMapping.ScenarioID == scenariomap.ScenarioID
+                            SqlAlchemy.ScenarioMappings.MappingID == scenariomap.MappingID,
+                            SqlAlchemy.ScenarioMappings.ScenarioID == scenariomap.ScenarioID
                         )
                     ).first().ScenarioMappingID
                 except:

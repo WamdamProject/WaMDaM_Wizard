@@ -16,7 +16,7 @@ from sqlalchemy import and_
 from ..ReadWorkbook_SheetsNames import *
 
 from model import SqlAlchemy
-
+import define
 
 class LoadTimeSeries(Parse_Excel_File, LoadingUtils):
     """
@@ -120,7 +120,7 @@ class LoadTimeSeries(Parse_Excel_File, LoadingUtils):
                         raise Exception('Error in {} row of "TimeSeriesValues_table" of  sheet "{}"\nField named "MethodName" is empty.\nThis field should not be empty.\nPlease fill this field to a value.'
                                         .format(row_id, sheet_name))
                     if row[6].value == "":
-                        raise Exception('Error in {} row of "TimeSeriesValues_table" of  sheet "{}"\nField named "WaterOrCalendarYear" is empty.\nThis field should not be empty.\nPlease fill this field to a value.'
+                        raise Exception('Error in {} row of "TimeSeriesValues_table" of  sheet "{}"\nField named "YearType" is empty.\nThis field should not be empty.\nPlease fill this field to a value.'
                                         .format(row_id, sheet_name))
                     if row[7].value == "":
                         raise Exception('Error in {} row of "TimeSeriesValues_table" of  sheet "{}"\nField named "AggregationStatisticCV" is empty.\nThis field should not be empty.\nPlease fill this field to a value.'
@@ -185,12 +185,12 @@ class LoadTimeSeries(Parse_Excel_File, LoadingUtils):
 
                 # If the mapperID exists for the attribs in the current row, we then search if the value exists for
                 # the row is stored in the db, if yes we then try to match with the mappingid to get datavaluemapper
-                datavalues = self.__session.query(SqlAlchemy.Mapping).filter(
+                datavalues = self.__session.query(SqlAlchemy.Mappings).filter(
                     and_(
-                        SqlAlchemy.Mapping.AttributeID == attrib_id,
-                        SqlAlchemy.Mapping.InstanceID == instance_id,
-                        SqlAlchemy.Mapping.SourceID == source_id,
-                        SqlAlchemy.Mapping.MethodID == method_id
+                        SqlAlchemy.Mappings.AttributeID == attrib_id,
+                        SqlAlchemy.Mappings.InstanceID == instance_id,
+                        SqlAlchemy.Mappings.SourceID == source_id,
+                        SqlAlchemy.Mappings.MethodID == method_id
                     )
                 ).all()
 
@@ -236,7 +236,7 @@ class LoadTimeSeries(Parse_Excel_File, LoadingUtils):
                         if found:
                             break
                         for each in result[:]:
-                            if mapping.DataValuesMapperID == each:
+                            if Mappings.DataValuesMapperID == each:
                                 datavalues = mapping
                                 found = True
                                 break
@@ -255,7 +255,7 @@ class LoadTimeSeries(Parse_Excel_File, LoadingUtils):
                 # Creating New entry, datavaluemapperID and mappingID
                 if not datavalues:
                     datavalmapper = self.load_data_values(self.__session)
-                    dataval_map = SqlAlchemy.Mapping()
+                    dataval_map = SqlAlchemy.Mappings()
                     dataval_map.AttributeID = attrib_id
                     dataval_map.InstanceID = instance_id
                     dataval_map.SourceID = source_id
@@ -275,7 +275,7 @@ class LoadTimeSeries(Parse_Excel_File, LoadingUtils):
                 # Creating new scenariomapping if scenarioID-mappingID does not exists.
                 # Starts by searchine for the mappingID in case its just been created, then tests to see if a
                 # scenarioID-mappingID exists, if yes, it skips, if no, it creates an entry
-                scenariomap = SqlAlchemy.ScenarioMapping()
+                scenariomap = SqlAlchemy.ScenarioMappings()
                 scenariomap.ScenarioID = scenario_id
 
                 # try to get the mappingid for the scenario if an entry already exist
@@ -283,23 +283,23 @@ class LoadTimeSeries(Parse_Excel_File, LoadingUtils):
                 if datavalues:
                     scenariomap.MappingID = datavalues.MappingID
                 else:
-                    scenariomap.MappingID = self.__session.query(SqlAlchemy.Mapping).filter(
+                    scenariomap.MappingID = self.__session.query(SqlAlchemy.Mappings).filter(
                         and_(
-                            SqlAlchemy.Mapping.AttributeID == attrib_id,
-                            SqlAlchemy.Mapping.InstanceID == instance_id,
-                            SqlAlchemy.Mapping.SourceID == source_id,
-                            SqlAlchemy.Mapping.MethodID == method_id,
-                            SqlAlchemy.Mapping.DataValuesMapperID == datavalues_id
+                            SqlAlchemy.Mappings.AttributeID == attrib_id,
+                            SqlAlchemy.Mappings.InstanceID == instance_id,
+                            SqlAlchemy.Mappings.SourceID == source_id,
+                            SqlAlchemy.Mappings.MethodID == method_id,
+                            SqlAlchemy.Mappings.DataValuesMapperID == datavalues_id
                         )
                     ).first().MappingID
 
                 try:
                     # test if the mappingid - scenarioid already exists in scenario table
                     # if yes, then nothing is added, else, we add new entry based of diff_scene var.
-                    test = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
+                    test = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                         and_(
-                            SqlAlchemy.ScenarioMapping.MappingID == scenariomap.MappingID,
-                            SqlAlchemy.ScenarioMapping.ScenarioID == scenariomap.ScenarioID
+                            SqlAlchemy.ScenarioMappings.MappingID == scenariomap.MappingID,
+                            SqlAlchemy.ScenarioMappings.ScenarioID == scenariomap.ScenarioID
                         )
                     ).first().ScenarioMappingID
                 except:
@@ -316,7 +316,7 @@ class LoadTimeSeries(Parse_Excel_File, LoadingUtils):
                 timeseries.BeginDateTime = None
                 timeseries.EndDateTime = None
                 if row[6].value == "":
-                    raise Exception('Error in "TimeSeries_table" of sheet "{}"\nField named "WaterOrCalendarYear" is empty.\nThis field should not be empty.\nPlease fill this field to a value'
+                    raise Exception('Error in "TimeSeries_table" of sheet "{}"\nField named "YearType" is empty.\nThis field should not be empty.\nPlease fill this field to a value'
                                     .format(sheet_name))
                 if row[8].value == "":
                     raise Exception('Error in "TimeSeries_table" of sheet "{}"\nField named "AggregationInterval" is empty.\nThis field should not be empty.\nPlease fill this field to a value'
@@ -324,7 +324,7 @@ class LoadTimeSeries(Parse_Excel_File, LoadingUtils):
                 if row[5].value and row[6].value and row[7].value and row[8].value:
                     # if the value does not already exist, we add it to the db else we skip
                     if not value or not diff_scene:
-                        timeseries.WaterOrCalendarYear = row[6].value
+                        timeseries.YearType = row[6].value
                         timeseries.AggregationStatisticCV = self.__session.query(
                             SqlAlchemy.CV_AggregationStatistic).filter(
                             SqlAlchemy.CV_AggregationStatistic.Name == row[7].value
@@ -386,7 +386,7 @@ class LoadTimeSeriesValue(Parse_Excel_File, LoadingUtils):
             for row_id, row in enumerate(temp):
                 temp_row = [cell.value for cell in row]
                 if 'TimeSeriesValues_table' in temp_row:
-                    print '******************** it works here **********************'
+                    # print '******************** it works here **********************'
                     temp = sheet_rows[row_id + 4:]
                     break
 
@@ -441,18 +441,25 @@ class LoadTimeSeriesValue(Parse_Excel_File, LoadingUtils):
 
                 # get attibute id based on attrib - objecttype association
                 try:
+                    DatasetID = self.__session.query(SqlAlchemy.Datasets).filter(
+                                            SqlAlchemy.Datasets.DatasetAcronym == define.datasetName
+                                        ).first().DatasetID
+
                     attrib_id = self.__session.query(SqlAlchemy.Attributes).filter(
                         and_(
                             SqlAlchemy.Attributes.AttributeName == row[3].value,
                             SqlAlchemy.Attributes.ObjectTypeID == self.__session.query(SqlAlchemy.ObjectTypes).filter(
-                                SqlAlchemy.ObjectTypes.ObjectType == row[0].value
+                                and_(
+                                        SqlAlchemy.ObjectTypes.ObjectType == row[0].value,
+                                        SqlAlchemy.ObjectTypes.DatasetID == DatasetID
+                                    )
                             ).first().ObjectTypeID
                         )
                     ).first().AttributeID
                 except Exception as e:
                     print e
-                    raise Exception("Could not find the combination of attribute and objectType '{}' / '{}' in the Attributess table".
-                                    format(row[3].value, row[0].value))
+                    raise Exception("Could not find the combination of attribute and objectType '{}' / '{}' in the Attributess table for row '{}' of TimeSeriesValues sheet".
+                                    format(row[3].value, row[0].value), row_id)
 
                 # Get InstanceID id based on InstanceName. Here, row[1].value--InstanceName
                 try:
@@ -491,17 +498,17 @@ class LoadTimeSeriesValue(Parse_Excel_File, LoadingUtils):
                 stored_rows.append(temp_row)
 
                 # using inner join with mapping, timeseries and scenariomapping to get the timeseries ID
-                result = self.__session.query(SqlAlchemy.TimeSeries.TimeSeriesID, SqlAlchemy.Mapping.MappingID,
-                                              SqlAlchemy.ScenarioMapping.ScenarioID). \
-                    join(SqlAlchemy.Mapping,
-                         SqlAlchemy.Mapping.DataValuesMapperID == SqlAlchemy.TimeSeries.DataValuesMapperID). \
-                    join(SqlAlchemy.ScenarioMapping,
-                         SqlAlchemy.ScenarioMapping.MappingID == SqlAlchemy.Mapping.MappingID). \
+                result = self.__session.query(SqlAlchemy.TimeSeries.TimeSeriesID, SqlAlchemy.Mappings.MappingID,
+                                              SqlAlchemy.ScenarioMappings.ScenarioID). \
+                    join(SqlAlchemy.Mappings,
+                         SqlAlchemy.Mappings.DataValuesMapperID == SqlAlchemy.TimeSeries.DataValuesMapperID). \
+                    join(SqlAlchemy.ScenarioMappings,
+                         SqlAlchemy.ScenarioMappings.MappingID == SqlAlchemy.Mappings.MappingID). \
                     filter(
                     and_(
-                        SqlAlchemy.Mapping.InstanceID == instance_id,
-                        SqlAlchemy.Mapping.AttributeID == attrib_id,
-                        SqlAlchemy.ScenarioMapping.ScenarioID == scenario_id
+                        SqlAlchemy.Mappings.InstanceID == instance_id,
+                        SqlAlchemy.Mappings.AttributeID == attrib_id,
+                        SqlAlchemy.ScenarioMappings.ScenarioID == scenario_id
                     )).all()
 
                 if len(result) == 0:
@@ -509,13 +516,13 @@ class LoadTimeSeriesValue(Parse_Excel_File, LoadingUtils):
                                     'Are not found in TimeSeries Table. Please Check \n'
                                     'Loading is Exiting due to this error.'.format(row_id))
                 # find mapping id which are mapped with the current scenario in the scenariomapping from result above
-                # if it is found, we set the found var to True and reuse the mapping.
+                # if it is found, we set the found var to True and reuse the Mappings.
                 for mapping in result:
                     try:
-                        scene = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
+                        scene = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                             and_(
-                                SqlAlchemy.ScenarioMapping.MappingID == mapping.MappingID,
-                                SqlAlchemy.ScenarioMapping.ScenarioID == scenario_id
+                                SqlAlchemy.ScenarioMappings.MappingID == Mappings.MappingID,
+                                SqlAlchemy.ScenarioMappings.ScenarioID == scenario_id
                             )
                         ).first().ScenarioMappingID
                         found = True
@@ -540,7 +547,7 @@ class LoadTimeSeriesValue(Parse_Excel_File, LoadingUtils):
                         )
                     ).first().TimeSeriesValueID
 
-                    print row
+                    # print row
 
                 except Exception as e:
                     if result is None:

@@ -581,38 +581,38 @@ class dlg_ConnectExistingDatabaseMySQL(wx.Dialog):
             fgSizer1.SetFlexibleDirection(wx.BOTH)
             fgSizer1.SetNonFlexibleGrowMode(wx.FLEX_GROWMODE_SPECIFIED)
 
-            self.m_staticText64 = wx.StaticText(sbSizer1.GetStaticBox(), wx.ID_ANY, u"Server:", wx.DefaultPosition, wx.DefaultSize, 0)
+            self.m_staticText64 = wx.StaticText(self, wx.ID_ANY, u"Server:", wx.DefaultPosition, wx.DefaultSize, 0)
             self.m_staticText64.Wrap(-1)
             fgSizer1.Add(self.m_staticText64, 0, wx.ALL, 5)
 
-            self.Server = wx.TextCtrl(sbSizer1.GetStaticBox(), 6001, u"localhost", wx.DefaultPosition, (300, -1),
+            self.Server = wx.TextCtrl(self, 6001, u"localhost", wx.DefaultPosition, (300, -1),
                                         0)
             fgSizer1.Add(self.Server, 1, wx.ALL | wx.ALIGN_BOTTOM | wx.EXPAND, 5)
 
-            self.m_staticText65 = wx.StaticText(sbSizer1.GetStaticBox(), wx.ID_ANY, u"Database Name:",
+            self.m_staticText65 = wx.StaticText(self, wx.ID_ANY, u"Database Name:",
                                                 wx.DefaultPosition, wx.DefaultSize, 0)
             self.m_staticText65.Wrap(-1)
             fgSizer1.Add(self.m_staticText65, 0, wx.ALL, 5)
 
-            self.dbName = wx.TextCtrl(sbSizer1.GetStaticBox(), 6002, u"Wamdam", wx.DefaultPosition, (300, -1),
+            self.dbName = wx.TextCtrl(self, 6002, u"Wamdam", wx.DefaultPosition, (300, -1),
                                       0)
             fgSizer1.Add(self.dbName, 1, wx.ALL, 5)
 
-            self.m_staticText66 = wx.StaticText(sbSizer1.GetStaticBox(), wx.ID_ANY, u"User Name:", wx.DefaultPosition,
+            self.m_staticText66 = wx.StaticText(self, wx.ID_ANY, u"User Name:", wx.DefaultPosition,
                                                 wx.DefaultSize, 0)
             self.m_staticText66.Wrap(-1)
             fgSizer1.Add(self.m_staticText66, 0, wx.ALL, 5)
 
-            self.username = wx.TextCtrl(sbSizer1.GetStaticBox(), 6003, u"root", wx.DefaultPosition,
+            self.username = wx.TextCtrl(self, 6003, u"root", wx.DefaultPosition,
                                          (300, -1), 0)
             fgSizer1.Add(self.username, 1, wx.ALL | wx.EXPAND, 5)
 
-            self.m_staticText67 = wx.StaticText(sbSizer1.GetStaticBox(), wx.ID_ANY, u"Password:", wx.DefaultPosition,
+            self.m_staticText67 = wx.StaticText(self, wx.ID_ANY, u"Password:", wx.DefaultPosition,
                                                 wx.DefaultSize, 0)
             self.m_staticText67.Wrap(-1)
             fgSizer1.Add(self.m_staticText67, 0, wx.ALL, 5)
 
-            self.password = wx.TextCtrl(sbSizer1.GetStaticBox(), 6004, wx.EmptyString, wx.DefaultPosition,
+            self.password = wx.TextCtrl(self, 6004, wx.EmptyString, wx.DefaultPosition,
                                         (300, -1), wx.TE_PASSWORD)
             fgSizer1.Add(self.password, 0, wx.ALL, 5 )
 

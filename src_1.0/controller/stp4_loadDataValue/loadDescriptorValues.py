@@ -136,12 +136,12 @@ class LoadDescriptorValues(Parse_Excel_File, LoadingUtils):
 
                 # If the mapperID exists for the attribs in the current row, we then search if the value exists for
                 # the row is stored in the db, if yes we then try to match with the mappingid to get datavaluemapper
-                datavalues = self.__session.query(SqlAlchemy.Mapping).filter(
+                datavalues = self.__session.query(SqlAlchemy.Mappings).filter(
                     and_(
-                        SqlAlchemy.Mapping.AttributeID == attrib_id,
-                        SqlAlchemy.Mapping.InstanceID == instance_id,
-                        SqlAlchemy.Mapping.SourceID == source_id,
-                        SqlAlchemy.Mapping.MethodID == method_id
+                        SqlAlchemy.Mappings.AttributeID == attrib_id,
+                        SqlAlchemy.Mappings.InstanceID == instance_id,
+                        SqlAlchemy.Mappings.SourceID == source_id,
+                        SqlAlchemy.Mappings.MethodID == method_id
                     )
                 ).all()
 
@@ -149,7 +149,7 @@ class LoadDescriptorValues(Parse_Excel_File, LoadingUtils):
                 datavalues_id = None
                 found = False
                 try:
-                    # skips searhing datavaluemapperid for required field if its attribs are not found in mapping table
+                    # skips searhing datavaluemapperid for required field if its attribs are not found in mappings table
                     if not datavalues:
                         raise Exception
 
@@ -166,7 +166,7 @@ class LoadDescriptorValues(Parse_Excel_File, LoadingUtils):
                         if found:
                             break
                         for each in result[:]:
-                            if mapping.DataValuesMapperID == each:
+                            if Mappings.DataValuesMapperID == each:
                                 datavalues = mapping
                                 found = True
                                 break
@@ -184,13 +184,13 @@ class LoadDescriptorValues(Parse_Excel_File, LoadingUtils):
                 # Creating New entry, datavaluemapperID and mappingID
                 if not datavalues:
                     datavalmapper = self.load_data_values(self.__session)
-                    dataval_map = SqlAlchemy.Mapping()
+                    dataval_map = SqlAlchemy.Mappings()
                     dataval_map.AttributeID = attrib_id
                     dataval_map.InstanceID = instance_id
                     dataval_map.SourceID = source_id
                     dataval_map.MethodID = method_id
                     if datavalues_id is None and not diff_scene:
-                        # check if a descriptor value already exists when creating a new mapping.
+                        # check if a descriptor value already exists when creating a new Mappings.
                         # if both the DescriptorValue and the DescriptorValueCV together are identical,
                         # then share them among "Instances" within the same "Scenario" and across "Scenarios".
                         # If only the DescriptorValue is given, (no DescriptorValueCV with it in excel), then dont
@@ -224,29 +224,29 @@ class LoadDescriptorValues(Parse_Excel_File, LoadingUtils):
                 # Creating new scenariomapping if scenarioID-mappingID does not exists.
                 # Starts by searchine for the mappingID in case its just been created, then tests to see if a
                 # scenarioID-mappingID exists, if yes, it skips, if no, it creates an entry
-                scenariomap = SqlAlchemy.ScenarioMapping()
+                scenariomap = SqlAlchemy.ScenarioMappings()
                 scenariomap.ScenarioID = scenario_id
 
                 # if the row attribs are already mapped, then we reuse the mapping ID else we get the New ID created
                 if datavalues:
                     scenariomap.MappingID = datavalues.MappingID
                 else:
-                    scenariomap.MappingID = self.__session.query(SqlAlchemy.Mapping).filter(
+                    scenariomap.MappingID = self.__session.query(SqlAlchemy.Mappings).filter(
                         and_(
-                            SqlAlchemy.Mapping.AttributeID == attrib_id,
-                            SqlAlchemy.Mapping.InstanceID == instance_id,
-                            SqlAlchemy.Mapping.SourceID == source_id,
-                            SqlAlchemy.Mapping.MethodID == method_id,
-                            SqlAlchemy.Mapping.DataValuesMapperID == datavalues_id
+                            SqlAlchemy.Mappings.AttributeID == attrib_id,
+                            SqlAlchemy.Mappings.InstanceID == instance_id,
+                            SqlAlchemy.Mappings.SourceID == source_id,
+                            SqlAlchemy.Mappings.MethodID == method_id,
+                            SqlAlchemy.Mappings.DataValuesMapperID == datavalues_id
                         )
                     ).first().MappingID
 
                 # test to ensure there is no scenarioID-mappingID relationship existing yet.
                 try:
-                    test = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
+                    test = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                         and_(
-                            SqlAlchemy.ScenarioMapping.MappingID == scenariomap.MappingID,
-                            SqlAlchemy.ScenarioMapping.ScenarioID == scenariomap.ScenarioID
+                            SqlAlchemy.ScenarioMappings.MappingID == scenariomap.MappingID,
+                            SqlAlchemy.ScenarioMappings.ScenarioID == scenariomap.ScenarioID
                         )
                     ).first().ScenarioMappingID
                 except:

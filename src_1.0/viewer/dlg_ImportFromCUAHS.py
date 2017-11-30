@@ -161,10 +161,10 @@ class dlg_ImportFromCUAHS( WaMDaMWizard.dlg_ImportFromCUAHS ):
 
     def allDone(self):
         self.waiting_dlg.Destroy()
-    # Popup success message if loading WaDE data within Sqlite db.
+    # Popup success message if loading CUAHSI data within Sqlite db.
         from Messages_forms.msg_successLoadDatabase import msg_successLoadDatabase
         instance = msg_successLoadDatabase(None)
-        instance.setMessageText(u"\n\nYou successfully loaded the data in WaDE data into " + define.dbName + u". \nYou can view the data by using: SQLite Manager: Add-ons for\nFirefox web browser")
+        instance.setMessageText(u"\n\nYou successfully loaded the data in CUAHSI data into " + define.dbName + u". \nYou can view the data by using: SQLite Manager: Add-ons for\nFirefox web browser")
         instance.ShowModal()
         instance.Destroy()
     #/////////////////////////////////////////////////////////////#

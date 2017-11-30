@@ -144,10 +144,10 @@ class GetDataStructure(object):
                                             "FROM Datasets "\
                                             "left join ObjectTypes on ObjectTypes.Datasetid=Datasets.Datasetid  "\
                                             "left join Attributes on Attributes.ObjectTypeid = Objecttypes.Objecttypeid "\
-                                            "left join Mapping on Mapping.Attributeid = Attributes.Attributeid  "\
-                                            "left join Instances on instances.instanceid = Mapping.Instanceid "\
-                                            "left join Scenariomapping on ScenarioMapping.Mappingid = Mapping.Mappingid "\
-                                            "left join Scenarios on Scenarios.ScenarioId=ScenarioMapping.Scenarioid  "\
+                                            "left join Mappings on Mappings.Attributeid = Attributes.Attributeid  "\
+                                            "left join Instances on instances.instanceid = Mappings.Instanceid "\
+                                            "left join Scenariomapping on ScenarioMappings.Mappingid = Mappings.Mappingid "\
+                                            "left join Scenarios on Scenarios.ScenarioId=ScenarioMappings.Scenarioid  "\
                                             "left join MasterNetworks on MasterNetworks.MasterNetworkid = Scenarios.MasterNetworkid  "\
                                             "WHERE DatasetAcronym='{}' AND ObjectTypologyCV='Network' ".format(selectedDataset))
             #Get data the remaining data except overlapping MasterNetworkName.
@@ -186,13 +186,13 @@ class GetDataStructure(object):
                                             "FROM Datasets "\
                                             "left join ObjectTypes on ObjectTypes.Datasetid=Datasets.Datasetid  "\
                                             "left join Attributes on Attributes.ObjectTypeid = Objecttypes.Objecttypeid "\
-                                            "left join Mapping on Mapping.Attributeid = Attributes.Attributeid  "\
-                                            "left join Instances on instances.instanceid = Mapping.Instanceid "\
-                                            "left join Scenariomapping on ScenarioMapping.Mappingid = Mapping.Mappingid "\
-                                            "left join Scenarios on Scenarios.ScenarioId=ScenarioMapping.Scenarioid  "\
+                                            "left join Mappings on Mappings.Attributeid = Attributes.Attributeid  "\
+                                            "left join Instances on instances.instanceid = Mappings.Instanceid "\
+                                            "left join Scenariomapping on ScenarioMappings.Mappingid = Mappings.Mappingid "\
+                                            "left join Scenarios on Scenarios.ScenarioId=ScenarioMappings.Scenarioid  "\
                                             "left join MasterNetworks on MasterNetworks.MasterNetworkid = Scenarios.MasterNetworkid  "\
-                                            "left join Methods on Methods.Methodid = Mapping.Methodid "\
-                                            "left join Sources on Sources.Sourceid = Mapping.Sourceid  "\
+                                            "left join Methods on Methods.Methodid = Mappings.Methodid "\
+                                            "left join Sources on Sources.Sourceid = Mappings.Sourceid  "\
                                             "WHERE DatasetAcronym='{}' AND ObjectTypologyCV='Network' AND MasterNetworkName='{}'"\
                                             "ORDER BY InstanceName DESC".format(selectedDataset, masterNetworkName))
             #Get data the remaining data except overlapping ScenarioName.
@@ -238,23 +238,23 @@ class GetDataStructure(object):
                     join(sq.Attributes,
                          sq.Attributes.ObjectTypeID == sq.ObjectTypes.ObjectTypeID).\
                     join(sq.Mapping,
-                         sq.Mapping.AttributeID == sq.Attributes.AttributeID).\
+                         sq.Mappings.AttributeID == sq.Attributes.AttributeID).\
                     join(sq.Instances,
-                         sq.Instances.InstanceID == sq.Mapping.InstanceID).\
+                         sq.Instances.InstanceID == sq.Mappings.InstanceID).\
                     join(sq.InstanceCategory,
                          sq.InstanceCategory.InstanceCategoryID == sq.Instances.InstanceCategoryID).\
                     join(sq.Connections,
                          sq.Instances.InstanceID == sq.Connections.LinkInstanceID).\
                     join(sq.ScenarioMapping,
-                         sq.ScenarioMapping.MappingID == sq.Mapping.MappingID).\
+                         sq.ScenarioMappings.MappingID == sq.Mappings.MappingID).\
                     join(sq.Scenarios,
-                         sq.Scenarios.ScenarioID == sq.ScenarioMapping.ScenarioID).\
+                         sq.Scenarios.ScenarioID == sq.ScenarioMappings.ScenarioID).\
                     join(sq.MasterNetworks,
                          sq.MasterNetworks.MasterNetworkID == sq.Scenarios.MasterNetworkID).\
                     join(sq.Methods,
-                         sq.Methods.MethodID == sq.Mapping.MethodID).\
+                         sq.Methods.MethodID == sq.Mappings.MethodID).\
                     join(sq.Sources,
-                         sq.Sources.SourceID == sq.Mapping.SourceID).\
+                         sq.Sources.SourceID == sq.Mappings.SourceID).\
                     filter(sq.Attributes.AttributeName == "ObjectTypeInstances").\
                     filter(sq.Scenarios.ScenarioName == scenarioName).all()
             #Get data the remaining data except overlapping InstanceName.
@@ -308,15 +308,15 @@ class GetDataStructure(object):
                     join(sq.Attributes,
                          sq.Attributes.ObjectTypeID == sq.ObjectTypes.ObjectTypeID).\
                     join(sq.Mapping,
-                         sq.Mapping.AttributeID == sq.Attributes.AttributeID).\
+                         sq.Mappings.AttributeID == sq.Attributes.AttributeID).\
                     join(sq.ScenarioMapping,
-                         sq.ScenarioMapping.MappingID == sq.Mapping.MappingID).\
+                         sq.ScenarioMappings.MappingID == sq.Mappings.MappingID).\
                     join(sq.Scenarios,
-                         sq.Scenarios.ScenarioID == sq.ScenarioMapping.ScenarioID).\
+                         sq.Scenarios.ScenarioID == sq.ScenarioMappings.ScenarioID).\
                     join(sq.MasterNetworks,
                          sq.MasterNetworks.MasterNetworkID == sq.Scenarios.MasterNetworkID).\
                     join(sq.Instances,
-                         sq.Instances.InstanceID == sq.Mapping.InstanceID).\
+                         sq.Instances.InstanceID == sq.Mappings.InstanceID).\
                     join(sq.InstanceCategory,
                          sq.InstanceCategory.InstanceCategoryID == sq.Instances.InstanceCategoryID).\
                     join(sq.Connections,
@@ -342,9 +342,9 @@ class GetDataStructure(object):
                     join(AttLinkEndInstance,
                          AttLinkEndInstance.AttributeID == AttEndNodeInstance.AttributeID).\
                     join(sq.Methods,
-                         sq.Methods.MethodID == sq.Mapping.MethodID).\
+                         sq.Methods.MethodID == sq.Mappings.MethodID).\
                     join(sq.Sources,
-                         sq.Sources.SourceID == sq.Mapping.SourceID).\
+                         sq.Sources.SourceID == sq.Mappings.SourceID).\
                     filter(AttLinkInstance.AttributeName == "ObjectTypeInstances").\
                     filter(sq.Attributes.AttributeName == "ObjectTypeInstances").\
                     filter(AttLinkEndInstance.AttributeName == "ObjectTypeInstances").all()

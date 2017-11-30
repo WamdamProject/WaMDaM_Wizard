@@ -460,7 +460,9 @@ class dlg_ImportSpreadsheetBasic(WaMDaMWizard.dlg_ImportSpreadsheetBasic):
             return
             
         # Backup the Database before loading any new data into it.
-        DB_Setup().backup_db()
+        if DB_Setup().getType() == 'sqlite':
+            DB_Setup().backup_db()
+
         define.logger.info("Backing up the database before starting to \
                                     load new data into it.")
 

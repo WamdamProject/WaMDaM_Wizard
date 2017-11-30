@@ -508,7 +508,7 @@ class RWISE_importer():
                  'ScenarioName': scenario_name,
                  'SourceName': source_name,
                  'MethodName': method_name}, self.__session)
-            dataval_map = SqlAlchemy.Mapping()
+            dataval_map = SqlAlchemy.Mappings()
             dataval_map.AttributeID = attrib_id
             dataval_map.InstanceID = instance_id
             dataval_map.SourceID = source_id
@@ -517,37 +517,37 @@ class RWISE_importer():
             self.setup.push_data(dataval_map)
 
             # ** Add data for ScenarioMapping ** #
-            scenariomap = SqlAlchemy.ScenarioMapping()
+            scenariomap = SqlAlchemy.ScenarioMappings()
             scenariomap.ScenarioID = scenario_id
 
-            datavalues = self.__session.query(SqlAlchemy.Mapping).filter(
+            datavalues = self.__session.query(SqlAlchemy.Mappings).filter(
                 and_(
-                    SqlAlchemy.Mapping.AttributeID == attrib_id,
-                    SqlAlchemy.Mapping.InstanceID == instance_id,
-                    SqlAlchemy.Mapping.SourceID == source_id,
-                    SqlAlchemy.Mapping.MethodID == method_id
+                    SqlAlchemy.Mappings.AttributeID == attrib_id,
+                    SqlAlchemy.Mappings.InstanceID == instance_id,
+                    SqlAlchemy.Mappings.SourceID == source_id,
+                    SqlAlchemy.Mappings.MethodID == method_id
                 )
             ).first()
             if datavalues:
                 scenariomap.MappingID = datavalues.MappingID
             else:
-                scenariomap.MappingID = self.__session.query(SqlAlchemy.Mapping).filter(
+                scenariomap.MappingID = self.__session.query(SqlAlchemy.Mappings).filter(
                     and_(
-                        SqlAlchemy.Mapping.AttributeID == attrib_id,
-                        SqlAlchemy.Mapping.InstanceID == instance_id,
-                        SqlAlchemy.Mapping.SourceID == source_id,
-                        SqlAlchemy.Mapping.MethodID == method_id,
-                        SqlAlchemy.Mapping.DataValuesMapperID == dataValuesMapper.DataValuesMapperID
+                        SqlAlchemy.Mappings.AttributeID == attrib_id,
+                        SqlAlchemy.Mappings.InstanceID == instance_id,
+                        SqlAlchemy.Mappings.SourceID == source_id,
+                        SqlAlchemy.Mappings.MethodID == method_id,
+                        SqlAlchemy.Mappings.DataValuesMapperID == dataValuesMapper.DataValuesMapperID
                     )
                 ).first().MappingID
 
             # if the current mappingid - scenarioid does not exist, a new
             # one is created else the old is reused.
             try:
-                test = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
+                test = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                     and_(
-                        SqlAlchemy.ScenarioMapping.MappingID == scenariomap.MappingID,
-                        SqlAlchemy.ScenarioMapping.ScenarioID == scenariomap.ScenarioID
+                        SqlAlchemy.ScenarioMappings.MappingID == scenariomap.MappingID,
+                        SqlAlchemy.ScenarioMappings.ScenarioID == scenariomap.ScenarioID
                     )
                 ).first().ScenarioMappingID
             except:
@@ -555,7 +555,7 @@ class RWISE_importer():
 
                 # ** load timeseries data ** #
             timeSeries = SqlAlchemy.TimeSeries()
-            timeSeries.WaterOrCalendarYear = 'CalendarYear'
+            timeSeries.YearType = 'CalendarYear'
             timeSeries.AggregationStatisticCV = "Average"
             timeSeries.AggregationInterval = 1.0
             timeSeries.IntervalTimeUnitCV = "day"

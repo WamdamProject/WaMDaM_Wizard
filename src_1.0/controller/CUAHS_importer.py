@@ -318,7 +318,7 @@ class CUAHS_importer():
                                                                                                      'ScenarioName': scenario_name,
                                                                                                      'SourceName': source_name,
                                                                                                      'MethodName': method_name}, self.__session)
-        dataval_map = SqlAlchemy.Mapping()
+        dataval_map = SqlAlchemy.Mappings()
         dataval_map.AttributeID = attrib_id
         dataval_map.InstanceID = instance_id
         dataval_map.SourceID = source_id
@@ -328,37 +328,37 @@ class CUAHS_importer():
         self.setup.add_data()
         #///////////////////////////////////#
 
-        # Add data for ScenarioMapping
-        scenariomap = SqlAlchemy.ScenarioMapping()
+        # Add data for ScenarioMappings
+        scenariomap = SqlAlchemy.ScenarioMappings()
         scenariomap.ScenarioID = scenario_id
 
-        datavalues = self.__session.query(SqlAlchemy.Mapping).filter(
+        datavalues = self.__session.query(SqlAlchemy.Mappings).filter(
             and_(
-                SqlAlchemy.Mapping.AttributeID == attrib_id,
-                SqlAlchemy.Mapping.InstanceID == instance_id,
-                SqlAlchemy.Mapping.SourceID == source_id,
-                SqlAlchemy.Mapping.MethodID == method_id
+                SqlAlchemy.Mappings.AttributeID == attrib_id,
+                SqlAlchemy.Mappings.InstanceID == instance_id,
+                SqlAlchemy.Mappings.SourceID == source_id,
+                SqlAlchemy.Mappings.MethodID == method_id
             )
         ).first()
         if datavalues:
             scenariomap.MappingID = datavalues.MappingID
         else:
-            scenariomap.MappingID = self.__session.query(SqlAlchemy.Mapping).filter(
+            scenariomap.MappingID = self.__session.query(SqlAlchemy.Mappings).filter(
                 and_(
-                    SqlAlchemy.Mapping.AttributeID == attrib_id,
-                    SqlAlchemy.Mapping.InstanceID == instance_id,
-                    SqlAlchemy.Mapping.SourceID == source_id,
-                    SqlAlchemy.Mapping.MethodID == method_id
+                    SqlAlchemy.Mappings.AttributeID == attrib_id,
+                    SqlAlchemy.Mappings.InstanceID == instance_id,
+                    SqlAlchemy.Mappings.SourceID == source_id,
+                    SqlAlchemy.Mappings.MethodID == method_id
                 )
             ).first().MappingID
 
             # if the current mappingid - scenarioid does not exist, a new
             # one is created else the old is reused.
         try:
-            test = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
+            test = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                 and_(
-                    SqlAlchemy.ScenarioMapping.MappingID == scenariomap.MappingID,
-                    SqlAlchemy.ScenarioMapping.ScenarioID == scenariomap.ScenarioID
+                    SqlAlchemy.ScenarioMappings.MappingID == scenariomap.MappingID,
+                    SqlAlchemy.ScenarioMappings.ScenarioID == scenariomap.ScenarioID
                 )
             ).first().ScenarioMappingID
         except:
@@ -368,7 +368,7 @@ class CUAHS_importer():
 
         # Add data within TimeSeries  table
         timeSeries = SqlAlchemy.TimeSeries()
-        timeSeries.WaterOrCalendarYear = 'CalendarYear'
+        timeSeries.YearType = 'CalendarYear'
         timeSeries.AggregationStatisticCV = "Average"
         timeSeries.AggregationInterval = 1
         timeSeries.IntervalTimeUnitCV = "day"

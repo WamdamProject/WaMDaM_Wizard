@@ -30,10 +30,10 @@
     Instances as in primary and foreign key constraints. 
     
     The Wizard business rule implemented in this file connects an Object Type with one or many of its 
-    instances through the Mapping Table. The connection between the ObjectType and the MappingID happens through 
+    instances through the Mappings Table. The connection between the ObjectType and the MappingID happens through
     a dummy attribute called "ObjectTypeInstancesAttribute" created by the Wizard to each ObjectType in stp2_loadDataStructure.py.
     Whenever an Instance is loaded into the database (which also comes with its father ObjectType, 
-    the Wizard creates a new record in the Mapping Table that connects the Instance, with the unique ID 
+    the Wizard creates a new record in the Mappings Table that connects the Instance, with the unique ID
     of the dummy attribute called ObjectTypeInstancesAttribute for the father ObjectType. 
     An Instance always must belong to a scenario and a Master Network. It also must have a source and a method name. 
     With all these provided entries in the 3.2_Nodes or 3.3_Links sheets in the WaMDaM workbook template,
@@ -83,7 +83,7 @@ from sqlalchemy import and_, or_
 # Import required variables (this are the network sheet names and their start values in the excel file)
 from .ReadWorkbook_SheetsNames import Network_sheets_ordered
 
-
+import define
 
 # ****************************************************************************************************************** #
 #                                                                                                                    #
@@ -114,25 +114,25 @@ class Load_Networks_Data(Parse_Excel_File):
         self.__session = self.setup.get_session()
         self.work_sheet = self.parse_object_control_value(Network_sheets_ordered[:])
 
-    def load_scenario_mapping(self, params):
+    def load_scenario_mappings(self, params):
         """
         This is a helper method to create and instance of
-        the ScenarioMapping table and filling the appropriate
+        the ScenarioMappings table and filling the appropriate
         fields with values sent through params.
-        :param params: A list of data to fill scenariomapping table
-        :return: a filled instance of the scenariomapping table
+        :param params: A list of data to fill scenariomappings table
+        :return: a filled instance of the scenariomappings table
         """
-        dummy_scen_map = SqlAlchemy.ScenarioMapping()
+        dummy_scen_map = SqlAlchemy.ScenarioMappings()
         dummy_scen_map.ScenarioID = params[0]
         try:
-            dummy_scen_map.MappingID = self.__session.query(SqlAlchemy.Mapping).filter(
+            dummy_scen_map.MappingID = self.__session.query(SqlAlchemy.Mappings).filter(
                 and_(
-                    SqlAlchemy.Mapping.AttributeID == params[1],
-                    SqlAlchemy.Mapping.InstanceID == params[2],
-                    SqlAlchemy.Mapping.SourceID == self.__session.query(SqlAlchemy.Sources).filter(
+                    SqlAlchemy.Mappings.AttributeID == params[1],
+                    SqlAlchemy.Mappings.InstanceID == params[2],
+                    SqlAlchemy.Mappings.SourceID == self.__session.query(SqlAlchemy.Sources).filter(
                         SqlAlchemy.Sources.SourceName == params[3]
                     ).first().SourceID,
-                    SqlAlchemy.Mapping.MethodID == self.__session.query(SqlAlchemy.Methods).filter(
+                    SqlAlchemy.Mappings.MethodID == self.__session.query(SqlAlchemy.Methods).filter(
                         SqlAlchemy.Methods.MethodName == params[4]
                     ).first().MethodID
                 )
@@ -141,10 +141,10 @@ class Load_Networks_Data(Parse_Excel_File):
         except:
             raise Exception('An error occurred when loading nodes sheet')
         try:
-            test = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
+            test = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                 and_(
-                    SqlAlchemy.ScenarioMapping.MappingID == dummy_scen_map.MappingID,
-                    SqlAlchemy.ScenarioMapping.ScenarioID == params[0]
+                    SqlAlchemy.ScenarioMappings.MappingID == dummy_scen_map.MappingID,
+                    SqlAlchemy.ScenarioMappings.ScenarioID == params[0]
                 )
             ).first().ScenarioMappingID
             return None
@@ -169,16 +169,16 @@ class Load_Networks_Data(Parse_Excel_File):
             dummy_dataval.DataValuesMapperID = 1
         return dummy_dataval
 
-    def load_mapping(self, params):
+    def load_mappings(self, params):
         """
         This is a helper method to create an instance of the
-        Mapping table. it creates a connection between Attributes, Instances, Scenarios, Sources and Methods, and DataValeus
+        Mappings table. it creates a connection between Attributes, Instances, Scenarios, Sources and Methods, and DataValeus
         tables.
-        :param params: A list of data to fill Mapping tables
-        :return: A filled instance of Mapping() table
+        :param params: A list of data to fill Mappings tables
+        :return: A filled instance of Mappings() table
         """
         # try:
-        dummy_map = SqlAlchemy.Mapping()
+        dummy_map = SqlAlchemy.Mappings()
         try:
             dummy_id = self.__session.query(SqlAlchemy.Attributes).filter(
                 SqlAlchemy.Attributes.ObjectTypeID == params[0]
@@ -209,14 +209,14 @@ class Load_Networks_Data(Parse_Excel_File):
         #     raise Exception('Object Type: ' + str(params[0])
         #                 + ',instance ID: ' + str(dummy_map.InstanceID) + ',method Name: ' + str(params[3]))
 
-        # check for mapping
+        # check for mappings
         try:
-            test = self.__session.query(SqlAlchemy.Mapping).filter(
+            test = self.__session.query(SqlAlchemy.Mappings).filter(
                 and_(
-                    SqlAlchemy.Mapping.AttributeID == dummy_map.AttributeID,
-                    SqlAlchemy.Mapping.InstanceID == dummy_map.InstanceID,
-                    SqlAlchemy.Mapping.SourceID == dummy_map.SourceID,
-                    SqlAlchemy.Mapping.MethodID == dummy_map.MethodID
+                    SqlAlchemy.Mappings.AttributeID == dummy_map.AttributeID,
+                    SqlAlchemy.Mappings.InstanceID == dummy_map.InstanceID,
+                    SqlAlchemy.Mappings.SourceID == dummy_map.SourceID,
+                    SqlAlchemy.Mappings.MethodID == dummy_map.MethodID
                 )
             ).first().MappingID
             return None, dummy_id
@@ -246,12 +246,12 @@ class Load_Networks_Data(Parse_Excel_File):
 
                 if sheet_name == Network_sheets_ordered[0]:
                     if 'InstanceCategory_table' in temp_row:
-                        cur_table = sheet_rows[row_id + 3:]
+                        cur_table = sheet_rows[row_id + 4:]
                         for row_id, row in enumerate(cur_table):
                             row_id = row_id + static_rownum - 3
                             if all('' == cell.value for cell in row):
                                 break
-                            instance_cat = SqlAlchemy.InstanceCategory()
+                            instance_cat = SqlAlchemy.InstanceCategories()
                             if row[0].value == "":
                                 raise Exception('Error in {} row of "InstanceCategory_table" of sheet "{}"\nField named "InstanceCategory" is empty.\nThis field should not be empty.\nPlease fill this field to a value'
                                                 .format(row_id , Network_sheets_ordered[0]))
@@ -379,7 +379,7 @@ class Load_Networks_Data(Parse_Excel_File):
                             dummy_dataval = self.load_data_values()
                             self.setup.push_data(dummy_dataval)
 
-                            # adding network connection for dummy mapping
+                            # adding network connection for dummy mappings
                             try:
                                 dummy_id = self.__session.query(SqlAlchemy.ObjectTypes).filter(
                                     SqlAlchemy.ObjectTypes.ObjectType == data_struct_acronym[row[1].value] + ' Global Attributes'
@@ -392,7 +392,7 @@ class Load_Networks_Data(Parse_Excel_File):
                             ).first().InstanceID
 
                             try:
-                                dummy_map, attrib = self.load_mapping([dummy_id, instance_id, row[2].value,
+                                dummy_map, attrib = self.load_mappings([dummy_id, instance_id, row[2].value,
                                                                        row[3].value, dummy_dataval.DataValuesMapperID])
                             except Exception as e:
                                 msg = e.message
@@ -411,9 +411,9 @@ class Load_Networks_Data(Parse_Excel_File):
                             if dummy_map:
                                 self.setup.push_data(dummy_map)
 
-                            # loading scenario mapping for dummy entry
+                            # loading scenario mappings for dummy entry
 
-                            dummy_scen_map = self.load_scenario_mapping([Scenario.ScenarioID, attrib,
+                            dummy_scen_map = self.load_scenario_mappings([Scenario.ScenarioID, attrib,
                                                                          instance_id, row[2].value, row[3].value,
                                                                          ])
                             if dummy_scen_map is not None:
@@ -483,20 +483,27 @@ class Load_Networks_Data(Parse_Excel_File):
                                     except Exception as e:
                                         print e
                                         raise Exception('Error with {} sheet\n Cannot Find {} in CV_InstanceName table'.
-                                                        format(sheet_name, row[2].value))
-                                if row[7].value:
-                                    nodes.Longitude_x = row[7].value
-                                if row[8].value:
-                                    nodes.Latitude_y = row[8].value
+                                                    format(sheet_name, row[2].value))
+
+                                # //////////////// convert float error catch////////////////////
+                                try:
+
+                                    if row[7].value:
+                                        nodes.Longitude_x = float(row[7].value)
+                                    if row[8].value:
+                                        nodes.Latitude_y = float(row[8].value)
+                                except:
+                                    nodes.Longitude_x = None
+                                    nodes.Latitude_y = None
                                 nodes.Description = row[9].value
                                 if row[6].value:
                                     try:
-                                        nodes.InstanceCategoryID = self.__session.query(SqlAlchemy.InstanceCategory).filter(
-                                            SqlAlchemy.InstanceCategory.InstanceCategory == row[6].value
+                                        nodes.InstanceCategoryID = self.__session.query(SqlAlchemy.InstanceCategories).filter(
+                                            SqlAlchemy.InstanceCategories.InstanceCategory == row[6].value
                                         ).first().InstanceCategoryID
                                     except Exception as e:
                                         print e
-                                        raise Exception('Error with {} sheet\nCannot Find {} in InstanceCategory table'.
+                                        raise Exception('Error with {} sheet\nCannot Find {} in InstanceCategories table'.
                                                         format(sheet_name, row[6].value))
                                 self.setup.push_data(nodes)
 
@@ -505,21 +512,30 @@ class Load_Networks_Data(Parse_Excel_File):
 
                             # load Mappings of node instance
                             try:
+                                # ////////////// dataset name and object type name join in object type table///////////
+                                DatasetID = self.__session.query(SqlAlchemy.Datasets).filter(
+                                            SqlAlchemy.Datasets.DatasetAcronym == define.datasetName
+                                        ).first().DatasetID
+
+
                                 obj = self.__session.query(SqlAlchemy.ObjectTypes).filter(
-                                    SqlAlchemy.ObjectTypes.ObjectType == row[0].value
+                                and_(
+                                        SqlAlchemy.ObjectTypes.ObjectType == row[0].value,
+                                        SqlAlchemy.ObjectTypes.DatasetID == DatasetID
+                                    )
                                 ).first().ObjectTypeID
                             except Exception as e:
                                 msg = "'{}' ObjectType within NodeInstances_table is not existing in ObjectTypes table.\nPlease check whether '{}' ObjectType is existing in ObjectTypes table.".format(row[0].value, row[0].value)
                                 raise Exception(msg)
                             try:
                                 if node_test:
-                                    dummy_map, attrib = self.load_mapping([obj, node_test, row[4].value,
+                                    dummy_map, attrib = self.load_mappings([obj, node_test, row[4].value,
                                                                            row[5].value, dummy_dataval.DataValuesMapperID])
                                 else:
-                                    dummy_map, attrib = self.load_mapping([obj, nodes.InstanceID, row[4].value,
+                                    dummy_map, attrib = self.load_mappings([obj, nodes.InstanceID, row[4].value,
                                                                            row[5].value, dummy_dataval.DataValuesMapperID])
                             except Exception as e:
-                                # Get exception from load_mapping method
+                                # Get exception from load_mappings method
                                 msg = e.message
                                 temp = msg.split('|')
                                 if temp.__len__() > 1:
@@ -534,11 +550,11 @@ class Load_Networks_Data(Parse_Excel_File):
                             # Raise an error if the provided MasterNetworkName in the spreadsheet does not exist in the MasterNetworks table
                             try:
                                 if same_node:
-                                    test_same_nodes = self.__session.query(SqlAlchemy.Mapping).filter(
-                                        and_(SqlAlchemy.Mapping.AttributeID == dummy_map.AttributeID,
-                                             SqlAlchemy.Mapping.InstanceID == node_test,
-                                             SqlAlchemy.Mapping.SourceID == dummy_map.SourceID,
-                                             SqlAlchemy.Mapping.MethodID == dummy_map.MethodID)
+                                    test_same_nodes = self.__session.query(SqlAlchemy.Mappings).filter(
+                                        and_(SqlAlchemy.Mappings.AttributeID == dummy_map.AttributeID,
+                                             SqlAlchemy.Mappings.InstanceID == node_test,
+                                             SqlAlchemy.Mappings.SourceID == dummy_map.SourceID,
+                                             SqlAlchemy.Mappings.MethodID == dummy_map.MethodID)
                                     ).first().InstanceID
                                 else:
                                     raise Exception('They are not same nodes')
@@ -548,7 +564,7 @@ class Load_Networks_Data(Parse_Excel_File):
                                 if dummy_map:
                                     self.setup.push_data(dummy_map)
 
-                            # load SenarioMapping for new instance
+                            # load SenarioMappings for new instance
                             try:
                                 scenario_id = self.__session.query(SqlAlchemy.Scenarios).filter(
                                     SqlAlchemy.Scenarios.ScenarioName == row[3].value
@@ -557,12 +573,12 @@ class Load_Networks_Data(Parse_Excel_File):
                                 msg = "Error:row {} in the {} sheet.\nThere is no '{}' value in Scenarios_table of 3.1_Networkss_Scenarios sheet,\n (Please reference row {} in the {} sheet)".format(row_id, sheet_name, row[3].value.encode('ascii','ignore'), row_id, sheet_name)
                                 raise Exception(msg)
                             if test_same_nodes or same_node:
-                                dummy_scen_map = self.load_scenario_mapping([scenario_id, attrib,
+                                dummy_scen_map = self.load_scenario_mappings([scenario_id, attrib,
                                                                              node_test, row[4].value, row[5].value
                                                                              ])
                                 same_node = False
                             else:
-                                dummy_scen_map = self.load_scenario_mapping([scenario_id, attrib,
+                                dummy_scen_map = self.load_scenario_mappings([scenario_id, attrib,
                                                                              nodes.InstanceID, row[4].value, row[5].value
                                                                              ])
 
@@ -664,8 +680,8 @@ class Load_Networks_Data(Parse_Excel_File):
                             # Foreign key constraint
                             # Raise an error if the provided InstanceCategory in the spreadsheet does not exist in the InstanceCategory table
                                     try:
-                                        links.InstanceCategoryID = self.__session.query(SqlAlchemy.InstanceCategory).filter(
-                                            SqlAlchemy.InstanceCategory.InstanceCategory == row[8].value
+                                        links.InstanceCategoryID = self.__session.query(SqlAlchemy.InstanceCategories).filter(
+                                            SqlAlchemy.InstanceCategories.InstanceCategory == row[8].value
                                         ).first().InstanceCategoryID
                                     except Exception as e:
                                         print e
@@ -686,21 +702,21 @@ class Load_Networks_Data(Parse_Excel_File):
                                                         format(sheet_name, row[0].value))
                                 # raise Exception(e.message)
                             if link_test:
-                                dummy_map, attrib = self.load_mapping([obj, link_test, row[4].value,
+                                dummy_map, attrib = self.load_mappings([obj, link_test, row[4].value,
                                                                        row[5].value, dummy_dataval.DataValuesMapperID])
                             else:
-                                dummy_map, attrib = self.load_mapping([obj, links.InstanceID, row[4].value,
+                                dummy_map, attrib = self.load_mappings([obj, links.InstanceID, row[4].value,
                                                                        row[5].value, dummy_dataval.DataValuesMapperID])
 
                             test_same_links = None
 
                             try:
                                 if same_link:
-                                    test_same_links = self.__session.query(SqlAlchemy.Mapping).filter(
-                                        and_(SqlAlchemy.Mapping.AttributeID == dummy_map.AttributeID,
-                                             SqlAlchemy.Mapping.InstanceID == link_test,
-                                             SqlAlchemy.Mapping.SourceID == dummy_map.SourceID,
-                                             SqlAlchemy.Mapping.MethodID == dummy_map.MethodID)
+                                    test_same_links = self.__session.query(SqlAlchemy.Mappings).filter(
+                                        and_(SqlAlchemy.Mappings.AttributeID == dummy_map.AttributeID,
+                                             SqlAlchemy.Mappings.InstanceID == link_test,
+                                             SqlAlchemy.Mappings.SourceID == dummy_map.SourceID,
+                                             SqlAlchemy.Mappings.MethodID == dummy_map.MethodID)
                                     ).first().InstanceID
                                 else:
                                     raise Exception('They are not same nodes')
@@ -710,7 +726,7 @@ class Load_Networks_Data(Parse_Excel_File):
                                 if dummy_map:
                                     self.setup.push_data(dummy_map)
 
-                            # load SenarioMapping for new instance
+                            # load SenarioMappings for new instance
                             try:
                                 scenario_id = self.__session.query(SqlAlchemy.Scenarios).filter(
                                     SqlAlchemy.Scenarios.ScenarioName == row[3].value
@@ -720,11 +736,11 @@ class Load_Networks_Data(Parse_Excel_File):
                                       "(Please reference row {} in the {} sheet)".format(row_id, sheet_name, row[3].value, row_id, sheet_name)
                                 raise Exception(msg)
                             if test_same_links or same_link:
-                                dummy_scen_map = self.load_scenario_mapping([scenario_id, attrib,
+                                dummy_scen_map = self.load_scenario_mappings([scenario_id, attrib,
                                                                              link_test, row[4].value, row[5].value])
                                 same_link = False
                             else:
-                                dummy_scen_map = self.load_scenario_mapping([scenario_id, attrib,
+                                dummy_scen_map = self.load_scenario_mappings([scenario_id, attrib,
                                                                              links.InstanceID, row[4].value, row[5].value
                                                                              ])
 

@@ -46,13 +46,13 @@ class GetNodeLinks(object):
                             sq.Sources.SourceName, sq.Methods.MethodName)\
                 .join(sq.ObjectTypes, sq.ObjectTypes.DatasetID == sq.Datasets.DatasetID)\
                 .join(sq.Attributes, sq.Attributes.ObjectTypeID == sq.ObjectTypes.ObjectTypeID)\
-                .join(sq.Mapping, sq.Mapping.AttributeID == sq.Attributes.AttributeID)\
-                .join(sq.Instances, sq.Instances.InstanceID == sq.Mapping.InstanceID)\
-                .join(sq.ScenarioMapping, sq.ScenarioMapping.MappingID == sq.Mapping.MappingID)\
-                .join(sq.Scenarios, sq.Scenarios.ScenarioID == sq.ScenarioMapping.ScenarioID)\
+                .join(sq.Mappings, sq.Mappings.AttributeID == sq.Attributes.AttributeID)\
+                .join(sq.Instances, sq.Instances.InstanceID == sq.Mappings.InstanceID)\
+                .join(sq.ScenarioMappings, sq.ScenarioMappings.MappingID == sq.Mappings.MappingID)\
+                .join(sq.Scenarios, sq.Scenarios.ScenarioID == sq.ScenarioMappings.ScenarioID)\
                 .join(sq.MasterNetworks, sq.MasterNetworks.MasterNetworkID == sq.Scenarios.MasterNetworkID)\
-                .join(sq.Methods, sq.Methods.MethodID == sq.Mapping.MethodID)\
-                .join(sq.Sources, sq.Sources.SourceID == sq.Mapping.SourceID)\
+                .join(sq.Methods, sq.Methods.MethodID == sq.Mappings.MethodID)\
+                .join(sq.Sources, sq.Sources.SourceID == sq.Mappings.SourceID)\
                 .filter(sq.Attributes.AttributeName=='ObjectTypeInstances').\
                 filter(sq.Instances.Longitude_x >= xmin).filter(sq.Instances.Latitude_y >= ymin)\
                 .filter(sq.Instances.Longitude_x <= xmax).filter(sq.Instances.Latitude_y <= ymax).\
@@ -93,13 +93,13 @@ class GetNodeLinks(object):
                             sq.Sources.SourceName, sq.Methods.MethodName)\
                 .join(sq.ObjectTypes, sq.ObjectTypes.DatasetID == sq.Datasets.DatasetID)\
                 .join(sq.Attributes, sq.Attributes.ObjectTypeID == sq.ObjectTypes.ObjectTypeID)\
-                .join(sq.Mapping, sq.Mapping.AttributeID == sq.Attributes.AttributeID)\
-                .join(sq.Instances, sq.Instances.InstanceID == sq.Mapping.InstanceID)\
-                .join(sq.ScenarioMapping, sq.ScenarioMapping.MappingID == sq.Mapping.MappingID)\
-                .join(sq.Scenarios, sq.Scenarios.ScenarioID == sq.ScenarioMapping.ScenarioID)\
+                .join(sq.Mappings, sq.Mappings.AttributeID == sq.Attributes.AttributeID)\
+                .join(sq.Instances, sq.Instances.InstanceID == sq.Mappings.InstanceID)\
+                .join(sq.ScenarioMappings, sq.ScenarioMappings.MappingID == sq.Mappings.MappingID)\
+                .join(sq.Scenarios, sq.Scenarios.ScenarioID == sq.ScenarioMappings.ScenarioID)\
                 .join(sq.MasterNetworks, sq.MasterNetworks.MasterNetworkID == sq.Scenarios.MasterNetworkID)\
-                .join(sq.Methods, sq.Methods.MethodID == sq.Mapping.MethodID)\
-                .join(sq.Sources, sq.Sources.SourceID == sq.Mapping.SourceID)\
+                .join(sq.Methods, sq.Methods.MethodID == sq.Mappings.MethodID)\
+                .join(sq.Sources, sq.Sources.SourceID == sq.Mappings.SourceID)\
                 .filter(sq.Attributes.AttributeName=='ObjectTypeInstances').\
                 filter(sq.Instances.Longitude_x >= xmin).filter(sq.Instances.Latitude_y >= ymin)\
                 .filter(sq.Instances.Longitude_x <= xmax).filter(sq.Instances.Latitude_y <= ymax).\
@@ -135,19 +135,19 @@ class GetNodeLinks(object):
         try:
             result = self.session.query(sq.Datasets.DatasetAcronym, sq.ObjectTypes.ObjectType, sq.Attributes.AttributeName,
                             sq.Instances.InstanceName, sq.Instances.InstanceNameCV, sq.MasterNetworks.MasterNetworkName,
-                            sq.Scenarios.ScenarioName, sq.InstanceCategory.InstanceCategory,
+                            sq.Scenarios.ScenarioName, sq.InstanceCategories.InstanceCategory,
                             sq.Sources.SourceName, sq.Methods.MethodName, sq.Instances.Longitude_x,
                             sq.Instances.Latitude_y, sq.Instances.Description)\
                 .join(sq.ObjectTypes, sq.ObjectTypes.DatasetID == sq.Datasets.DatasetID)\
                 .join(sq.Attributes, sq.Attributes.ObjectTypeID == sq.ObjectTypes.ObjectTypeID)\
-                .join(sq.Mapping, sq.Mapping.AttributeID == sq.Attributes.AttributeID)\
-                .join(sq.Instances, sq.Instances.InstanceID == sq.Mapping.InstanceID)\
-                .join(sq.InstanceCategory, sq.InstanceCategory.InstanceCategoryID == sq.Instances.InstanceCategoryID)\
-                .join(sq.ScenarioMapping, sq.ScenarioMapping.MappingID == sq.Mapping.MappingID)\
-                .join(sq.Scenarios, sq.Scenarios.ScenarioID == sq.ScenarioMapping.ScenarioID)\
+                .join(sq.Mappings, sq.Mappings.AttributeID == sq.Attributes.AttributeID)\
+                .join(sq.Instances, sq.Instances.InstanceID == sq.Mappings.InstanceID)\
+                .join(sq.InstanceCategories, sq.InstanceCategories.InstanceCategoryID == sq.Instances.InstanceCategoryID)\
+                .join(sq.ScenarioMappings, sq.ScenarioMappings.MappingID == sq.Mappings.MappingID)\
+                .join(sq.Scenarios, sq.Scenarios.ScenarioID == sq.ScenarioMappings.ScenarioID)\
                 .join(sq.MasterNetworks, sq.MasterNetworks.MasterNetworkID == sq.Scenarios.MasterNetworkID)\
-                .join(sq.Methods, sq.Methods.MethodID == sq.Mapping.MethodID)\
-                .join(sq.Sources, sq.Sources.SourceID == sq.Mapping.SourceID)\
+                .join(sq.Methods, sq.Methods.MethodID == sq.Mappings.MethodID)\
+                .join(sq.Sources, sq.Sources.SourceID == sq.Mappings.SourceID)\
                 .filter(sq.Attributes.AttributeName=='ObjectTypeInstances').\
                 filter(sq.Instances.Longitude_x >= xmin).filter(sq.Instances.Latitude_y >= ymin)\
                 .filter(sq.Instances.Longitude_x <= xmax).filter(sq.Instances.Latitude_y <= ymax).\
@@ -182,7 +182,7 @@ class GetNodeLinks(object):
         '''
         try:
             StartInstance = aliased(sq.Instances)
-            MetadataStartNodeInstace = aliased(sq.Mapping)
+            MetadataStartNodeInstace = aliased(sq.Mappings)
             EndInstance = aliased(sq.Instances)
             AttStartNodeInstance = aliased(sq.Attributes)
             AttEndNodeInstance = aliased(sq.Attributes)
@@ -190,28 +190,28 @@ class GetNodeLinks(object):
             AttLinkEndInstance = aliased(sq.Attributes)
             ObjectTypeEndNodeInstance = aliased(sq.ObjectTypes)
             ObjectTypeStartNodeInstance = aliased(sq.ObjectTypes)
-            MetadataEndNodeInstace = aliased(sq.Mapping)
+            MetadataEndNodeInstace = aliased(sq.Mappings)
             result = self.session.query(sq.Datasets.DatasetAcronym, sq.ObjectTypes.ObjectType, sq.Instances.InstanceName,
                                         sq.Instances.InstanceNameCV, sq.Scenarios.ScenarioName,
                                         sq.Sources.SourceName, sq.Methods.MethodName,
                                         StartInstance.InstanceName, EndInstance.InstanceName,
-                                        sq.InstanceCategory.InstanceCategory, sq.Instances.Description).\
+                                        sq.InstanceCategories.InstanceCategory, sq.Instances.Description).\
                     join(sq.ObjectTypes,
                          sq.ObjectTypes.DatasetID == sq.Datasets.DatasetID).\
                     join(sq.Attributes,
                          sq.Attributes.ObjectTypeID == sq.ObjectTypes.ObjectTypeID).\
-                    join(sq.Mapping,
-                         sq.Mapping.AttributeID == sq.Attributes.AttributeID).\
-                    join(sq.ScenarioMapping,
-                         sq.ScenarioMapping.MappingID == sq.Mapping.MappingID).\
+                    join(sq.Mappings,
+                         sq.Mappings.AttributeID == sq.Attributes.AttributeID).\
+                    join(sq.ScenarioMappings,
+                         sq.ScenarioMappings.MappingID == sq.Mappings.MappingID).\
                     join(sq.Scenarios,
-                         sq.Scenarios.ScenarioID == sq.ScenarioMapping.ScenarioID).\
+                         sq.Scenarios.ScenarioID == sq.ScenarioMappings.ScenarioID).\
                     join(sq.MasterNetworks,
                          sq.MasterNetworks.MasterNetworkID == sq.Scenarios.MasterNetworkID).\
                     join(sq.Instances,
-                         sq.Instances.InstanceID == sq.Mapping.InstanceID).\
-                    join(sq.InstanceCategory,
-                         sq.InstanceCategory.InstanceCategoryID == sq.Instances.InstanceCategoryID).\
+                         sq.Instances.InstanceID == sq.Mappings.InstanceID).\
+                    join(sq.InstanceCategories,
+                         sq.InstanceCategories.InstanceCategoryID == sq.Instances.InstanceCategoryID).\
                     join(sq.Connections,
                          sq.Instances.InstanceID == sq.Connections.LinkInstanceID).\
                     join(StartInstance,
@@ -235,9 +235,9 @@ class GetNodeLinks(object):
                     join(AttLinkEndInstance,
                          AttLinkEndInstance.AttributeID == AttEndNodeInstance.AttributeID).\
                     join(sq.Methods,
-                         sq.Methods.MethodID == sq.Mapping.MethodID).\
+                         sq.Methods.MethodID == sq.Mappings.MethodID).\
                     join(sq.Sources,
-                         sq.Sources.SourceID == sq.Mapping.SourceID)\
+                         sq.Sources.SourceID == sq.Mappings.SourceID)\
                     .filter(AttLinkInstance.AttributeName == "ObjectTypeInstances").\
                     filter(sq.Attributes.AttributeName == "ObjectTypeInstances").\
                     filter(AttLinkEndInstance.AttributeName == "ObjectTypeInstances")\

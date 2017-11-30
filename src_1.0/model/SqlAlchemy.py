@@ -106,7 +106,7 @@ class CV_DualValueMeaning(Base):
 
     Name = Column(String(255), primary_key=True)
     Term = Column(String(255), primary_key=True)
-    BooleanValue = Column(String(10), nullable=False)
+    BooleanValue = Column(String(5), nullable=False)
     Definition = Column(String(5000))
     Category = Column(String(255))
     SourceVocabularyURI = Column(String(255))
@@ -184,7 +184,7 @@ class CV_SpatialReference(Base):
 class CV_DescriptorValues(Base):
     __tablename__ = 'CV_DescriptorValues'
 
-    Name = Column(String(255), primary_key=True)
+    Name = Column(String(255), primary_key=False)
     Term = Column(String(255), primary_key=True)
     AttributeName = Column(String(255)) # Column(ForeignKey('CV_AttributeName.Name'))
     Definition = Column(String(5000))
@@ -222,8 +222,8 @@ class CV_ElevationDatum(Base):
 # ****************************************************************************************************************** #
 
 
-class AttributeCategory(Base):
-    __tablename__ = 'AttributeCategory'
+class AttributeCategories(Base):
+    __tablename__ = 'AttributeCategories'
 
     AttributeCategoryID = Column(Integer, primary_key=True)
     AttributeCategoryName = Column(String(255), nullable=False)
@@ -240,14 +240,14 @@ class Attributes(Base):
     UnitNameCV = Column(ForeignKey('CV_Units.Name'))
     UnitName = Column(String(255))
     AttributeDataTypeCV = Column(ForeignKey('CV_AttributeDataType.Name'), nullable=False)
-    AttributeCategoryID = Column(ForeignKey('AttributeCategory.AttributeCategoryID'))
+    AttributeCategoryID = Column(ForeignKey('AttributeCategories.AttributeCategoryID'))
     ModelInputOrOutput = Column(String(50))
     AttributeDescription = Column(Text)
 
     ObjectTypes = relationship('ObjectTypes')
     Units = relationship('CV_Units')
     AttributeDataTypes = relationship('CV_AttributeDataType')
-    AttributeCategory = relationship('AttributeCategory')
+    AttributeCategories = relationship('AttributeCategories')
     AttributeNames = relationship('CV_AttributeName')
 
 
@@ -263,8 +263,8 @@ class Datasets(Base):
     Sources = relationship('Sources')
 
 
-class ObjectCategory(Base):
-    __tablename__ = 'ObjectCategory'
+class ObjectCategories(Base):
+    __tablename__ = 'ObjectCategories'
 
     ObjectCategoryID = Column(Integer, primary_key=True)
     ObjectCategoryName = Column(String(255), nullable=False)
@@ -280,11 +280,11 @@ class ObjectTypes(Base):
     ObjectTypologyCV = Column(ForeignKey('CV_ObjectTypology.Name'), nullable=False)
     icon = Column(BLOB)
     Description = Column(Text)
-    ObjectCategoryID = Column(ForeignKey('ObjectCategory.ObjectCategoryID'))
+    ObjectCategoryID = Column(ForeignKey('ObjectCategories.ObjectCategoryID'))
     DatasetID = Column(ForeignKey('Datasets.DatasetID'), nullable=False)
 
     Datasets = relationship('Datasets')
-    ObjectCategory = relationship('ObjectCategory')
+    ObjectCategories = relationship('ObjectCategories')
     ObjectTypes = relationship('CV_ObjectType')
     ObjectTypology = relationship('CV_ObjectTypology')
 
@@ -302,11 +302,11 @@ class DualValues(Base):
     __tablename__ = 'DualValues'
 
     BooleanValueID = Column(Integer, primary_key=True)
-    dualvalue = Column(String(256), nullable=False)
-    dualvaluemeaningCV = Column(ForeignKey('CV_DualValueMeaning.Name'))
+    Dualvalue = Column(String(5), nullable=False)
+    DualvalueMeaningCV = Column(ForeignKey('CV_DualValueMeaning.Name'))
     DataValuesMapperID = Column(ForeignKey('DataValuesMapper.DataValuesMapperID'), nullable=False)
 
-    dualvaluemeaning = relationship('CV_DualValueMeaning')
+    DualValueMeaning = relationship('CV_DualValueMeaning')
     DataValuesMapper = relationship('DataValuesMapper')
 
 
@@ -383,11 +383,11 @@ class DescriptorValues(Base):
 
     DescriptorValuesID = Column(Integer, primary_key=True)
     DescriptorValue = Column(String(500), nullable=False)
-    descriptorvalueCV = Column(ForeignKey('CV_DescriptorValues.Name'))
+    DescriptorvalueCV = Column(ForeignKey('CV_DescriptorValues.Term'))
     DataValuesMapperID = Column(ForeignKey('DataValuesMapper.DataValuesMapperID'), nullable=False)
 
     DataValuesMapper = relationship('DataValuesMapper')
-    descriptorvalues = relationship('CV_DescriptorValues')
+    DescriptorValues = relationship('CV_DescriptorValues')
 
 
 
@@ -395,7 +395,7 @@ class TimeSeries(Base):
     __tablename__ = 'TimeSeries'
 
     TimeSeriesID = Column(Integer, primary_key=True)
-    WaterOrCalendarYear = Column(String(50), nullable=False)
+    YearType = Column(String(50), nullable=False)
     AggregationStatisticCV = Column(ForeignKey('CV_AggregationStatistic.Name'), nullable=False)
     AggregationInterval = Column(Float, nullable=False)
     IntervalTimeUnitCV = Column(ForeignKey('CV_Units.Name'), nullable=False)
@@ -506,8 +506,8 @@ class Connections(Base):
     Instance2 = relationship('Instances', primaryjoin='Connections.StartNodeInstanceID == Instances.InstanceID')
 
 
-class InstanceCategory(Base):
-    __tablename__ = 'InstanceCategory'
+class InstanceCategories(Base):
+    __tablename__ = 'InstanceCategories'
 
     InstanceCategoryID = Column(Integer, primary_key=True)
     InstanceCategory = Column(String(255), nullable=False)
@@ -523,14 +523,14 @@ class Instances(Base):
     Longitude_x = Column(Float)
     Latitude_y = Column(Float)
     Description = Column(Text)
-    InstanceCategoryID = Column(ForeignKey('InstanceCategory.InstanceCategoryID'))
+    InstanceCategoryID = Column(ForeignKey('InstanceCategories.InstanceCategoryID'))
 
     InstanceNames = relationship('CV_InstanceName')
-    InstanceCategory = relationship('InstanceCategory')
+    InstanceCategories = relationship('InstanceCategories')
 
 
-class Mapping(Base):
-    __tablename__ = 'Mapping'
+class Mappings(Base):
+    __tablename__ = 'Mappings'
 
     MappingID = Column(Integer, primary_key=True)
     AttributeID = Column(ForeignKey('Attributes.AttributeID'), nullable=False)
@@ -559,14 +559,14 @@ class MasterNetworks(Base):
     VerticalDatum = relationship('CV_ElevationDatum')
 
 
-class ScenarioMapping(Base):
-    __tablename__ = 'ScenarioMapping'
+class ScenarioMappings(Base):
+    __tablename__ = 'ScenarioMappings'
 
     ScenarioMappingID = Column(Integer, primary_key=True)
     ScenarioID = Column(ForeignKey('Scenarios.ScenarioID'), nullable=False)
-    MappingID = Column(ForeignKey('Mapping.MappingID'), nullable=False)
+    MappingID = Column(ForeignKey('Mappings.MappingID'), nullable=False)
 
-    Mapping = relationship('Mapping')
+    Mappings = relationship('Mappings')
     Scenarios = relationship('Scenarios')
 
 
@@ -586,31 +586,3 @@ class Scenarios(Base):
     Units = relationship('CV_Units')
 
 
-
-
-# def _changeSchema(schema):
-#     import inspect
-#     import sys
-#     #get a list of all of the classes in the module
-#     clsmembers = inspect.getmembers(sys.modules[__name__], lambda member: inspect.isclass(member) and member.__module__ == __name__)
-#
-#     for name, Tbl in clsmembers:
-#         import sqlalchemy.ext.declarative.api as api
-#         if isinstance(Tbl, api.DeclarativeMeta):
-#             Tbl.__table__.schema = schema
-#
-#
-# def _getSchema(engine):
-#     from sqlalchemy.engine import reflection
-#
-#     insp=reflection.Inspector.from_engine(engine)
-#
-#     for name in insp.get_schema_names():
-#         if 'odm2' == name.lower():
-#             return name
-#     else:
-#         return insp.default_schema_name
-#
-# def setSchema(engine):
-#     s = _getSchema(engine)
-# _changeSchema(s)

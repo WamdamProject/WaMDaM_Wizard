@@ -138,7 +138,9 @@ class DB_Setup(object):
         self.__session.close()
         self.__session.bind.dispose()
         self.__session = None
-        
+    def getType(self):
+        return self.__type
+
     def backup_db(self):
         """
         used to backup the database before importing data into it.

@@ -77,22 +77,22 @@ class LoadingUtils():
     def load_scenario_mapping(params, session):
         """
         This is a helper method to create and instance of
-        the ScenarioMapping table and filling the appropriate
+        the ScenarioMappings table and filling the appropriate
         fields with values sent through params.
-        :param params: A list of data to fill scenariomapping table
-        :return: a filled instance of the scenariomapping table
+        :param params: A list of data to fill scenarioMappings table
+        :return: a filled instance of the scenarioMappings table
         """
-        dummy_scen_map = SqlAlchemy.ScenarioMapping()
+        dummy_scen_map = SqlAlchemy.ScenarioMappings()
         dummy_scen_map.ScenarioID = params[0]
         try:
-            dummy_scen_map.MappingID = session.query(SqlAlchemy.Mapping).filter(
+            dummy_scen_map.MappingID = session.query(SqlAlchemy.Mappings).filter(
                 and_(
-                    SqlAlchemy.Mapping.AttributeID == params[1],
-                    SqlAlchemy.Mapping.InstanceID == params[2],
-                    SqlAlchemy.Mapping.SourceID == session.query(SqlAlchemy.Sources).filter(
+                    SqlAlchemy.Mappings.AttributeID == params[1],
+                    SqlAlchemy.Mappings.InstanceID == params[2],
+                    SqlAlchemy.Mappings.SourceID == session.query(SqlAlchemy.Sources).filter(
                         SqlAlchemy.Sources.SourceName == params[3]
                     ).first().SourceID,
-                    SqlAlchemy.Mapping.MethodID == session.query(SqlAlchemy.Methods).filter(
+                    SqlAlchemy.Mappings.MethodID == session.query(SqlAlchemy.Methods).filter(
                         SqlAlchemy.Methods.MethodName == params[4]
                     ).first().MethodID
                 )
@@ -101,10 +101,10 @@ class LoadingUtils():
         except:
             raise Exception('An error occurred when loading nodes sheet')
         try:
-            test = session.query(SqlAlchemy.ScenarioMapping).filter(
+            test = session.query(SqlAlchemy.ScenarioMappings).filter(
                 and_(
-                    SqlAlchemy.ScenarioMapping.MappingID == dummy_scen_map.MappingID,
-                    SqlAlchemy.ScenarioMapping.ScenarioID == params[0]
+                    SqlAlchemy.ScenarioMappings.MappingID == dummy_scen_map.MappingID,
+                    SqlAlchemy.ScenarioMappings.ScenarioID == params[0]
                 )
             ).first().ScenarioMappingID
             return None
@@ -115,14 +115,14 @@ class LoadingUtils():
     def load_mapping(params, session):
         """
         This is a helper method to create an instance of the
-        Mapping table. it creates a connection between Attributes, Instances, Scenarios, Sources and Methods, and DataValeus
+        Mappings table. it creates a connection between Attributes, Instances, Scenarios, Sources and Methods, and DataValeus
         tables.
         :param session: 
-        :param params: A list of data to fill Mapping tables
-        :return: A filled instance of Mapping() table
+        :param params: A list of data to fill Mappings tables
+        :return: A filled instance of Mappings() table
         """
         # try:
-        dummy_map = SqlAlchemy.Mapping()
+        dummy_map = SqlAlchemy.Mappings()
         try:
             dummy_id = session.query(SqlAlchemy.Attributes).filter(
                 SqlAlchemy.Attributes.ObjectTypeID == params[0]
@@ -136,7 +136,7 @@ class LoadingUtils():
                 SqlAlchemy.Sources.SourceName == params[2]
             ).first().SourceID
         except:
-            # raise exception with Sources table and value if there is no params[2] valuye in the Sources table.
+            # raise exception with Sources table and value if there is no params[2] value in the Sources table.
             msg = "Sources|{}".format(params[2])
             raise Exception(msg)
         try:
@@ -144,18 +144,18 @@ class LoadingUtils():
                 SqlAlchemy.Methods.MethodName == params[3]
             ).first().MethodID
         except:
-            # raise exception with Methods table and value if there is no params[3] valuye in the Methods table.
+            # raise exception with Methods table and value if there is no params[3] value in the Methods table.
             msg = "Methods|{}".format(params[3])
             raise Exception(msg)
         dummy_map.DataValuesMapperID = params[4]
 
         try:
-            test = session.query(SqlAlchemy.Mapping).filter(
+            test = session.query(SqlAlchemy.Mappings).filter(
                 and_(
-                    SqlAlchemy.Mapping.AttributeID == dummy_map.AttributeID,
-                    SqlAlchemy.Mapping.InstanceID == dummy_map.InstanceID,
-                    SqlAlchemy.Mapping.SourceID == dummy_map.SourceID,
-                    SqlAlchemy.Mapping.MethodID == dummy_map.MethodID
+                    SqlAlchemy.Mappings.AttributeID == dummy_map.AttributeID,
+                    SqlAlchemy.Mappings.InstanceID == dummy_map.InstanceID,
+                    SqlAlchemy.Mappings.SourceID == dummy_map.SourceID,
+                    SqlAlchemy.Mappings.MethodID == dummy_map.MethodID
                 )
             ).first().MappingID
             return None, dummy_id

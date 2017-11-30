@@ -55,8 +55,8 @@ class GetComapreScenarios(object):
         # Drop those if existing MappingID1ScenarioID1 and MappingID1ScenarioID2 that are temp tables and create those tables.
         self.session.execute('DROP TABLE IF EXISTS MappingID1ScenarioID1')
         self.session.execute('DROP TABLE IF EXISTS MappingID1ScenarioID2')
-        self.session.execute('CREATE Table MappingID1ScenarioID1 AS SELECT ScenarioID,MappingID FROM "ScenarioMapping" WHERE "ScenarioID"="{}";'.format(str(scenarioID1)))
-        self.session.execute('CREATE Table MappingID1ScenarioID2 AS SELECT ScenarioID,MappingID FROM "ScenarioMapping" WHERE "ScenarioID"="{}";'.format(str(scenarioID2)))
+        self.session.execute('CREATE Table MappingID1ScenarioID1 AS SELECT ScenarioID,MappingID FROM "ScenarioMappings" WHERE "ScenarioID"="{}";'.format(str(scenarioID1)))
+        self.session.execute('CREATE Table MappingID1ScenarioID2 AS SELECT ScenarioID,MappingID FROM "ScenarioMappings" WHERE "ScenarioID"="{}";'.format(str(scenarioID2)))
         result = self.session.execute(CompareScenarioSql)
 
         # Create those if don't exist ScenarioComparision
@@ -106,10 +106,10 @@ class GetComapreScenarios(object):
                 'FROM "ScenarioComparision"' \
                 'JOIN "Mapping"' \
                 'ON "Mapping"."MappingID"="ScenarioComparision"."MappingID2"' \
-                'JOIN "ScenarioMapping"' \
-                'ON "ScenarioMapping"."MappingID"="ScenarioComparision"."MappingID2"' \
+                'JOIN "ScenarioMappings"' \
+                'ON "ScenarioMappings"."MappingID"="ScenarioComparision"."MappingID2"' \
                 'JOIN "Scenarios"' \
-                'ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID"' \
+                'ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID"' \
                 'Left JOIN "MasterNetworks"' \
                 'ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID"' \
                 'Left JOIN "Attributes"' \
@@ -149,10 +149,10 @@ class GetComapreScenarios(object):
                 'FROM "ScenarioComparision"' \
                 'JOIN "Mapping"' \
                 'ON "Mapping"."MappingID"="ScenarioComparision"."MappingID1"' \
-                'JOIN "ScenarioMapping"' \
-                'ON "ScenarioMapping"."MappingID"="ScenarioComparision"."MappingID1"' \
+                'JOIN "ScenarioMappings"' \
+                'ON "ScenarioMappings"."MappingID"="ScenarioComparision"."MappingID1"' \
                 'JOIN "Scenarios"'\
-                'ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID"' \
+                'ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID"' \
                 'Left JOIN "MasterNetworks"' \
                 'ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID"' \
                 'Left JOIN "Attributes"' \
@@ -194,18 +194,18 @@ class GetComapreScenarios(object):
                 'Left JOIN "Attributes"' \
                 'ON Attributes.ObjectTypeid = Objecttypes.Objecttypeid ' \
                 'Left JOIN "Mapping"'\
-                'ON Mapping.Attributeid = Attributes.Attributeid ' \
+                'ON Mappings.Attributeid = Attributes.Attributeid ' \
                 'Left JOIN "Instances"' \
-                'ON instances.instanceid = Mapping.Instanceid ' \
-                'Left JOIN "Scenariomapping"' \
-                'ON ScenarioMapping.Mappingid = Mapping.Mappingid ' \
+                'ON instances.instanceid = Mappings.Instanceid ' \
+                'Left JOIN "ScenarioMappings"' \
+                'ON ScenarioMappings.Mappingid = Mappings.Mappingid ' \
                 'Left JOIN  "Scenarios"' \
-                'ON Scenarios.ScenarioId=ScenarioMapping.Scenarioid ' \
+                'ON Scenarios.ScenarioId=ScenarioMappings.Scenarioid ' \
                 'Left JOIN "MasterNetworks"' \
                 'ON MasterNetworks.MasterNetworkid = Scenarios.MasterNetworkid '\
                 'Left JOIN "Methods"' \
-                'ON Methods.Methodid = Mapping.Methodid ' \
-                'Left JOIN Sources on Sources.Sourceid = Mapping.Sourceid '\
+                'ON Methods.Methodid = Mappings.Methodid ' \
+                'Left JOIN Sources on Sources.Sourceid = Mappings.Sourceid '\
                 'WHERE "Attributes"."AttributeName"="ObjectTypeInstances" AND ObjectTypologyCV !="Network" and InstanceName IS NOT NULL '\
                       'AND "Datasets"."DatasetAcronym"="{}" ' \
                       'AND "MasterNetworks"."MasterNetworkName"="{}" '\
@@ -240,10 +240,10 @@ class GetComapreScenarios(object):
                 'FROM "ScenarioComparision" '\
                 'JOIN "Mapping" '\
                 'ON "Mapping"."MappingID"="ScenarioComparision"."MappingID2" '\
-                'JOIN "ScenarioMapping" '\
-                'ON "ScenarioMapping"."MappingID"="ScenarioComparision"."MappingID2" '\
+                'JOIN "ScenarioMappings" '\
+                'ON "ScenarioMappings"."MappingID"="ScenarioComparision"."MappingID2" '\
                 'JOIN "Scenarios" '\
-                'ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks" '\
                 'ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
                 'Left JOIN "Attributes" '\
@@ -264,10 +264,10 @@ class GetComapreScenarios(object):
                 'FROM "ScenarioComparision" '\
                 'JOIN "Mapping" '\
                 'ON "Mapping"."MappingID"="ScenarioComparision"."MappingID1" '\
-                'JOIN "ScenarioMapping" '\
-                'ON "ScenarioMapping"."MappingID"="ScenarioComparision"."MappingID1" '\
+                'JOIN "ScenarioMappings" '\
+                'ON "ScenarioMappings"."MappingID"="ScenarioComparision"."MappingID1" '\
                 'JOIN "Scenarios" '\
-                'ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "Attributes" '\
                 'ON "Attributes"."AttributeID"="Mapping"."AttributeID" '\
                 'Left JOIN  "ObjectTypes" '\
@@ -310,10 +310,10 @@ class GetComapreScenarios(object):
                 'FROM "ScenarioComparision" '\
                 'JOIN "Mapping" '\
                 'ON "Mapping"."MappingID"="ScenarioComparision"."MappingID2" '\
-                'JOIN "ScenarioMapping" '\
-                'ON "ScenarioMapping"."MappingID"="ScenarioComparision"."MappingID2" '\
+                'JOIN "ScenarioMappings" '\
+                'ON "ScenarioMappings"."MappingID"="ScenarioComparision"."MappingID2" '\
                 'JOIN "Scenarios" '\
-                'ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks"  '\
                 'ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
                 'Left JOIN "Attributes" '\
@@ -334,10 +334,10 @@ class GetComapreScenarios(object):
                 'FROM "ScenarioComparision" '\
                 'JOIN "Mapping" '\
                 'ON "Mapping"."MappingID"="ScenarioComparision"."MappingID1" '\
-                'JOIN "ScenarioMapping" '\
-                'ON "ScenarioMapping"."MappingID"="ScenarioComparision"."MappingID1" '\
+                'JOIN "ScenarioMappings" '\
+                'ON "ScenarioMappings"."MappingID"="ScenarioComparision"."MappingID1" '\
                 'JOIN "Scenarios" '\
-                'ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "Attributes" '\
                 'ON "Attributes"."AttributeID"="Mapping"."AttributeID" '\
                 'Left JOIN  "ObjectTypes" '\
@@ -372,13 +372,13 @@ class GetComapreScenarios(object):
                 'Left JOIN "Attributes"'\
                 'ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
                 'Left JOIN "Mapping" '\
-                'ON Mapping.AttributeID= Attributes.AttributeID '\
+                'ON Mappings.AttributeID= Attributes.AttributeID '\
                 'Left JOIN "Instances" '\
                 'ON "Instances"."InstanceID"="Mapping"."InstanceID" '\
-                'Left JOIN "ScenarioMapping" '\
-                'ON "ScenarioMapping"."MappingID"="Mapping"."MappingID" '\
+                'Left JOIN "ScenarioMappings" '\
+                'ON "ScenarioMappings"."MappingID"="Mapping"."MappingID" '\
                 'Left JOIN "Scenarios" '\
-                'ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks" '\
                 'ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" ' \
                 'Left JOIN "DataValuesMapper" ' \
@@ -395,10 +395,10 @@ class GetComapreScenarios(object):
               'ON "ObjectTypes"."DatasetID"="Datasets"."DatasetID" ' \
               'Left JOIN  "Attributes" ' \
               'ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" ' \
-              'Left JOIN "Mapping" ON Mapping.AttributeID= Attributes.AttributeID ' \
+              'Left JOIN "Mapping" ON Mappings.AttributeID= Attributes.AttributeID ' \
               'Left JOIN "Instances" ON "Instances"."InstanceID"="Mapping"."InstanceID" ' \
-              'Left JOIN "ScenarioMapping" ON "ScenarioMapping"."MappingID"="Mapping"."MappingID" ' \
-              'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" ' \
+              'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mapping"."MappingID" ' \
+              'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" ' \
               'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" ' \
               'Left JOIN "Methods" ON "Methods"."MethodID"="Mapping"."MethodID" ' \
               'Left JOIN "Sources" ON "Sources"."SourceID"="Mapping"."SourceID" ' \
@@ -413,10 +413,10 @@ class GetComapreScenarios(object):
         sql = 'SELECT  count(InstanceName) AS AllMetadataAttributesCount FROM Datasets ' \
               'Left JOIN "ObjectTypes" ON "ObjectTypes"."DatasetID"="Datasets"."DatasetID" ' \
               'Left JOIN  "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" ' \
-              'Left JOIN "Mapping" ON Mapping.AttributeID= Attributes.AttributeID ' \
+              'Left JOIN "Mapping" ON Mappings.AttributeID= Attributes.AttributeID ' \
               'Left JOIN "Instances" ON "Instances"."InstanceID"="Mapping"."InstanceID" ' \
-              'Left JOIN "ScenarioMapping" ON "ScenarioMapping"."MappingID"="Mapping"."MappingID" ' \
-              'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" ' \
+              'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mapping"."MappingID" ' \
+              'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" ' \
               'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" ' \
               'Left JOIN "Methods" ON "Methods"."MethodID"="Mapping"."MethodID" ' \
               'Left JOIN "Sources" ON "Sources"."SourceID"="Mapping"."SourceID" ' \

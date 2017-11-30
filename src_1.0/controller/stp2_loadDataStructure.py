@@ -74,9 +74,14 @@ class Load_Struct_To_DB(Parse_Excel_File):
             dummy_attrib.AttributeName = dum_attrib[0]
             dummy_attrib.ObjectTypeID = self.__session.query(SqlAlchemy.ObjectTypes).order_by(
                 SqlAlchemy.ObjectTypes.ObjectTypeID.desc()).first().ObjectTypeID
+
+            dummy_attrib.UnitName = 'Dimensionless'
+
         else:
             dummy_attrib.AttributeName = 'DatasetAcronym'
             dummy_attrib.ObjectTypeID = dum_attrib[0]
+
+
 
         dummy_attrib.UnitNameCV = self.__session.query(SqlAlchemy.CV_Units).filter(
             SqlAlchemy.CV_Units.Name == 'Dimensionless'
@@ -126,7 +131,7 @@ class Load_Struct_To_DB(Parse_Excel_File):
                             row_id = row_id + static_rownum - 2
                             if all('' == cell.value for cell in row):
                                 break
-                            obj_cat = SqlAlchemy.ObjectCategory()
+                            obj_cat = SqlAlchemy.ObjectCategories()
                             if row[0].value == "":
                                 raise Exception('Error in {} row of "ObjectCategory_table" of sheet {}\nField named "ObjectCategoryName" is empty.\nThis field should not be empty.\nPlease fill this field to a value\n\n'
                                                 .format(row_id, sheet_names[0]))
@@ -143,7 +148,7 @@ class Load_Struct_To_DB(Parse_Excel_File):
 
                             if all('' == cell.value for cell in row):
                                 break
-                            attrib_cat = SqlAlchemy.AttributeCategory()
+                            attrib_cat = SqlAlchemy.AttributeCategories()
                             if row[0].value == "":
                                 raise Exception('Error in {} row of "AttributeCategory_table" of sheet "{}"\nField named "AttributeCategoryName" is empty.\nThis field should not be empty.\nPlease fill this field to a value\n\n'
                                                 .format(row_id, sheet_names[1]))
@@ -181,9 +186,16 @@ class Load_Struct_To_DB(Parse_Excel_File):
                                 raise Exception('Error in "Datasets_table" of sheet "{}"\nField named "DatasetName" is empty.\nThis field should not be empty.\nPlease fill this field to a value\n\n'
                                                 .format(sheet_names[2]))
                                 # raise Exception('Empty Field found in DatasetName Column in Dataset table')
-                            existname = self.__session.query(SqlAlchemy.Datasets).filter(
-                                    SqlAlchemy.Datasets.DatasetName == row[0].value
-                                ).first()
+                            existname = None
+                            try:
+                                existname = self.__session.query(SqlAlchemy.Datasets).filter(
+                                        SqlAlchemy.Datasets.DatasetName == row[0].value
+                                    ).first().DatasetAcronym
+                                self.datasetAcronym = existname
+                                define.datasetName = existname
+                            except:
+                                existname = None
+
                             if existname == None:
                                 data_struct.DatasetName = row[0].value
                                 if row[1].value:
@@ -258,8 +270,8 @@ class Load_Struct_To_DB(Parse_Excel_File):
 
                             try:
                                 if row[6].value:
-                                    obj_type.ObjectCategoryID = self.__session.query(SqlAlchemy.ObjectCategory).filter(
-                                        SqlAlchemy.ObjectCategory.ObjectCategoryName == row[6].value
+                                    obj_type.ObjectCategoryID = self.__session.query(SqlAlchemy.ObjectCategories).filter(
+                                        SqlAlchemy.ObjectCategories.ObjectCategoryName == row[6].value
                                     ).first().ObjectCategoryID
                             except Exception as e:
                                 print e
@@ -389,8 +401,8 @@ class Load_Struct_To_DB(Parse_Excel_File):
                                                     .format(sheet_names[3], row[5].value))
                             if row[6].value:
                                 try:
-                                    attrib.AttributeCategoryID = self.__session.query(SqlAlchemy.AttributeCategory).filter(
-                                        SqlAlchemy.AttributeCategory.AttributeCategoryName == row[6].value
+                                    attrib.AttributeCategoryID = self.__session.query(SqlAlchemy.AttributeCategories).filter(
+                                        SqlAlchemy.AttributeCategories.AttributeCategoryName == row[6].value
                                     ).first().AttributeCategoryID
                                 except Exception as e:
                                     print e

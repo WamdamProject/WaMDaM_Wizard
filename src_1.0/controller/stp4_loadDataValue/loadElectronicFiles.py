@@ -115,12 +115,12 @@ class LoadElectronicFiles(Parse_Excel_File, LoadingUtils):
                 self.test_properties(self.__session, row, sheet_name)
 
                 # getting datavaluemapper id using the above params fro Mapping table
-                datavalues = self.__session.query(SqlAlchemy.Mapping).filter(
+                datavalues = self.__session.query(SqlAlchemy.Mappings).filter(
                     and_(
-                        SqlAlchemy.Mapping.AttributeID == attrib_id,
-                        SqlAlchemy.Mapping.InstanceID == instance_id,
-                        SqlAlchemy.Mapping.SourceID == source_id,
-                        SqlAlchemy.Mapping.MethodID == method_id
+                        SqlAlchemy.Mappings.AttributeID == attrib_id,
+                        SqlAlchemy.Mappings.InstanceID == instance_id,
+                        SqlAlchemy.Mappings.SourceID == source_id,
+                        SqlAlchemy.Mappings.MethodID == method_id
                     )
                 ).first()
 
@@ -153,7 +153,7 @@ class LoadElectronicFiles(Parse_Excel_File, LoadingUtils):
 
                 if not datavalues:
                     datavalmapper = self.load_data_values(self.__session)
-                    dataval_map = SqlAlchemy.Mapping()
+                    dataval_map = SqlAlchemy.Mappings()
                     dataval_map.AttributeID = attrib_id
                     dataval_map.InstanceID = instance_id
                     dataval_map.SourceID = source_id
@@ -190,26 +190,26 @@ class LoadElectronicFiles(Parse_Excel_File, LoadingUtils):
                         self.setup.push_data(file_base)
                         value = False
 
-                scenariomap = SqlAlchemy.ScenarioMapping()
+                scenariomap = SqlAlchemy.ScenarioMappings()
                 scenariomap.ScenarioID = scenario_id
 
                 if datavalues:
                     scenariomap.MappingID = datavalues.MappingID
                 else:
-                    scenariomap.MappingID = self.__session.query(SqlAlchemy.Mapping).filter(
+                    scenariomap.MappingID = self.__session.query(SqlAlchemy.Mappings).filter(
                         and_(
-                            SqlAlchemy.Mapping.AttributeID == attrib_id,
-                            SqlAlchemy.Mapping.InstanceID == instance_id,
-                            SqlAlchemy.Mapping.SourceID == source_id,
-                            SqlAlchemy.Mapping.MethodID == method_id
+                            SqlAlchemy.Mappings.AttributeID == attrib_id,
+                            SqlAlchemy.Mappings.InstanceID == instance_id,
+                            SqlAlchemy.Mappings.SourceID == source_id,
+                            SqlAlchemy.Mappings.MethodID == method_id
                         )
                     ).first().MappingID
 
                 try:
-                    test = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
+                    test = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                         and_(
-                            SqlAlchemy.ScenarioMapping.MappingID == scenariomap.MappingID,
-                            SqlAlchemy.ScenarioMapping.ScenarioID == scenariomap.ScenarioID
+                            SqlAlchemy.ScenarioMappings.MappingID == scenariomap.MappingID,
+                            SqlAlchemy.ScenarioMappings.ScenarioID == scenariomap.ScenarioID
                         )
                     ).first().ScenarioMappingID
                 except:

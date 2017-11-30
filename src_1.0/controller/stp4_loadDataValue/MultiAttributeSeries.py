@@ -202,21 +202,21 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                     # This is the code to load multicolumns rows put under the similar category.
                     if diff_scene:
                         multi_map = None
-                        multiarray_mapping = SqlAlchemy.Mapping()
+                        multiarray_mapping = SqlAlchemy.Mappings()
 
                         # This is to load the main attribs to multicolumn table
                         # Here, we test if the mapping combination exits, if no, the try clause will
                         # fail and the new mapping combination with main attribute will be loaded from
                         # the except clause.
                         try:
-                            multi_map = self.__session.query(SqlAlchemy.Mapping).filter(
+                            multi_map = self.__session.query(SqlAlchemy.Mappings).filter(
                                 and_(
-                                    SqlAlchemy.Mapping.AttributeID == self.__session.query(
+                                    SqlAlchemy.Mappings.AttributeID == self.__session.query(
                                         SqlAlchemy.Attributes).filter(
                                         SqlAlchemy.Attributes.AttributeName == main_col.value).first().AttributeID,
-                                    SqlAlchemy.Mapping.InstanceID == instance_id,
-                                    SqlAlchemy.Mapping.SourceID == source_id,
-                                    SqlAlchemy.Mapping.MethodID == method_id
+                                    SqlAlchemy.Mappings.InstanceID == instance_id,
+                                    SqlAlchemy.Mappings.SourceID == source_id,
+                                    SqlAlchemy.Mappings.MethodID == method_id
                                 )
                             ).all()
 
@@ -244,7 +244,7 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                             main_data_val = datavalmapper.DataValuesMapperID
 
                         # Loads Scenariomapping for the new loaded combination
-                        scenariomap = SqlAlchemy.ScenarioMapping()
+                        scenariomap = SqlAlchemy.ScenarioMappings()
                         scenariomap.ScenarioID = scenario_id
 
                         # Test if the current mapping row exist in the mapping table,
@@ -253,16 +253,16 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                         if multi_map:
                             scenariomap.MappingID = multi_map.MappingID
                         else:
-                            scenariomap.MappingID = self.__session.query(SqlAlchemy.Mapping).filter(
+                            scenariomap.MappingID = self.__session.query(SqlAlchemy.Mappings).filter(
                                 and_(
-                                    SqlAlchemy.Mapping.AttributeID == self.__session.query(
+                                    SqlAlchemy.Mappings.AttributeID == self.__session.query(
                                         SqlAlchemy.Attributes).filter(
                                         SqlAlchemy.Attributes.AttributeName == main_col.value
                                     ).first().AttributeID,
-                                    SqlAlchemy.Mapping.InstanceID == instance_id,
-                                    SqlAlchemy.Mapping.SourceID == source_id,
-                                    SqlAlchemy.Mapping.MethodID == method_id,
-                                    SqlAlchemy.Mapping.DataValuesMapperID == main_data_val
+                                    SqlAlchemy.Mappings.InstanceID == instance_id,
+                                    SqlAlchemy.Mappings.SourceID == source_id,
+                                    SqlAlchemy.Mappings.MethodID == method_id,
+                                    SqlAlchemy.Mappings.DataValuesMapperID == main_data_val
                                 )
                             ).first().MappingID
 
@@ -270,10 +270,10 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                             # Tries if the current mapping ID exist with the current scenario ID
                             # if yes, the scenario is shared (not loaded) else new entry is loaded.
 
-                            test = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
+                            test = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                                 and_(
-                                    SqlAlchemy.ScenarioMapping.MappingID == scenariomap.MappingID,
-                                    SqlAlchemy.ScenarioMapping.ScenarioID == scenariomap.ScenarioID
+                                    SqlAlchemy.ScenarioMappings.MappingID == scenariomap.MappingID,
+                                    SqlAlchemy.ScenarioMappings.ScenarioID == scenariomap.ScenarioID
                                 )
                             ).first().ScenarioMappingID
                         except:
@@ -289,15 +289,15 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                                 # tries to get the current mapping values with the sub_attribute
                                 # if it does not exist the current mapping combination is added
                                 # with the sub_attribute
-                                main_var_map = self.__session.query(SqlAlchemy.Mapping).filter(
+                                main_var_map = self.__session.query(SqlAlchemy.Mappings).filter(
                                     and_(
-                                        SqlAlchemy.Mapping.AttributeID == self.__session.query(
+                                        SqlAlchemy.Mappings.AttributeID == self.__session.query(
                                             SqlAlchemy.Attributes).filter(
                                             SqlAlchemy.Attributes.AttributeName == sub_attrib.value
                                         ).first().AttributeID,
-                                        SqlAlchemy.Mapping.InstanceID == instance_id,
-                                        SqlAlchemy.Mapping.SourceID == source_id,
-                                        SqlAlchemy.Mapping.MethodID == method_id
+                                        SqlAlchemy.Mappings.InstanceID == instance_id,
+                                        SqlAlchemy.Mappings.SourceID == source_id,
+                                        SqlAlchemy.Mappings.MethodID == method_id
                                     )
                                 ).all()
 
@@ -313,7 +313,7 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                                 sub_data_val = main_var_map.DataValuesMapperID
                             except Exception as e:
                                 datavalmapper = self.load_data_values(self.__session)
-                                multiarray_mapping = SqlAlchemy.Mapping()
+                                multiarray_mapping = SqlAlchemy.Mappings()
                                 multiarray_mapping.AttributeID = self.__session.query(SqlAlchemy.Attributes).filter(
                                     SqlAlchemy.Attributes.AttributeName == sub_attrib.value
                                 ).first().AttributeID
@@ -341,31 +341,31 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
 
                             # adding scenario for new sub attribute mapping combination.
                             # This follows same law as loading the main_attributes. Sharing is done here
-                            scenariomap = SqlAlchemy.ScenarioMapping()
+                            scenariomap = SqlAlchemy.ScenarioMappings()
                             scenariomap.ScenarioID = scenario_id
                             if main_var_map:
                                 scenariomap.MappingID = main_var_map.MappingID
                             else:
-                                scenariomap.MappingID = self.__session.query(SqlAlchemy.Mapping).filter(
+                                scenariomap.MappingID = self.__session.query(SqlAlchemy.Mappings).filter(
                                     and_(
-                                        SqlAlchemy.Mapping.AttributeID == self.__session.query(
+                                        SqlAlchemy.Mappings.AttributeID == self.__session.query(
                                             SqlAlchemy.Attributes).filter(
                                             SqlAlchemy.Attributes.AttributeName == sub_attrib.value
                                         ).first().AttributeID,
-                                        SqlAlchemy.Mapping.InstanceID == instance_id,
-                                        SqlAlchemy.Mapping.SourceID == source_id,
-                                        SqlAlchemy.Mapping.MethodID == method_id,
-                                        SqlAlchemy.Mapping.DataValuesMapperID == sub_data_val
+                                        SqlAlchemy.Mappings.InstanceID == instance_id,
+                                        SqlAlchemy.Mappings.SourceID == source_id,
+                                        SqlAlchemy.Mappings.MethodID == method_id,
+                                        SqlAlchemy.Mappings.DataValuesMapperID == sub_data_val
                                     )
                                 ).first().MappingID
 
                             try:
                                 # we test if the mappingid-scenarioid association exists in scenariomapping, if yes,
-                                # we reuse that association and no new entry is added to scenariomapping.
-                                test = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
+                                # we reuse that association and no new entry is added to scenarioMappings.
+                                test = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                                     and_(
-                                        SqlAlchemy.ScenarioMapping.MappingID == scenariomap.MappingID,
-                                        SqlAlchemy.ScenarioMapping.ScenarioID == scenariomap.ScenarioID
+                                        SqlAlchemy.ScenarioMappings.MappingID == scenariomap.MappingID,
+                                        SqlAlchemy.ScenarioMappings.ScenarioID == scenariomap.ScenarioID
                                     )
                                 ).first().ScenarioMappingID
                             except:
@@ -378,15 +378,15 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                         for row_id, sub_attrib in enumerate(sub_attrib_array[:]):
                             if not sub_attrib.value:
                                 continue
-                            multiarray_attrib_id = self.__session.query(SqlAlchemy.Mapping).filter(
+                            multiarray_attrib_id = self.__session.query(SqlAlchemy.Mappings).filter(
                                 and_(
-                                    SqlAlchemy.Mapping.AttributeID == self.__session.query(
+                                    SqlAlchemy.Mappings.AttributeID == self.__session.query(
                                         SqlAlchemy.Attributes).filter(
                                         SqlAlchemy.Attributes.AttributeName == sub_attrib.value
                                     ).first().AttributeID,
-                                    SqlAlchemy.Mapping.SourceID == source_id,
-                                    SqlAlchemy.Mapping.MethodID == method_id,
-                                    SqlAlchemy.Mapping.InstanceID == instance_id
+                                    SqlAlchemy.Mappings.SourceID == source_id,
+                                    SqlAlchemy.Mappings.MethodID == method_id,
+                                    SqlAlchemy.Mappings.InstanceID == instance_id
                                 )
                             ).first().DataValuesMapperID
 
@@ -437,18 +437,18 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                         found = False
                         multi_map = None
                         main_data_val = None
-                        multiarray_mapping = SqlAlchemy.Mapping()
+                        multiarray_mapping = SqlAlchemy.Mappings()
 
                         # This is to load the main attribs to multicolumn table
                         try:
-                            multi_map = self.__session.query(SqlAlchemy.Mapping).filter(
+                            multi_map = self.__session.query(SqlAlchemy.Mappings).filter(
                                 and_(
-                                    SqlAlchemy.Mapping.AttributeID == self.__session.query(
+                                    SqlAlchemy.Mappings.AttributeID == self.__session.query(
                                         SqlAlchemy.Attributes).filter(
                                         SqlAlchemy.Attributes.AttributeName == main_col.value).first().AttributeID,
-                                    SqlAlchemy.Mapping.InstanceID == instance_id,
-                                    SqlAlchemy.Mapping.SourceID == source_id,
-                                    SqlAlchemy.Mapping.MethodID == method_id
+                                    SqlAlchemy.Mappings.InstanceID == instance_id,
+                                    SqlAlchemy.Mappings.SourceID == source_id,
+                                    SqlAlchemy.Mappings.MethodID == method_id
                                 )
                             ).all()
 
@@ -456,15 +456,15 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                             # mappingid, else, we will make new mapping entry in the db
                             for mapping in multi_map:
                                 try:
-                                    scene = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
+                                    scene = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                                         and_(
-                                            SqlAlchemy.ScenarioMapping.MappingID == mapping.MappingID,
-                                            SqlAlchemy.ScenarioMapping.ScenarioID == scenario_id
+                                            SqlAlchemy.ScenarioMappings.MappingID == Mappings.MappingID,
+                                            SqlAlchemy.ScenarioMappings.ScenarioID == scenario_id
                                         )
                                     ).first().ScenarioMappingID
                                     found = True
                                     multi_map = mapping
-                                    main_data_val = mapping.DataValuesMapperID
+                                    main_data_val = Mappings.DataValuesMapperID
                                 except:
                                     pass
                             datavalue = multi_map.DataValuesMapperID
@@ -486,27 +486,27 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                         # this is to load scenariomapping for rows under different category.
                         # gets mapping ID is mapping combination already existed else it gets the
                         # most recent mapping combination loaded.
-                        scenariomap = SqlAlchemy.ScenarioMapping()
+                        scenariomap = SqlAlchemy.ScenarioMappings()
                         scenariomap.ScenarioID = scenario_id
                         if multi_map and found:
                             scenariomap.MappingID = multi_map.MappingID
                         else:
-                            scenariomap.MappingID = self.__session.query(SqlAlchemy.Mapping).filter(
+                            scenariomap.MappingID = self.__session.query(SqlAlchemy.Mappings).filter(
                                 and_(
-                                    SqlAlchemy.Mapping.AttributeID == attrib_id,
-                                    SqlAlchemy.Mapping.InstanceID == instance_id,
-                                    SqlAlchemy.Mapping.SourceID == source_id,
-                                    SqlAlchemy.Mapping.MethodID == method_id,
-                                    SqlAlchemy.Mapping.DataValuesMapperID == main_data_val
+                                    SqlAlchemy.Mappings.AttributeID == attrib_id,
+                                    SqlAlchemy.Mappings.InstanceID == instance_id,
+                                    SqlAlchemy.Mappings.SourceID == source_id,
+                                    SqlAlchemy.Mappings.MethodID == method_id,
+                                    SqlAlchemy.Mappings.DataValuesMapperID == main_data_val
                                 )
                             ).first().MappingID
 
                         try:
                             # tests to see if mapping combination exists with scenarioid
-                            test = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
+                            test = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                                 and_(
-                                    SqlAlchemy.ScenarioMapping.MappingID == scenariomap.MappingID,
-                                    SqlAlchemy.ScenarioMapping.ScenarioID == scenariomap.ScenarioID
+                                    SqlAlchemy.ScenarioMappings.MappingID == scenariomap.MappingID,
+                                    SqlAlchemy.ScenarioMappings.ScenarioID == scenariomap.ScenarioID
                                 )
                             ).first().ScenarioMappingID
                         except:
@@ -517,29 +517,29 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                                 # scenario ID.
                                 # If the mapping ID does not exist in the scenariomapping ID, then it will
                                 # be loaded with the scenario ID
-                                scenario_test = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
-                                    SqlAlchemy.ScenarioMapping.MappingID == scenariomap.MappingID
-                                ).order_by(SqlAlchemy.ScenarioMapping.ScenarioMappingID).first().MappingID
+                                scenario_test = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
+                                    SqlAlchemy.ScenarioMappings.MappingID == scenariomap.MappingID
+                                ).order_by(SqlAlchemy.ScenarioMappings.ScenarioMappingID).first().MappingID
 
                                 datavalmapper = self.load_data_values(self.__session)
                                 main_data_val = datavalmapper.DataValuesMapperID
-                                multiarray_mapping.AttributeID = self.__session.query(SqlAlchemy.Attributes).filter(
+                                multiarray_mapping .AttributeID = self.__session.query(SqlAlchemy.Attributes).filter(
                                     SqlAlchemy.Attributes.AttributeName == main_col.value
                                 ).first().AttributeID
-                                multiarray_mapping.InstanceID = instance_id
-                                multiarray_mapping.SourceID = source_id
-                                multiarray_mapping.MethodID = method_id
-                                multiarray_mapping.DataValuesMapperID = datavalmapper.DataValuesMapperID
+                                multiarray_mapping .InstanceID = instance_id
+                                multiarray_mapping .SourceID = source_id
+                                multiarray_mapping .MethodID = method_id
+                                multiarray_mapping .DataValuesMapperID = datavalmapper.DataValuesMapperID
                                 self.setup.push_data(datavalmapper)
                                 self.setup.push_data(multiarray_mapping)
 
-                                scenariomap.MappingID = self.__session.query(SqlAlchemy.Mapping).filter(
+                                scenariomap.MappingID = self.__session.query(SqlAlchemy.Mappings).filter(
                                     and_(
-                                        SqlAlchemy.Mapping.AttributeID == attrib_id,
-                                        SqlAlchemy.Mapping.InstanceID == instance_id,
-                                        SqlAlchemy.Mapping.SourceID == source_id,
-                                        SqlAlchemy.Mapping.MethodID == method_id,
-                                        SqlAlchemy.Mapping.DataValuesMapperID == datavalmapper.DataValuesMapperID
+                                        SqlAlchemy.Mappings.AttributeID == attrib_id,
+                                        SqlAlchemy.Mappings.InstanceID == instance_id,
+                                        SqlAlchemy.Mappings.SourceID == source_id,
+                                        SqlAlchemy.Mappings.MethodID == method_id,
+                                        SqlAlchemy.Mappings.DataValuesMapperID == datavalmapper.DataValuesMapperID
                                     )
                                 ).first().MappingID
                                 self.setup.push_data(scenariomap)
@@ -556,41 +556,41 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                             found = False
                             sub_data_val = None
                             try:
-                                main_var_map = self.__session.query(SqlAlchemy.Mapping).filter(
+                                main_var_map = self.__session.query(SqlAlchemy.Mappings).filter(
                                     and_(
-                                        SqlAlchemy.Mapping.AttributeID == self.__session.query(
+                                        SqlAlchemy.Mappings.AttributeID == self.__session.query(
                                             SqlAlchemy.Attributes).filter(
                                             SqlAlchemy.Attributes.AttributeName == sub_attrib.value
                                         ).first().AttributeID,
-                                        SqlAlchemy.Mapping.InstanceID == instance_id,
-                                        SqlAlchemy.Mapping.SourceID == source_id,
-                                        SqlAlchemy.Mapping.MethodID == method_id
+                                        SqlAlchemy.Mappings.InstanceID == instance_id,
+                                        SqlAlchemy.Mappings.SourceID == source_id,
+                                        SqlAlchemy.Mappings.MethodID == method_id
                                     )
                                 ).all()
                                 for mapping in main_var_map:
                                     try:
-                                        scene = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
+                                        scene = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                                             and_(
-                                                SqlAlchemy.ScenarioMapping.MappingID == mapping.MappingID,
-                                                SqlAlchemy.ScenarioMapping.ScenarioID == scenario_id
+                                                SqlAlchemy.ScenarioMappings.MappingID == Mappings.MappingID,
+                                                SqlAlchemy.ScenarioMappings.ScenarioID == scenario_id
                                             )
                                         ).first().ScenarioMappingID
                                         found = True
                                         main_var_map = mapping
-                                        sub_data_val = mapping.DataValuesMapperID
+                                        sub_data_val = Mappings.DataValuesMapperID
                                     except:
                                         pass
                                 test = main_var_map.DataValuesMapperID
                             except Exception as e:
                                 datavalmapper = self.load_data_values(self.__session)
-                                multiarray_mapping = SqlAlchemy.Mapping()
-                                multiarray_mapping.AttributeID = self.__session.query(SqlAlchemy.Attributes).filter(
+                                multiarray_mapping = SqlAlchemy.Mappings()
+                                multiarray_mapping .AttributeID = self.__session.query(SqlAlchemy.Attributes).filter(
                                     SqlAlchemy.Attributes.AttributeName == sub_attrib.value
                                 ).first().AttributeID
-                                multiarray_mapping.InstanceID = instance_id
-                                multiarray_mapping.SourceID = source_id
-                                multiarray_mapping.MethodID = method_id
-                                multiarray_mapping.DataValuesMapperID = datavalmapper.DataValuesMapperID
+                                multiarray_mapping .InstanceID = instance_id
+                                multiarray_mapping .SourceID = source_id
+                                multiarray_mapping .MethodID = method_id
+                                multiarray_mapping .DataValuesMapperID = datavalmapper.DataValuesMapperID
                                 self.setup.push_data(multiarray_mapping)
                                 self.setup.push_data(datavalmapper)
                                 sub_data_val = datavalmapper.DataValuesMapperID
@@ -609,36 +609,36 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                                     multicolumn.DataValuesMapperID = main_data_val
                                     self.setup.push_data(multicolumn)
 
-                            scenariomap = SqlAlchemy.ScenarioMapping()
+                            scenariomap = SqlAlchemy.ScenarioMappings()
                             scenariomap.ScenarioID = scenario_id
                             if main_var_map and found:
                                 scenariomap.MappingID = main_var_map.MappingID
                             else:
-                                scenariomap.MappingID = self.__session.query(SqlAlchemy.Mapping).filter(
+                                scenariomap.MappingID = self.__session.query(SqlAlchemy.Mappings).filter(
                                     and_(
-                                        SqlAlchemy.Mapping.AttributeID == self.__session.query(
+                                        SqlAlchemy.Mappings.AttributeID == self.__session.query(
                                             SqlAlchemy.Attributes).filter(
                                             SqlAlchemy.Attributes.AttributeName == sub_attrib.value
                                         ).first().AttributeID,
-                                        SqlAlchemy.Mapping.InstanceID == instance_id,
-                                        SqlAlchemy.Mapping.SourceID == source_id,
-                                        SqlAlchemy.Mapping.MethodID == method_id,
-                                        SqlAlchemy.Mapping.DataValuesMapperID == sub_data_val
+                                        SqlAlchemy.Mappings.InstanceID == instance_id,
+                                        SqlAlchemy.Mappings.SourceID == source_id,
+                                        SqlAlchemy.Mappings.MethodID == method_id,
+                                        SqlAlchemy.Mappings.DataValuesMapperID == sub_data_val
                                     )
                                 ).first().MappingID
 
                             try:
-                                test = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
+                                test = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                                     and_(
-                                        SqlAlchemy.ScenarioMapping.MappingID == scenariomap.MappingID,
-                                        SqlAlchemy.ScenarioMapping.ScenarioID == scenariomap.ScenarioID
+                                        SqlAlchemy.ScenarioMappings.MappingID == scenariomap.MappingID,
+                                        SqlAlchemy.ScenarioMappings.ScenarioID == scenariomap.ScenarioID
                                     )
                                 ).first().ScenarioMappingID
                             except:
                                 try:
-                                    scenario_test = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
-                                        SqlAlchemy.ScenarioMapping.MappingID == scenariomap.MappingID
-                                    ).order_by(SqlAlchemy.ScenarioMapping.ScenarioMappingID).first().MappingID
+                                    scenario_test = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
+                                        SqlAlchemy.ScenarioMappings.MappingID == scenariomap.MappingID
+                                    ).order_by(SqlAlchemy.ScenarioMappings.ScenarioMappingID).first().MappingID
 
                                     datavalmapper = self.load_data_values(self.__session)
                                     main_data_val = datavalmapper.DataValuesMapperID
@@ -666,13 +666,13 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                                         multicolumn.DataValuesMapperID = main_data_val
                                         self.setup.push_data(multicolumn)
 
-                                    scenariomap.MappingID = self.__session.query(SqlAlchemy.Mapping).filter(
+                                    scenariomap.MappingID = self.__session.query(SqlAlchemy.Mappings).filter(
                                         and_(
-                                            SqlAlchemy.Mapping.AttributeID == attrib_id,
-                                            SqlAlchemy.Mapping.InstanceID == instance_id,
-                                            SqlAlchemy.Mapping.SourceID == source_id,
-                                            SqlAlchemy.Mapping.MethodID == method_id,
-                                            SqlAlchemy.Mapping.DataValuesMapperID == datavalmapper.DataValuesMapperID
+                                            SqlAlchemy.Mappings.AttributeID == attrib_id,
+                                            SqlAlchemy.Mappings.InstanceID == instance_id,
+                                            SqlAlchemy.Mappings.SourceID == source_id,
+                                            SqlAlchemy.Mappings.MethodID == method_id,
+                                            SqlAlchemy.Mappings.DataValuesMapperID == datavalmapper.DataValuesMapperID
                                         )
                                     ).first().MappingID
                                     self.setup.push_data(scenariomap)
@@ -686,27 +686,27 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                         for row_id, sub_attrib in enumerate(sub_attrib_array[:]):
                             if not sub_attrib.value:
                                 continue
-                            multiarray_attrib_id = self.__session.query(SqlAlchemy.Mapping).filter(
+                            multiarray_attrib_id = self.__session.query(SqlAlchemy.Mappings).filter(
                                 and_(
-                                    SqlAlchemy.Mapping.AttributeID == self.__session.query(
+                                    SqlAlchemy.Mappings.AttributeID == self.__session.query(
                                         SqlAlchemy.Attributes).filter(
                                         SqlAlchemy.Attributes.AttributeName == sub_attrib.value
                                     ).first().AttributeID,
-                                    SqlAlchemy.Mapping.SourceID == source_id,
-                                    SqlAlchemy.Mapping.MethodID == method_id,
-                                    SqlAlchemy.Mapping.InstanceID == instance_id
+                                    SqlAlchemy.Mappings.SourceID == source_id,
+                                    SqlAlchemy.Mappings.MethodID == method_id,
+                                    SqlAlchemy.Mappings.InstanceID == instance_id
                                 )
                             ).all()
 
                             for mapping in multiarray_attrib_id:
                                 try:
-                                    scene = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
+                                    scene = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                                         and_(
-                                            SqlAlchemy.ScenarioMapping.MappingID == mapping.MappingID,
-                                            SqlAlchemy.ScenarioMapping.ScenarioID == scenario_id
+                                            SqlAlchemy.ScenarioMappings.MappingID == Mappings.MappingID,
+                                            SqlAlchemy.ScenarioMappings.ScenarioID == scenario_id
                                         )
                                     ).first().ScenarioMappingID
-                                    multiarray_attrib_id = mapping.DataValuesMapperID
+                                    multiarray_attrib_id = Mappings.DataValuesMapperID
                                 except:
                                     pass
 

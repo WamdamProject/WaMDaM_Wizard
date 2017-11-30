@@ -110,152 +110,153 @@ class Load_CV_To_DB(Parse_Excel_File):
         loaded using data from the corresponding sheet.
         :return: None
         """
+        try:
+            for key, value in vocab.items():
+                # Defining the URL to extract the csv files.
+                url = 'http://vocabulary.wamdam.org/api/v1/{}/?format=csv'.format(key)
+                # url = 'http://vocabulary.wamdam.org/'
 
-        for key, value in vocab.items():
-            # Defining the URL to extract the csv files.
-            url = 'http://vocabulary.wamdam.org/api/v1/{}/?format=csv'.format(key)
-            # url = 'http://vocabulary.wamdam.org/'
+                # check if db CV tables are empty. it suffices to check one table.
+                # try:
+                #     s = self.__session.query(SqlAlchemy.CV_AggregationStatistic).first().Name
+                #     raise Exception('CV tables Not empty.')
+                # except Exception as e:
+                #     print 'it is here.'
+                #     print e
+                try:
+                    response = urllib2.urlopen(url)
+                except:
+                    continue
+                csv_content = csv.reader(response)
+                cv_model = value
 
-            # check if db CV tables are empty. it suffices to check one table.
-            # try:
-            #     s = self.__session.query(SqlAlchemy.CV_AggregationStatistic).first().Name
-            #     raise Exception('CV tables Not empty.')
-            # except Exception as e:
-            #     print 'it is here.'
-            #     print e
-            try:
-                response = urllib2.urlopen(url)
-            except:
-                continue
-            csv_content = csv.reader(response)
-            cv_model = value
+                if key == "aggregationstatistic":
+                    result = self.__session.query(SqlAlchemy.CV_AggregationStatistic.Name).all()
+                    result = [row[0] for row in result]
+                    for row in list(csv_content)[1:]:
+                        model = cv_model()
+                        model = self.load_cv(model, row, result)
+                        if model:
+                            self.setup.push_data(model)
 
-            if key == "aggregationstatistic":
-                result = self.__session.query(SqlAlchemy.CV_AggregationStatistic.Name).all()
-                result = [row[0] for row in result]
-                for row in list(csv_content)[1:]:
-                    model = cv_model()
-                    model = self.load_cv(model, row, result)
-                    if model:
-                        self.setup.push_data(model)
+                if key == "attributedatatype":
+                    result = self.__session.query(SqlAlchemy.CV_AttributeDataType.Name).all()
+                    result = [row[0] for row in result]
+                    for row in list(csv_content)[1:]:
+                        model = cv_model()
+                        model = self.load_cv(model, row, result)
+                        if model:
+                            self.setup.push_data(model)
 
-            if key == "attributedatatype":
-                result = self.__session.query(SqlAlchemy.CV_AttributeDataType.Name).all()
-                result = [row[0] for row in result]
-                for row in list(csv_content)[1:]:
-                    model = cv_model()
-                    model = self.load_cv(model, row, result)
-                    if model:
-                        self.setup.push_data(model)
+                if key == "attributename":
+                    result = self.__session.query(SqlAlchemy.CV_AttributeName.Name).all()
+                    result = [row[0] for row in result]
+                    for row in list(csv_content)[1:]:
+                        model = cv_model()
+                        model = self.load_cv(model, row, result)
+                        if model:
+                            self.setup.push_data(model)
 
-            if key == "attributename":
-                result = self.__session.query(SqlAlchemy.CV_AttributeName.Name).all()
-                result = [row[0] for row in result]
-                for row in list(csv_content)[1:]:
-                    model = cv_model()
-                    model = self.load_cv(model, row, result)
-                    if model:
-                        self.setup.push_data(model)
+                if key == "dualvaluemeaning":
+                    result = self.__session.query(SqlAlchemy.CV_DualValueMeaning.Name).all()
+                    result = [row[0] for row in result]
+                    for row in list(csv_content)[1:]:
+                        model = cv_model()
+                        model = self.load_cv(model, row, result)
+                        if model:
+                            self.setup.push_data(model)
 
-            if key == "dualvaluemeaning":
-                result = self.__session.query(SqlAlchemy.CV_DualValueMeaning.Name).all()
-                result = [row[0] for row in result]
-                for row in list(csv_content)[1:]:
-                    model = cv_model()
-                    model = self.load_cv(model, row, result)
-                    if model:
-                        self.setup.push_data(model)
+                if key == "electronicfileformat":
+                    result = self.__session.query(SqlAlchemy.CV_ElectronicFileFormat.Name).all()
+                    result = [row[0] for row in result]
+                    for row in list(csv_content)[1:]:
+                        model = cv_model()
+                        model = self.load_cv(model, row, result)
+                        if model:
+                            self.setup.push_data(model)
 
-            if key == "electronicfileformat":
-                result = self.__session.query(SqlAlchemy.CV_ElectronicFileFormat.Name).all()
-                result = [row[0] for row in result]
-                for row in list(csv_content)[1:]:
-                    model = cv_model()
-                    model = self.load_cv(model, row, result)
-                    if model:
-                        self.setup.push_data(model)
+                if key == "instancename":
+                    result = self.__session.query(SqlAlchemy.CV_InstanceName.Name).all()
+                    result = [row[0] for row in result]
+                    for row in list(csv_content)[1:]:
+                        model = cv_model()
+                        model = self.load_cv(model, row, result)
+                        if model:
+                            self.setup.push_data(model)
 
-            if key == "instancename":
-                result = self.__session.query(SqlAlchemy.CV_InstanceName.Name).all()
-                result = [row[0] for row in result]
-                for row in list(csv_content)[1:]:
-                    model = cv_model()
-                    model = self.load_cv(model, row, result)
-                    if model:
-                        self.setup.push_data(model)
+                if key == "methodtype":
+                    result = self.__session.query(SqlAlchemy.CV_MethodType.Name).all()
+                    result = [row[0] for row in result]
+                    for row in list(csv_content)[1:]:
+                        model = cv_model()
+                        model = self.load_cv(model, row, result)
+                        if model:
+                            self.setup.push_data(model)
 
-            if key == "methodtype":
-                result = self.__session.query(SqlAlchemy.CV_MethodType.Name).all()
-                result = [row[0] for row in result]
-                for row in list(csv_content)[1:]:
-                    model = cv_model()
-                    model = self.load_cv(model, row, result)
-                    if model:
-                        self.setup.push_data(model)
+                if key == "objecttypology":
+                    result = self.__session.query(SqlAlchemy.CV_ObjectTypology.Name).all()
+                    result = [row[0] for row in result]
+                    for row in list(csv_content)[1:]:
+                        model = cv_model()
+                        model = self.load_cv(model, row, result)
+                        if model:
+                            self.setup.push_data(model)
 
-            if key == "objecttypology":
-                result = self.__session.query(SqlAlchemy.CV_ObjectTypology.Name).all()
-                result = [row[0] for row in result]
-                for row in list(csv_content)[1:]:
-                    model = cv_model()
-                    model = self.load_cv(model, row, result)
-                    if model:
-                        self.setup.push_data(model)
+                if key == "objecttype":
+                    result = self.__session.query(SqlAlchemy.CV_ObjectType.Name).all()
+                    result = [row[0] for row in result]
+                    for row in list(csv_content)[1:]:
+                        model = cv_model()
+                        model = self.load_cv(model, row, result)
+                        if model:
+                            self.setup.push_data(model)
 
-            if key == "objecttype":
-                result = self.__session.query(SqlAlchemy.CV_ObjectType.Name).all()
-                result = [row[0] for row in result]
-                for row in list(csv_content)[1:]:
-                    model = cv_model()
-                    model = self.load_cv(model, row, result)
-                    if model:
-                        self.setup.push_data(model)
+                if key == "seasonname":
+                    result = self.__session.query(SqlAlchemy.CV_SeasonName.Name).all()
+                    result = [row[0] for row in result]
+                    for row in list(csv_content)[1:]:
+                        model = cv_model()
+                        model = self.load_cv(model, row, result)
+                        if model:
+                            self.setup.push_data(model)
 
-            if key == "seasonname":
-                result = self.__session.query(SqlAlchemy.CV_SeasonName.Name).all()
-                result = [row[0] for row in result]
-                for row in list(csv_content)[1:]:
-                    model = cv_model()
-                    model = self.load_cv(model, row, result)
-                    if model:
-                        self.setup.push_data(model)
+                if key == "spatialreference":
+                    result = self.__session.query(SqlAlchemy.CV_SpatialReference.Name).all()
+                    result = [row[0] for row in result]
+                    for row in list(csv_content)[1:]:
+                        model = cv_model()
+                        model = self.load_cv(model, row, result)
+                        if model:
+                            self.setup.push_data(model)
 
-            if key == "spatialreference":
-                result = self.__session.query(SqlAlchemy.CV_SpatialReference.Name).all()
-                result = [row[0] for row in result]
-                for row in list(csv_content)[1:]:
-                    model = cv_model()
-                    model = self.load_cv(model, row, result)
-                    if model:
-                        self.setup.push_data(model)
+                if key == "descriptorvalue":
+                    result = self.__session.query(SqlAlchemy.CV_DescriptorValues.Name).all()
+                    # print result
+                    result = [row[0] for row in result]
+                    for row in list(csv_content)[1:]:
+                        model = cv_model()
+                        model = self.load_cv(model, row, result)
+                        if model:
+                            self.setup.push_data(model)
 
-            if key == "descriptorvalue":
-                result = self.__session.query(SqlAlchemy.CV_DescriptorValues.Name).all()
-                # print result
-                result = [row[0] for row in result]
-                for row in list(csv_content)[1:]:
-                    model = cv_model()
-                    model = self.load_cv(model, row, result)
-                    if model:
-                        self.setup.push_data(model)
+                if key == "units":
+                    result = self.__session.query(SqlAlchemy.CV_Units.Name).all()
+                    result = [row[0] for row in result]
+                    for row in list(csv_content)[1:]:
+                        model = cv_model()
+                        model = self.load_cv(model, row, result)
+                        if model:
+                            self.setup.push_data(model)
 
-            if key == "units":
-                result = self.__session.query(SqlAlchemy.CV_Units.Name).all()
-                result = [row[0] for row in result]
-                for row in list(csv_content)[1:]:
-                    model = cv_model()
-                    model = self.load_cv(model, row, result)
-                    if model:
-                        self.setup.push_data(model)
-
-            if key == "elevationdatum":
-                result = self.__session.query(SqlAlchemy.CV_ElevationDatum.Name).all()
-                result = [row[0] for row in result]
-                for row in list(csv_content)[1:]:
-                    model = cv_model()
-                    model = self.load_cv(model, row, result)
-                    if model:
-                        self.setup.push_data(model)
-
+                if key == "elevationdatum":
+                    result = self.__session.query(SqlAlchemy.CV_ElevationDatum.Name).all()
+                    result = [row[0] for row in result]
+                    for row in list(csv_content)[1:]:
+                        model = cv_model()
+                        model = self.load_cv(model, row, result)
+                        if model:
+                            self.setup.push_data(model)
+        except Exception as e:
+            print e.message
     def add_data(self):
         self.setup.add_data('CV')

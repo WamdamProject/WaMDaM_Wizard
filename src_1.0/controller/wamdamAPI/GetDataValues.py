@@ -113,14 +113,14 @@ class GetDataValues(object):
                 'FROM "Datasets" '\
                 'Left JOIN "ObjectTypes" ON "ObjectTypes"."DatasetID"="Datasets"."DatasetID" '\
                 'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mapping" ON "Mapping"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mapping"."DataValuesMapperID" '\
-                'Left JOIN "ScenarioMapping" ON "ScenarioMapping"."MappingID"="Mapping"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mappings"."DataValuesMapperID" '\
+                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mapping"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mapping"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mapping"."InstanceID" '\
+                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
                 'LEFT JOIN "DualValues" ON "DualValues"."DataValuesMapperID" = "DataValuesMapper"."DataValuesMapperID" '\
                 'LEFT JOIN "CV_DualValueMeaning" ON "CV_DualValueMeaning"."Name"= "DualValues"."dualvaluemeaningCV" '\
                 'WHERE "AttributeDataTypeCV"="DualValues" AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
@@ -161,14 +161,14 @@ class GetDataValues(object):
                 'FROM "Datasets" '\
                 'Left JOIN "ObjectTypes" ON "ObjectTypes"."DatasetID"="Datasets"."DatasetID" '\
                 'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mapping" ON "Mapping"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mapping"."DataValuesMapperID" '\
-                'Left JOIN "ScenarioMapping" ON "ScenarioMapping"."MappingID"="Mapping"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mappings"."DataValuesMapperID" '\
+                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mapping"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mapping"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mapping"."InstanceID" '\
+                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
                 'LEFT JOIN "DescriptorValues" ON "DescriptorValues"."DataValuesMapperID" = "DataValuesMapper"."DataValuesMapperID" '\
                 'LEFT JOIN "CV_DescriptorValues" ON "CV_DescriptorValues"."Name"= "DescriptorValues"."descriptorvalueCV" '\
                 'WHERE "AttributeDataTypeCV"="DescriptorValues" AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
@@ -210,14 +210,14 @@ class GetDataValues(object):
                 'FROM "Datasets" '\
                 'Left JOIN "ObjectTypes" ON "ObjectTypes"."DatasetID"="Datasets"."DatasetID" '\
                 'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mapping" ON "Mapping"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mapping"."DataValuesMapperID" '\
-                'Left JOIN "ScenarioMapping" ON "ScenarioMapping"."MappingID"="Mapping"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mappings"."DataValuesMapperID" '\
+                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mapping"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mapping"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mapping"."InstanceID" '\
+                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
                 'LEFT JOIN "NumericValues" ON "NumericValues"."DataValuesMapperID" = "DataValuesMapper"."DataValuesMapperID" '\
                 'WHERE "AttributeDataTypeCV"="Parameter" AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
                 .format(selectedType, selectedInstance, selectedAttribute)
@@ -257,14 +257,14 @@ class GetDataValues(object):
                 'FROM "Datasets" '\
                 'Left JOIN "ObjectTypes" ON "ObjectTypes"."DatasetID"="Datasets"."DatasetID" '\
                 'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mapping" ON "Mapping"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mapping"."DataValuesMapperID" '\
-                'Left JOIN "ScenarioMapping" ON "ScenarioMapping"."MappingID"="Mapping"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mappings"."DataValuesMapperID" '\
+                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mapping"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mapping"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mapping"."InstanceID" '\
+                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
                 'LEFT JOIN "File" ON "File"."DataValuesMapperID" = "DataValuesMapper"."DataValuesMapperID" '\
                 'Left JOIN "CV_ElectronicFormat" ON "CV_ElectronicFormat"."Name"="File"."ElectronicFileFormatCV" '\
                 'WHERE "AttributeDataTypeCV"="File" AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
@@ -304,14 +304,14 @@ class GetDataValues(object):
                   'ScenarioName,MethodName,SeasonName, SeasonValue, SeasonNameCV ' \
                 'FROM "Attributes" '\
                 'Left JOIN "ObjectTypes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mapping" ON "Mapping"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mapping"."DataValuesMapperID" '\
-                'Left JOIN "ScenarioMapping" ON "ScenarioMapping"."MappingID"="Mapping"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mappings"."DataValuesMapperID" '\
+                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mapping"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mapping"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mapping"."InstanceID" '\
+                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
                 'LEFT JOIN "SeasonalParameters" ON "SeasonalParameters"."DataValuesMapperID" = "DataValuesMapper"."DataValuesMapperID" '\
                 'WHERE "AttributeDataTypeCV"="SeasonalParameter" AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
                 .format(selectedType, selectedInstance, selectedAttribute)
@@ -352,14 +352,14 @@ class GetDataValues(object):
                 'FROM "Datasets" '\
                 'Left JOIN "ObjectTypes" ON "ObjectTypes"."DatasetID"="Datasets"."DatasetID" '\
                 'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mapping" ON "Mapping"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mapping"."DataValuesMapperID" '\
-                'Left JOIN "ScenarioMapping" ON "ScenarioMapping"."MappingID"="Mapping"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mappings"."DataValuesMapperID" '\
+                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mapping"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mapping"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mapping"."InstanceID" '\
+                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
                 'LEFT JOIN "TimeSeries" ON "TimeSeries"."DataValuesMapperID" = "DataValuesMapper"."DataValuesMapperID" '\
                 'WHERE AttributeName!="ObjectInstances"  AND AttributeDataTypeCV="TimeSeries" ' \
                   ' AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
@@ -402,14 +402,14 @@ class GetDataValues(object):
                 'FROM "Datasets" '\
                 'Left JOIN "ObjectTypes" ON "ObjectTypes"."DatasetID"="Datasets"."DatasetID" '\
                 'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mapping" ON "Mapping"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mapping"."DataValuesMapperID" '\
-                'Left JOIN "ScenarioMapping" ON "ScenarioMapping"."MappingID"="Mapping"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mappings"."DataValuesMapperID" '\
+                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mapping"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mapping"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mapping"."InstanceID" '\
+                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
                 'LEFT JOIN "TextFree" ON "TextFree"."DataValuesMapperID" = "DataValuesMapper"."DataValuesMapperID" '\
                 'WHERE AttributeDataTypeCV="TextFree" ' \
                   ' AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
@@ -449,17 +449,17 @@ class GetDataValues(object):
                 'FROM "Datasets" '\
                 'Left JOIN "ObjectTypes" ON "ObjectTypes"."DatasetID"="Datasets"."DatasetID" '\
                 'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mapping" ON "Mapping"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mapping"."DataValuesMapperID" '\
-                'Left JOIN "ScenarioMapping" ON "ScenarioMapping"."MappingID"="Mapping"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mappings"."DataValuesMapperID" '\
+                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mapping"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mapping"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mapping"."InstanceID" '\
+                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
                 'Left JOIN "MultiAttributeSeries" ON "MultiAttributeSeries"."DataValuesMapperID"="DataValuesMapper"."DataValuesMapperID" '\
                 'Left JOIN "DataValuesMapper" As "DataValuesMapperColumn" ON "DataValuesMapperColumn"."DataValuesMapperID"="MultiAttributeSeries"."AttriNameID" '\
-                'Left JOIN "Mapping" As "MappingColumns" ON "MappingColumns"."DataValuesMapperID"="DataValuesMapperColumn"."DataValuesMapperID" '\
+                'Left JOIN "Mappings" As "MappingColumns" ON "MappingColumns"."DataValuesMapperID"="DataValuesMapperColumn"."DataValuesMapperID" '\
                 'Left JOIN "Attributes" AS "AttributesColumns" ON "AttributesColumns"."AttributeID"="MappingColumns"."AttributeID" '\
                 'Left JOIN "MultiAttributeSeriesValues" ON "MultiAttributeSeriesValues"."MultiAttributeSeriesID"="MultiAttributeSeries"."MultiAttributeSeriesID" '\
                 'WHERE Attributes.AttributeDataTypeCV="MultiAttributeSeries" '\
@@ -549,14 +549,14 @@ class GetDataValues(object):
                 'FROM "Datasets" '\
                 'Left JOIN "ObjectTypes" ON "ObjectTypes"."DatasetID"="Datasets"."DatasetID" '\
                 'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mapping" ON "Mapping"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mapping"."DataValuesMapperID" '\
-                'Left JOIN "ScenarioMapping" ON "ScenarioMapping"."MappingID"="Mapping"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mappings"."DataValuesMapperID" '\
+                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mapping"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mapping"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mapping"."InstanceID" '\
+                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
                 'LEFT JOIN "DualValues" ON "DualValues"."DataValuesMapperID" = "DataValuesMapper"."DataValuesMapperID" '\
                 'LEFT JOIN "CV_DualValueMeaning" ON "CV_DualValueMeaning"."Name"= "DualValues"."dualvaluemeaningCV" '\
                 'WHERE "Attributes"."AttributeDataTypeCV"="DualValues" AND "Datasets"."DatasetAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
@@ -598,14 +598,14 @@ class GetDataValues(object):
                 'FROM "Datasets" '\
                 'Left JOIN "ObjectTypes" ON "ObjectTypes"."DatasetID"="Datasets"."DatasetID" '\
                 'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mapping" ON "Mapping"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mapping"."DataValuesMapperID" '\
-                'Left JOIN "ScenarioMapping" ON "ScenarioMapping"."MappingID"="Mapping"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mappings"."DataValuesMapperID" '\
+                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mapping"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mapping"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mapping"."InstanceID" '\
+                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
                 'LEFT JOIN "DescriptorValues" ON "DescriptorValues"."DataValuesMapperID" = "DataValuesMapper"."DataValuesMapperID" '\
                 'LEFT JOIN "CV_DescriptorValues" ON "CV_DescriptorValues"."Name"= "DescriptorValues"."descriptorvalueCV" '\
                 'WHERE "Attributes"."AttributeDataTypeCV"="DescriptorValues" AND "Datasets"."DatasetAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
@@ -646,14 +646,14 @@ class GetDataValues(object):
                 'FROM "Datasets" '\
                 'Left JOIN "ObjectTypes" ON "ObjectTypes"."DatasetID"="Datasets"."DatasetID" '\
                 'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mapping" ON "Mapping"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mapping"."DataValuesMapperID" '\
-                'Left JOIN "ScenarioMapping" ON "ScenarioMapping"."MappingID"="Mapping"."MappingID"'\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mappings"."DataValuesMapperID" '\
+                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID"'\
+                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mapping"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mapping"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mapping"."InstanceID" '\
+                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
                 'LEFT JOIN "NumericValues" ON "NumericValues"."DataValuesMapperID" = "DataValuesMapper"."DataValuesMapperID" '\
                 'WHERE "Attributes"."AttributeDataTypeCV"="Parameter" AND "Datasets"."DatasetAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
                 .format(selectedDataset, selectedNetwork, selectedScenarior)
@@ -693,14 +693,14 @@ class GetDataValues(object):
                 'FROM "Datasets" '\
                 'Left JOIN "ObjectTypes" ON "ObjectTypes"."DatasetID"="Datasets"."DatasetID" '\
                 'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mapping" ON "Mapping"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mapping"."DataValuesMapperID" '\
-                'Left JOIN "ScenarioMapping" ON "ScenarioMapping"."MappingID"="Mapping"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mappings"."DataValuesMapperID" '\
+                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mapping"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mapping"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mapping"."InstanceID" '\
+                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
                 'LEFT JOIN "Files" ON "File"."DataValuesMapperID" = "DataValuesMapper"."DataValuesMapperID" '\
                 'Left JOIN "CV_ElectronicFormat" ON "CV_ElectronicFormat"."Name"="File"."ElectronicFileFormatCV" '\
                 'WHERE "Attributes"."AttributeDataTypeCV"="File" AND "Datasets"."DatasetAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
@@ -741,14 +741,14 @@ class GetDataValues(object):
                   'ScenarioName,MethodName,SeasonName, SeasonValue, SeasonNameCV ' \
                 'FROM "Attributes" '\
                 'Left JOIN "ObjectTypes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mapping" ON "Mapping"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mapping"."DataValuesMapperID" '\
-                'Left JOIN "ScenarioMapping" ON "ScenarioMapping"."MappingID"="Mapping"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mappings"."DataValuesMapperID" '\
+                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mapping"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mapping"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mapping"."InstanceID" '\
+                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
                 'LEFT JOIN "SeasonalParameters" ON "SeasonalParameters"."DataValuesMapperID" = "DataValuesMapper"."DataValuesMapperID" '\
                 'WHERE "AttributeDataTypeCV"="SeasonalParameter" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
                 .format(selectedNetwork, selectedScenarior)
@@ -789,14 +789,14 @@ class GetDataValues(object):
                 'FROM "Datasets" '\
                 'Left JOIN "ObjectTypes" ON "ObjectTypes"."DatasetID"="Datasets"."DatasetID" '\
                 'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mapping" ON "Mapping"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mapping"."DataValuesMapperID" '\
-                'Left JOIN "ScenarioMapping" ON "ScenarioMapping"."MappingID"="Mapping"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mappings"."DataValuesMapperID" '\
+                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mapping"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mapping"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mapping"."InstanceID" '\
+                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
                 'LEFT JOIN "TimeSeries" ON "TimeSeries"."DataValuesMapperID" = "DataValuesMapper"."DataValuesMapperID" '\
                 'WHERE AttributeName!="ObjectInstances"  AND AttributeDataTypeCV="TimeSeries" ' \
                    'AND "DatasetAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
@@ -839,17 +839,17 @@ class GetDataValues(object):
                 'FROM "Datasets" '\
                 'Left JOIN "ObjectTypes" ON "ObjectTypes"."DatasetID"="Datasets"."DatasetID" '\
                 'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mapping" ON "Mapping"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mapping"."DataValuesMapperID" '\
-                'Left JOIN "ScenarioMapping" ON "ScenarioMapping"."MappingID"="Mapping"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMapping"."ScenarioID" '\
+                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                'Left JOIN "DataValuesMapper" ON "DataValuesMapper"."DataValuesMapperID"="Mappings"."DataValuesMapperID" '\
+                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mapping"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mapping"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mapping"."InstanceID" '\
+                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
                 'Left JOIN "MultiAttributeSeries" ON "MultiAttributeSeries"."DataValuesMapperID"="DataValuesMapper"."DataValuesMapperID" '\
                 'Left JOIN "DataValuesMapper" As "DataValuesMapperColumn" ON "DataValuesMapperColumn"."DataValuesMapperID"="MultiAttributeSeries"."AttriNameID" '\
-                'Left JOIN "Mapping" As "MappingColumns" ON "MappingColumns"."DataValuesMapperID"="DataValuesMapperColumn"."DataValuesMapperID" '\
+                'Left JOIN "Mappings" As "MappingColumns" ON "MappingColumns"."DataValuesMapperID"="DataValuesMapperColumn"."DataValuesMapperID" '\
                 'Left JOIN "Attributes" AS "AttributesColumns" ON "AttributesColumns"."AttributeID"="MappingColumns"."AttributeID" '\
                 'Left JOIN "MultiAttributeSeriesValues" ON "MultiAttributeSeriesValues"."MultiAttributeSeriesID"="MultiAttributeSeries"."MultiAttributeSeriesID" '\
                 'WHERE Attributes.AttributeDataTypeCV="MultiAttributeSeries" '\

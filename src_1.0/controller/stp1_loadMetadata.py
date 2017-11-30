@@ -77,6 +77,7 @@ class LoadMetaData(Parse_Excel_File):
         loaded using data from the corresponding sheet.
         :return: None
         """
+
         static_rownum = 10
         for sheet_name, sheet_rows in self.work_sheet.items():
             temp = sheet_rows[:]
