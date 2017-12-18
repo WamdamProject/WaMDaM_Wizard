@@ -1,4 +1,16 @@
+# Create an executable the WaMDaM Wizard (.exe) for windows
+ 
+1. In the CDM terminal, navigate to directory where wamdam.py exist in your pc.  
+You need to have pyinstaller python package on your machine. You can do so
+```pip install pyinstaller```
 
+2. Execute the following command in the cmd.exe 
+
+``` pyinstaller --clean --icon=WaMDaM_Wizard.ico --onedir --noconfirm --noupx --onefile --windowed wamdam.py```
+
+The image called "WaMDaM_Wizard.ico" will be used as icon for the executable. The image (icon) is free/open source
+
+# Create a msi installer for Windows
 
 In the terminal, navigate to the directory where wamdam.py exists. Run this command:   
 ```python setup_cx.py bdist_msi```
