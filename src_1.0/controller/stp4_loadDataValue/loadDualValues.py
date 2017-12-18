@@ -75,7 +75,7 @@ class LoadDualValues(Parse_Excel_File, LoadingUtils):
 
                 if any('' == cell.value for cell in row[:-1]):
                     raise Exception(
-                        "Some Empty Fields where found in Boolean.\n Please fill all Required fields in " + sheet_name)
+                        "Some Empty Fields where found in Dual Values.\n Please fill all Required fields in " + sheet_name)
 
                 if row[-1].value is None:
                     continue
@@ -128,12 +128,12 @@ class LoadDualValues(Parse_Excel_File, LoadingUtils):
                 self.test_properties(self.__session, row, sheet_name)
 
                 # getting datavaluemapper id using the above params fro Mapping table
-                datavalues = self.__session.query(SqlAlchemy.Mapping).filter(
+                datavalues = self.__session.query(SqlAlchemy.Mappings).filter(
                     and_(
-                        SqlAlchemy.Mapping.AttributeID == attrib_id,
-                        SqlAlchemy.Mapping.InstanceID == instance_id,
-                        SqlAlchemy.Mapping.SourceID == source_id,
-                        SqlAlchemy.Mapping.MethodID == method_id
+                        SqlAlchemy.Mappings.AttributeID == attrib_id,
+                        SqlAlchemy.Mappings.InstanceID == instance_id,
+                        SqlAlchemy.Mappings.SourceID == source_id,
+                        SqlAlchemy.Mappings.MethodID == method_id
                     )
                 ).all()
 
@@ -160,7 +160,7 @@ class LoadDualValues(Parse_Excel_File, LoadingUtils):
                     # If the mapperID exists for the attribs in the current row, we then search if the value exists for
                     # the row is stored in the db, if yes we then try to match with the mappingid to get datavaluemapper
                     datavalues_id = self.__session.query(SqlAlchemy.DualValues).filter(
-                        SqlAlchemy.DualValues.dualvaluemeaningCV == row[6].value
+                        SqlAlchemy.DualValues.DualvaluemeaningCV == row[6].value
                     ).all()
 
                     result = [datavaluemapper.DataValuesMapperID for datavaluemapper in datavalues_id]
@@ -189,7 +189,7 @@ class LoadDualValues(Parse_Excel_File, LoadingUtils):
                 # Creating New entry, datavaluemapperID and mappingID
                 if not datavalues and not diff_scene:
                     datavalmapper = self.load_data_values(self.__session)
-                    dataval_map = SqlAlchemy.Mapping()
+                    dataval_map = SqlAlchemy.Mappings()
                     dataval_map.AttributeID = attrib_id
                     dataval_map.InstanceID = instance_id
                     dataval_map.SourceID = source_id
@@ -209,28 +209,28 @@ class LoadDualValues(Parse_Excel_File, LoadingUtils):
                 # Creating new scenariomapping if scenarioID-mappingID does not exists.
                 # Starts by searchine for the mappingID in case its just been created, then tests to see if a
                 # scenarioID-mappingID exists, if yes, it skips, if no, it creates an entry
-                scenariomap = SqlAlchemy.ScenarioMapping()
+                scenariomap = SqlAlchemy.ScenarioMappings()
                 scenariomap.ScenarioID = scenario_id
 
                 if datavalues:
                     scenariomap.MappingID = datavalues.MappingID
                 else:
-                    scenariomap.MappingID = self.__session.query(SqlAlchemy.Mapping).filter(
+                    scenariomap.MappingID = self.__session.query(SqlAlchemy.Mappings).filter(
                         and_(
-                            SqlAlchemy.Mapping.AttributeID == attrib_id,
-                            SqlAlchemy.Mapping.InstanceID == instance_id,
-                            SqlAlchemy.Mapping.SourceID == source_id,
-                            SqlAlchemy.Mapping.MethodID == method_id,
-                            SqlAlchemy.Mapping.DataValuesMapperID == datavalues_id
+                            SqlAlchemy.Mappings.AttributeID == attrib_id,
+                            SqlAlchemy.Mappings.InstanceID == instance_id,
+                            SqlAlchemy.Mappings.SourceID == source_id,
+                            SqlAlchemy.Mappings.MethodID == method_id,
+                            SqlAlchemy.Mappings.DataValuesMapperID == datavalues_id
                         )
                     ).first().MappingID
 
                 # test to ensure there is no scenarioID-mappingID relationship existing yet.
                 try:
-                    test = self.__session.query(SqlAlchemy.ScenarioMapping).filter(
+                    test = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                         and_(
-                            SqlAlchemy.ScenarioMapping.MappingID == scenariomap.MappingID,
-                            SqlAlchemy.ScenarioMapping.ScenarioID == scenariomap.ScenarioID
+                            SqlAlchemy.ScenarioMappings.MappingID == scenariomap.MappingID,
+                            SqlAlchemy.ScenarioMappings.ScenarioID == scenariomap.ScenarioID
                         )
                     ).first().ScenarioMappingID
                 except:
@@ -240,8 +240,8 @@ class LoadDualValues(Parse_Excel_File, LoadingUtils):
                     # insert a value if only the value cell is not none, the value does not exists in the database
                     # and the row holding the value is similar. if any of this conditions fails, the value not inserted
                     if not value or not diff_scene:
-                        boolean.dualvalue = row[6].value
-                        boolean.dualvaluemeaningCV = self.__session.query(SqlAlchemy.CV_DualValueMeaning).filter(
+                        boolean.Dualvalue = row[6].value
+                        boolean.DualvaluemeaningCV = self.__session.query(SqlAlchemy.CV_DualValueMeaning).filter(
                             SqlAlchemy.CV_DualValueMeaning.Name == row[7].value
                         ).first().Name
                         boolean.DataValuesMapperID = datavalues_id

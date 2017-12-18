@@ -146,7 +146,7 @@ class GetDataStructure(object):
                                             "left join Attributes on Attributes.ObjectTypeid = Objecttypes.Objecttypeid "\
                                             "left join Mappings on Mappings.Attributeid = Attributes.Attributeid  "\
                                             "left join Instances on instances.instanceid = Mappings.Instanceid "\
-                                            "left join Scenariomapping on ScenarioMappings.Mappingid = Mappings.Mappingid "\
+                                            "left join Scenariomappings on ScenarioMappings.Mappingid = Mappings.Mappingid "\
                                             "left join Scenarios on Scenarios.ScenarioId=ScenarioMappings.Scenarioid  "\
                                             "left join MasterNetworks on MasterNetworks.MasterNetworkid = Scenarios.MasterNetworkid  "\
                                             "WHERE DatasetAcronym='{}' AND ObjectTypologyCV='Network' ".format(selectedDataset))
@@ -188,7 +188,7 @@ class GetDataStructure(object):
                                             "left join Attributes on Attributes.ObjectTypeid = Objecttypes.Objecttypeid "\
                                             "left join Mappings on Mappings.Attributeid = Attributes.Attributeid  "\
                                             "left join Instances on instances.instanceid = Mappings.Instanceid "\
-                                            "left join Scenariomapping on ScenarioMappings.Mappingid = Mappings.Mappingid "\
+                                            "left join Scenariomappings on ScenarioMappings.Mappingid = Mappings.Mappingid "\
                                             "left join Scenarios on Scenarios.ScenarioId=ScenarioMappings.Scenarioid  "\
                                             "left join MasterNetworks on MasterNetworks.MasterNetworkid = Scenarios.MasterNetworkid  "\
                                             "left join Methods on Methods.Methodid = Mappings.Methodid "\
@@ -231,21 +231,21 @@ class GetDataStructure(object):
             result = self.session.query(sq.Datasets.DatasetAcronym, sq.ObjectTypes.ObjectType, sq.Instances.InstanceName,
                                         sq.Instances.InstanceNameCV, sq.Scenarios.ScenarioName,
                                         sq.Sources.SourceName, sq.Methods.MethodName,
-                                        sq.InstanceCategory.InstanceCategory, sq.Instances.Longitude_x,
+                                        sq.InstanceCategories.InstanceCategories, sq.Instances.Longitude_x,
                                         sq.Instances.Latitude_y, sq.Instances.Description).\
                     join(sq.ObjectTypes,
                          sq.ObjectTypes.DatasetID == sq.Datasets.DatasetID).\
                     join(sq.Attributes,
                          sq.Attributes.ObjectTypeID == sq.ObjectTypes.ObjectTypeID).\
-                    join(sq.Mapping,
+                    join(sq.Mappings,
                          sq.Mappings.AttributeID == sq.Attributes.AttributeID).\
                     join(sq.Instances,
                          sq.Instances.InstanceID == sq.Mappings.InstanceID).\
-                    join(sq.InstanceCategory,
-                         sq.InstanceCategory.InstanceCategoryID == sq.Instances.InstanceCategoryID).\
+                    join(sq.InstanceCategories,
+                         sq.InstanceCategories.InstanceCategoryID == sq.Instances.InstanceCategoryID).\
                     join(sq.Connections,
                          sq.Instances.InstanceID == sq.Connections.LinkInstanceID).\
-                    join(sq.ScenarioMapping,
+                    join(sq.ScenarioMappings,
                          sq.ScenarioMappings.MappingID == sq.Mappings.MappingID).\
                     join(sq.Scenarios,
                          sq.Scenarios.ScenarioID == sq.ScenarioMappings.ScenarioID).\
@@ -271,7 +271,7 @@ class GetDataStructure(object):
                     dataResult.append([row.ObjectType, row.InstanceName,
                                         row.InstanceNameCV, row.ScenarioName,
                                         row.SourceName, row.MethodName,
-                                        row.InstanceCategory, row.Longitude_x,
+                                        row.InstanceCategories, row.Longitude_x,
                                         row.Latitude_y, row.Description])
 
             return nameResult, dataResult
@@ -289,7 +289,7 @@ class GetDataStructure(object):
         '''
         try:
             StartInstance = aliased(sq.Instances)
-            MetadataStartNodeInstace = aliased(sq.Mapping)
+            MetadataStartNodeInstace = aliased(sq.Mappings)
             EndInstance = aliased(sq.Instances)
             AttStartNodeInstance = aliased(sq.Attributes)
             AttEndNodeInstance = aliased(sq.Attributes)
@@ -297,19 +297,19 @@ class GetDataStructure(object):
             AttLinkEndInstance = aliased(sq.Attributes)
             ObjectTypeEndNodeInstance = aliased(sq.ObjectTypes)
             ObjectTypeStartNodeInstance = aliased(sq.ObjectTypes)
-            MetadataEndNodeInstace = aliased(sq.Mapping)
+            MetadataEndNodeInstace = aliased(sq.Mappings)
             result = self.session.query(sq.Datasets.DatasetAcronym, sq.ObjectTypes.ObjectType, sq.Instances.InstanceName,
                                         sq.Instances.InstanceNameCV, sq.Scenarios.ScenarioName,
                                         sq.Sources.SourceName, sq.Methods.MethodName,
                                         StartInstance.InstanceName, EndInstance.InstanceName,
-                                        sq.InstanceCategory.InstanceCategory, sq.Instances.Description).\
+                                        sq.InstanceCategories.InstanceCategories, sq.Instances.Description).\
                     join(sq.ObjectTypes,
                          sq.ObjectTypes.DatasetID == sq.Datasets.DatasetID).\
                     join(sq.Attributes,
                          sq.Attributes.ObjectTypeID == sq.ObjectTypes.ObjectTypeID).\
-                    join(sq.Mapping,
+                    join(sq.Mappings,
                          sq.Mappings.AttributeID == sq.Attributes.AttributeID).\
-                    join(sq.ScenarioMapping,
+                    join(sq.ScenarioMappings,
                          sq.ScenarioMappings.MappingID == sq.Mappings.MappingID).\
                     join(sq.Scenarios,
                          sq.Scenarios.ScenarioID == sq.ScenarioMappings.ScenarioID).\
@@ -317,8 +317,8 @@ class GetDataStructure(object):
                          sq.MasterNetworks.MasterNetworkID == sq.Scenarios.MasterNetworkID).\
                     join(sq.Instances,
                          sq.Instances.InstanceID == sq.Mappings.InstanceID).\
-                    join(sq.InstanceCategory,
-                         sq.InstanceCategory.InstanceCategoryID == sq.Instances.InstanceCategoryID).\
+                    join(sq.InstanceCategories,
+                         sq.InstanceCategories.InstanceCategoryID == sq.Instances.InstanceCategoryID).\
                     join(sq.Connections,
                          sq.Instances.InstanceID == sq.Connections.LinkInstanceID).\
                     join(StartInstance,
@@ -355,7 +355,7 @@ class GetDataStructure(object):
                                         row.InstanceNameCV, row.ScenarioName,
                                         row.SourceName, row.MethodName,
                                         row[7], row[8],
-                                        row.InstanceCategory, row.Description])
+                                        row.InstanceCategories, row.Description])
             return complete_result
         except Exception as e:
             # define.logger.error('Failed metAData load.\n' + e.message)
