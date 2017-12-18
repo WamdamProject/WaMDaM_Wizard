@@ -19,7 +19,7 @@ In the terminal, navigate to the directory where wamdam.py exists. Run this comm
 
 Before that, make sure you have all the wamdam needed libraries are installed. Besides those libraries, you need to have these libraries below. For some reason I need to follow the steps below to install the libraries, the hard way.
 
-1. Download this folder [site-packages](https://github.com/amabdallah/draftWaMDaM/blob/master/site-packages.zip)
+1. Download this folder [site-packages](https://github.com/WamdamProject/WaMDaM_Wizard/blob/master/src_1.0/site-packages.zip)
 
 Unzip it and copy the four unzipped folders:cx_Freeze, cx_Freeze-5.0.2.dist-info, suds, and suds-0.4-py2.7.egg-info
 directly into the directory below: 
