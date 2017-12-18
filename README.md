@@ -8,11 +8,20 @@ The Wizard is built using Python 2.7 and the [wxPython](https://www.wxpython.org
 
 
 
-## Download the Wizard GUI for Windows [7 and 10] 64 bit operating systems
-* **[Windows executable .exe (No-Installer)](https://github.com/WamdamProject/WaMDaM_Wizard/releases/download/v1.0_beta/wamdam.exe)** [232 MB]  
+## [Download the Wizard GUI for Windows [7 and 10] 64 bit operating systems][1]
+Download and install the latest release. Choose one of these two options. 
+
+* **Windows executable .exe (No-Installer)**
 Allows the user to run WaMDaM_Wizard without installing it on your local machine.   
-* **[Windows Installer .msi](https://github.com/WamdamProject/WaMDaM_Wizard/releases/download/v1.0_beta/WaMDaM_Main_Setup-1.0.0-amd64.msi)** [26 MB]  
-Install on your pc, get an icon shortcut on your desktop and run WaMDaM Wizard  
+* **[Windows Installer .msi]
+
+Install on your pc, get an icon shortcut on your desktop and run WaMDaM Wizard As **Admin**  
+
+
+[1]:https://github.com/WamdamProject/WaMDaM_Wizard/releases
+
+
+
 
 
 ## Run WaMDaM_Wizard from Source Code 
