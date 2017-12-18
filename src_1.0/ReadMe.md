@@ -1,7 +1,8 @@
 # Create an executable the WaMDaM Wizard (.exe) for windows
  
-1. In the CDM terminal, navigate to directory where wamdam.py exist in your pc.  
-You need to have pyinstaller python package on your machine. You can do so
+1. In the CDM terminal, navigate to directory where wamdam.py exist in your pc.   
+You need to have pyinstaller python package on your machine.  
+You can do so  
 ```pip install pyinstaller```
 
 2. Execute the following command in the cmd.exe 
