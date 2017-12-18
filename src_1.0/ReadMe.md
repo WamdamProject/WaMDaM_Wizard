@@ -31,4 +31,4 @@ C:\Users\Adel\AppData\Roaming\Python\Python27\site-packages\cx_Freeze
 
 At the bottom on the file, replace the existing path underlined in red as shown in the screenshot below. To find where the path exist to your sqlite3.dll file, navigate to this path and find 
 C:\Users\Adel\AppData\Roaming\pyinstaller\bincache00_py27_64bits
-![](https://github.com/amabdallah/draftWaMDaM/blob/master/SqliteDDL_hooks_path.PNG)
+![](https://github.com/WamdamProject/WaMDaM_Wizard/blob/master/src_1.0/SqliteDDL_hooks_path.PNG)
