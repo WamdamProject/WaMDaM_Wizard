@@ -27,8 +27,10 @@ folder. For example, clicking at the button "From Excel" under the GUI homepage 
 dlg_ImportSpreadsheetBasic.py which exist in the viewer Folder. Then when the user
 clicks at "load Data" in this dialog box, a function calls one or all the sub-data importers
 for the checked boxes from the controller folder: 
-stp0_loadCVs.py, stp1_loadMetadata.py, stp2_loadDataStructure.py, 
-stp3_loadNetworks.py, and stp4_loadDataValues.py
+stp0_loadCVs.py, stp1_loadMetadata.py,  
+stp2_loadDataStructure.py,  
+stp3_loadNetworks.py, 
+and stp4_loadDataValues.py 
 
 stp0_loadCVs.py, load_step_1.py, load_step_2.py, load_step_3.py, stp4_loadDataValues.py
 It's important to note that the controlled vocabulary (CV) data in the stp0_loadCVs.py 
@@ -40,13 +42,11 @@ to make sure it complies with WaMDaM business rules
 
 The Wizard either loads all the dataset and it's metadata etc or nothing. 
 
-See the software architecture in a flowchart @ https://github.com/amabdallah
+See the software architecture in a flowchart @ https://github.com/WamdamProject/WaMDaM_Wizard
 """
 
-# [[add text about these two python modules]]
 import wx, os
 
-#[[briefly describe the logic of this class. Short sentences are good.]]
 
 class pyWamdam(wx.App):
 
@@ -71,11 +71,3 @@ def main():
 if __name__ == '__main__':
     main()
 
-
-# To create an executable of this WaMDaM Wizard (.exe) for windows,
-# execute the following command in the cmd.exe (after you navigate to wamdam.py directory:
-
-# pyinstaller --clean --icon=WaMDaM_Wizard.ico --onedir --noconfirm --noupx --onefile --windowed wamdam.py
-
-# The image called "WaMDaM_Wizard.ico" will be used as icon for the executable.
-# the image (icon) is free/open source
