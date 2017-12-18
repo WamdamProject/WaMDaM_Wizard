@@ -70,10 +70,10 @@ class frm_Home( WaMDaMWizard.frm_Home ):
         CUAHS = cuahs.dlg_ImportFromCUAHS(None)
         CUAHS.ShowModal()
 
-    def rtbn_ImportWadeOnRibbonButtonClicked( self, event ):
+    #def rtbn_ImportWadeOnRibbonButtonClicked( self, event ):
         import dlg_ImportFromWaDE as fwade
-        wade = fwade.dlg_ImportFromWaDE(None)
-        wade.ShowModal()
+        #wade = fwade.dlg_ImportFromWaDE(None)
+        #wade.ShowModal()
 
     def rtbn_ImportRwiseOnRibbonButtonClicked( self, event ):
         import dlg_ImportRwise as fHY
