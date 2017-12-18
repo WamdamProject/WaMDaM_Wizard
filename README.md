@@ -13,7 +13,7 @@ Download and install the latest release. Choose one of these two options.
 
 * **Windows executable .exe (No-Installer)**
 Allows the user to run WaMDaM_Wizard without installing it on your local machine.   
-* **[Windows Installer .msi]
+* **[Windows Installer .msi]**
 
 Install on your pc, get an icon shortcut on your desktop and run WaMDaM Wizard As **Admin**  
 
