@@ -23,6 +23,7 @@ sessionmaker(autoflush=True)
 __engine = create_engine('sqlite:///Data/wdm.sqlite')
 __session = None
 
+
 def connect(dbpath, db_type, sql_string=None):
     if db_type == 'mysql':
         # used to create and connect to a mysql database.
