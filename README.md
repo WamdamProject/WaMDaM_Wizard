@@ -1,12 +1,13 @@
 # WaMDaM_Wizard
 WaMDaM Wizard is a desktop data loader from a spreadsheet template to a SQLite database. The SQLite database is built based on a data model called WaMDaM. The data model is designed to organize and integrate different water management datasets.
-Here is the schema that the Wizard works within: [WaMDaM Schema](https://wamdamproject.github.io/WaMDaM_Information_Model/diagrams/01_WaMDaM.html) 
+Here is the schema that the Wizard works within: [WaMDaM Schema](https://wamdamproject.github.io/WaMDaM_Information_Model/diagrams/01_WaMDaM.html)  
+
 The Wizard is built using Python 2.7 and the [wxPython](https://www.wxpython.org/) GUI library with the help of [wxFormBuilder](https://github.com/wxFormBuilder/wxFormBuilder).  
 
-## Download the WaMDaM Excel Workbook Templates for Input Data  
-1. [Excel Workbook template](https://github.com/WamdamProject/WaMDaM_UseCases/raw/master/UseCases_files/0WorkbookTemplates/InputData_Template/WaMDaM_InputData_template.xlsm) to prepare your data into it. Each dataset into one workbook
+## [Download the WaMDaM Excel Workbook Templates for Input Data][5]  
+1. Excel Workbook template to prepare your data into it. Each dataset into one workbook
 
-
+[5]:https://github.com/WamdamProject/WaMDaM_UseCases/raw/master/UseCases_files/0WorkbookTemplates/InputData_Template/WaMDaM_InputData_template.xlsm
 
 ## [Download the Wizard GUI for Windows [7 and 10] 64 bit operating systems][1]
 Download and install the latest release. Choose one of these two options. 
@@ -22,10 +23,8 @@ Install on your pc, get an icon shortcut on your desktop and run WaMDaM Wizard A
 
 
 
-
-
 ## Run WaMDaM_Wizard from Source Code 
-1. Install the dependences  
+1. Install the [dependences][7]  
 2. Run wamdam.py in the src folder. The connect to an empty SQLite db (it will create a new one for you) 
 3. Click at ImportData to WaMDaM tab, and then "From Excel" choose a dataset like: WEAP.xlsm
 4. In the view in (3) above, browse for the folder src_v0.1/Test_Data and select the excel file WEAP_April4.xlsm 
@@ -34,6 +33,13 @@ the Wizard should load all the data and give you a message of successful loading
 <p align="center">
   <img width="449" height="352" src="/Wizard.PNG">
 </p>
+
+[7]:https://github.com/WamdamProject/WaMDaM_Wizard/blob/master/src_1.0/requirements.md
+
+## Built With
+* Python 2.7 
+* wxpython cross-platform GUI toolkit
+* sqlAlchemy
 
 
 ## Why WaMDaM Wizard?   
