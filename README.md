@@ -34,7 +34,7 @@ the Wizard should load all the data and give you a message of successful loading
   <img width="449" height="352" src="/Wizard.PNG">
 </p>
 
-[7]:https://github.com/WamdamProject/WaMDaM_Wizard/blob/master/src_1.0/requirements.md
+[7]:https://github.com/WamdamProject/WaMDaM_Wizard/blob/master/src/requirements.md
 
 ## Built With
 * Python 2.7 
