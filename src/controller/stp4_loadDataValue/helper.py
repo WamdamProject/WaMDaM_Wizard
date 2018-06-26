@@ -22,11 +22,11 @@ class LoadingUtils():
     def load_data_values(session):
         """
         This is a method to create an instance of the
-        ValuesMapper table. it queries the table to get the
+        DataValuesMapper table. it queries the table to get the
         most recent datavaluemapperid. If query returns None,
         the Databaluesmapperid is set to None else 1 is added to the
         highest Datavaluesmapper.
-        :return: An instance of ValuesMapper with filled fields
+        :return: An instance of DataValuesMapper with filled fields
         """
         dummy_dataval = SqlAlchemy.ValuesMapper()
         try:
@@ -43,7 +43,7 @@ class LoadingUtils():
         This method creates dummy record in the attribute table when loading
         datasets and objecttypes. Also contributes in creating links in the
         database
-        :param session: 
+        :param session:
         :param dum_attrib: Dummy attribute name
         :return: An instance of the Attributes() table
         """
@@ -56,8 +56,6 @@ class LoadingUtils():
         else:
             dummy_attrib.AttributeName = 'ResourceTypeAcronym'
             dummy_attrib.ObjectTypeID = dum_attrib[0]
-
-        dummy_attrib.UnitName = 'Dimensionless'
 
         dummy_attrib.UnitNameCV = session.query(SqlAlchemy.CV_Units).filter(
             SqlAlchemy.CV_Units.Name == 'Dimensionless'
@@ -79,10 +77,10 @@ class LoadingUtils():
     def load_scenario_mapping(params, session):
         """
         This is a helper method to create and instance of
-        the ScenarioMappings table and filling the appropriate
+        the ScenarioMapping table and filling the appropriate
         fields with values sent through params.
-        :param params: A list of data to fill scenarioMappings table
-        :return: a filled instance of the scenarioMappings table
+        :param params: A list of data to fill scenariomapping table
+        :return: a filled instance of the scenariomapping table
         """
         dummy_scen_map = SqlAlchemy.ScenarioMappings()
         dummy_scen_map.ScenarioID = params[0]
@@ -117,11 +115,11 @@ class LoadingUtils():
     def load_mapping(params, session):
         """
         This is a helper method to create an instance of the
-        Mappings table. it creates a connection between Attributes, Instances, Scenarios, Sources and Methods, and DataValeus
+        Mapping table. it creates a connection between Attributes, Instances, Scenarios, Sources and Methods, and DataValeus
         tables.
-        :param session: 
-        :param params: A list of data to fill Mappings tables
-        :return: A filled instance of Mappings() table
+        :param session:
+        :param params: A list of data to fill Mapping tables
+        :return: A filled instance of Mapping() table
         """
         # try:
         dummy_map = SqlAlchemy.Mappings()
@@ -138,7 +136,7 @@ class LoadingUtils():
                 SqlAlchemy.Sources.SourceName == params[2]
             ).first().SourceID
         except:
-            # raise exception with Sources table and value if there is no params[2] value in the Sources table.
+            # raise exception with Sources table and value if there is no params[2] valuye in the Sources table.
             msg = "Sources|{}".format(params[2])
             raise Exception(msg)
         try:
@@ -146,7 +144,7 @@ class LoadingUtils():
                 SqlAlchemy.Methods.MethodName == params[3]
             ).first().MethodID
         except:
-            # raise exception with Methods table and value if there is no params[3] value in the Methods table.
+            # raise exception with Methods table and value if there is no params[3] valuye in the Methods table.
             msg = "Methods|{}".format(params[3])
             raise Exception(msg)
         dummy_map.ValuesMapperID = params[4]
@@ -299,7 +297,7 @@ class LoadingUtils():
     @staticmethod
     def data_type_test(session, row, dtype):
         '''
-        this method test if the datatype for the current attribute is 
+        this method test if the datatype for the current attribute is
         defined in the attributes table. if not false is returned.
         :param session: current session for database
         :param row: row of current excel sheet
@@ -339,5 +337,5 @@ class LoadingUtils():
             raise Exception('Error in Sheet {}\nObjectType {} is not associated to Attribute {}'.
                             format(sheet_name, row[0].value, row[3].value))
 
-            # TODO: test instance - objectType existence  [[lets do it ]]
+        # TODO: test instance - objectType existence  [[lets do it ]]
 

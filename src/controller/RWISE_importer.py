@@ -265,7 +265,8 @@ class RWISE_importer():
             # adding dummy instance for each Master Network Loaded
             dummy_instance = SqlAlchemy.Instances()
             dummy_instance.InstanceName = masternetwork_name
-            dummy_instance.InstanceNameCV = 'Hyrum Reservoir'
+
+            # dummy_instance.InstanceNameCV = 'Hyrum Reservoir'
             dummy_instance.Longitude_x = None
             dummy_instance.Latitude_y = None
             dummy_instance.Description = "Dummy instance to help connect scenarios and networks with " \
@@ -382,7 +383,13 @@ class RWISE_importer():
             instances.Longitude_x = longitude
             instances.InstanceCategoryID = None
             instances.Description = ''
-            instances.InstanceNameCV = 'Hyrum Reservoir'
+            if node_instance_name=='HYRUM RESERVOIR':
+                instances.InstanceNameCV = 'Hyrum Reservoir'
+            elif node_instance_name=='SHASTA':
+                instances.InstanceNameCV ='Shasta Reservoir'
+            else:
+                instances.InstanceNameCV =''
+
             self.setup.push_data(instances)
 
             try:

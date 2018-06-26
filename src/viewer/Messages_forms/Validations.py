@@ -534,7 +534,7 @@ class msg_successLoadDatabase(wx.Dialog):
 		bSizer1 = wx.BoxSizer(wx.VERTICAL)
 
 		self.m_staticText1 = wx.StaticText(self, wx.ID_ANY,
-										   u"\n\nYou successfully loaded the provided data into the database. \nYou can query the data using the Wizard at Query WaMDaM tab. Or you can query the data by using: SQLite Manager: Add-ons for\nFirefox web browser",
+										   u"\n\nYou successfully loaded the provided data into the database. \nYou can query the data using the Wizard at Query WaMDaM tab (limited for now).\n Or you can query the data by using DB Browser for SQLite @ https://sqlitebrowser.org \n For more info, visit http://docs.wamdam.org"  ,
 										   wx.DefaultPosition, wx.DefaultSize, 0)
 		self.m_staticText1.Wrap(-1)
 		bSizer1.Add(self.m_staticText1, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)

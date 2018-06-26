@@ -69,6 +69,7 @@ class LoadSeasonalNumericValues(Parse_Excel_File, LoadingUtils):
             order_row_test = temp_row[:6]
             stored_rows = [temp_row]
             scenario_name = temp[0][2]
+            mappingID = ''
             for row_id, row in enumerate(temp):
 
                 if all('' == cell.value for cell in row):
@@ -77,7 +78,7 @@ class LoadSeasonalNumericValues(Parse_Excel_File, LoadingUtils):
                 if any('' == cell.value for cell in row[:7]):
                     raise Exception("Some empty fields were found in SeasonalNumericValues.\nPlease fill all Required fields")
 
-                if row[-1].value is None:
+                if row[-1].value is None or row[-1].value == '':
                     continue
 
                 if row[0].value == "":
@@ -101,9 +102,9 @@ class LoadSeasonalNumericValues(Parse_Excel_File, LoadingUtils):
                 if row[6].value == "":
                     raise Exception('Error in {} row of "SeasonalNumericValues_table" of  sheet "{}"\nField named "SeasonName" is empty.\nThis field should not be empty.\nPlease fill this field to a value.'
                                     .format(row_id, sheet_name))
-                if row[7].value == "":
-                    raise Exception('Error in {} row of "SeasonalNumericValues_table" of  sheet "{}"\nField named "SeasonNameCV" is empty.\nThis field should not be empty.\nPlease fill this field to a value.'
-                                    .format(row_id, sheet_name))
+                # if row[7].value == "":
+                #     raise Exception('Error in {} row of "SeasonalNumericValues_table" of  sheet "{}"\nField named "SeasonNameCV" is empty.\nThis field should not be empty.\nPlease fill this field to a value.'
+                #                     .format(row_id, sheet_name))
 
                 # test for datatype
                 if not self.data_type_test(self.__session, row, 'SeasonalNumericValues'):
@@ -183,7 +184,6 @@ class LoadSeasonalNumericValues(Parse_Excel_File, LoadingUtils):
                             if found:
                                 break
                             for each in result[:]:
-                                #print 'it found something.'
                                 if mapping.ValuesMapperID == each:
                                     datavalues = mapping
                                     found = True
@@ -241,6 +241,12 @@ class LoadSeasonalNumericValues(Parse_Excel_File, LoadingUtils):
                             SqlAlchemy.Mappings.ValuesMapperID == datavalues_id
                         )
                     ).first().MappingID
+
+                # there is a problem in sharing/reusing the MappingID into the scenarioMapping table for different blocks.
+                # therefore, there is a duplicat of values showing in the query result
+
+
+
 
                 # test if the mappingid - scenarioid already exists in scenario table
                 # if yes, then nothing is added, else, we add new entry based of diff_scene var.

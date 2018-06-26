@@ -35,7 +35,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 
 from shutil import copyfile
-
+import os
 
 # Get only one copy of database class at a time and use it throughout the Wizard
 class Singleton(type):
@@ -149,9 +149,14 @@ class DB_Setup(object):
         copies the current database, and renames it "currentname---backup"
         """
         src = self.__path
-        dst = src.split('.')[0] + '---backup.' + src.split('.')[1]
+        filename = os.path.basename(src)
+        f_name, ext = os.path.splitext(filename)
+        new_fname = f_name + '---backup.' + ext
+        path, filename = os.path.split(src)
+        dst = path + '/' + new_fname
+        # dst = src.split('.')[0] + '---backup.' + src.split('.')[-1]
         self.__backupName = dst
-        print 'Backing Up the DB\nsrc:{}\ndst:{}'.format(src, dst)
+        print 'Backing up the DB\nsrc:{}\ndst:{}'.format(src, dst)
         copyfile(src, dst)
 
     def restore_db(self):

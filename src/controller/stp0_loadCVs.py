@@ -157,14 +157,6 @@ class Load_CV_To_DB(Parse_Excel_File):
                         if model:
                             self.setup.push_data(model)
 
-                if key == "dualvaluemeaning":
-                    result = self.__session.query(SqlAlchemy.CV_DualValueMeaning.Name).all()
-                    result = [row[0] for row in result]
-                    for row in list(csv_content)[1:]:
-                        model = cv_model()
-                        model = self.load_cv(model, row, result)
-                        if model:
-                            self.setup.push_data(model)
 
                 if key == "electronicfileformat":
                     result = self.__session.query(SqlAlchemy.CV_ElectronicFileFormat.Name).all()
@@ -230,7 +222,7 @@ class Load_CV_To_DB(Parse_Excel_File):
                             self.setup.push_data(model)
 
                 if key == "descriptorvalue":
-                    result = self.__session.query(SqlAlchemy.CV_DescriptorValues.Name).all()
+                    result = self.__session.query(SqlAlchemy.CV_Categorical.Name).all()
                     # print result
                     result = [row[0] for row in result]
                     for row in list(csv_content)[1:]:

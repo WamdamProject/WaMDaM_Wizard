@@ -3,8 +3,9 @@
 # frm_Home connects each button with its dialog box
 
 import wx
-import WaMDaMWizard, define
+import WaMDaMWizard
 from Messages_forms.msg_sureToExit import msg_sureToExit
+
 
 # Implementing frm_Home
 class frm_Home( WaMDaMWizard.frm_Home ):
@@ -47,18 +48,18 @@ class frm_Home( WaMDaMWizard.frm_Home ):
         message.ShowModal()
 
     def rtbn_ShapefileToWaMDaMOnRibbonButtonClicked( self, event ):
-        import dlg_ShapefileToWaMDaM as fSH
+        from viewer.Transform_utility import dlg_ShapefileToWaMDaM as fSH
         sh=fSH.dlg_ShapefileToWaMDaM(None)
         sh.ShowModal()
 
 
     def rtbnCrossTabSeasonalToWaMDaMOnRibbonButtonClicked( self, event ):
-        import dlg_CrossTabSeasonalToWaMDaM as fCTS
+        from viewer.Transform_utility import dlg_CrossTabSeasonalToWaMDaM as fCTS
         CTS=fCTS.dlg_CrossTabSeasonalToWaMDaM(None)
         CTS.ShowModal()
 
     def rtbn_CrossTabTimeSeriesToWaMDaMOnRibbonButtonClicked( self, event ):
-        import dlg_CrossTabTimeSeriesToWaMDaM as fCTTS
+        from viewer.Transform_utility import dlg_CrossTabTimeSeriesToWaMDaM as fCTTS
         CTTS=fCTTS.dlg_CrossTabTimeSeriesToWaMDaM(None)
         CTTS.ShowModal()
 
@@ -72,7 +73,6 @@ class frm_Home( WaMDaMWizard.frm_Home ):
         CUAHS.ShowModal()
 
     #def rtbn_ImportWadeOnRibbonButtonClicked( self, event ):
-        import dlg_ImportFromWaDE as fwade
         #wade = fwade.dlg_ImportFromWaDE(None)
         #wade.ShowModal()
 
@@ -82,22 +82,23 @@ class frm_Home( WaMDaMWizard.frm_Home ):
         HY.ShowModal()
 
     def rtbn_AddNewSourceOnRibbonButtonClicked( self, event ):
-        # TODO: Implement rtbn_AddNewSourceOnRibbonButtonClicked
-        pass
+        import Exporter.dlg_ExtractWeapArea as fEx
+        Ext=fEx.dlg_ExtractWeapArea(None)
+        Ext.ShowModal()
 
     def btn_query_metadataOnRibbonButtonClicked(self, event):
-        import dlg_query_metadata as fMeta
+        from viewer.Query import dlg_query_metadata as fMeta
         Meta = fMeta.dlg_query_metadata(None)
         Meta.ShowModal()
 
     def btn_query_modelOnRibbonButtonClicked( self, event ):
-        import dlg_query_model as fQMY
+        from viewer.Query import dlg_query_model as fQMY
         QM=fQMY.dlg_query_model(None)
         QM.ShowModal()
 
 
     def btn_query_netwokOnRibbonButtonClicked( self, event ):
-        import dlg_query_network as fQNY
+        from viewer.Query import dlg_query_network as fQNY
         QNe=fQNY.dlg_query_network(None)
         QNe.ShowModal()
 
@@ -107,22 +108,25 @@ class frm_Home( WaMDaMWizard.frm_Home ):
         QCS.ShowModal()
 
     def btn_SearchNodesLinksOnRibbonButtonClicked( self, event ):
-        import dlg_SearchNodesLinks as fQNY
+        from viewer.Query import dlg_SearchNodesLinks as fQNY
         QNo=fQNY.dlg_SearchNodesLinks(None)
         QNo.ShowModal()
 
     def btn_SearchDataValuesOnRibbonButtonClicked( self, event ):
-        import dlg_SearchDataValues as fQva
+        from viewer.Query import dlg_SearchDataValues as fQva
         Qva=fQva.dlg_SearchDataValues(None)
         Qva.ShowModal()
 
     def rtbn_WEAPOnRibbonButtonClicked( self, event ):
-        # TODO: Implement rtbn_WEAPOnRibbonButtonClicked
-        pass
+        import Exporter.dlg_SelectModel as fServ
+        Serv=fServ.dlg_SelectModel(None)
+        Serv.ShowModal()
 
     def rtbn_WASHOnRibbonButtonClicked( self, event ):
-        # TODO: Implement rtbn_WASHOnRibbonButtonClicked
-        pass
+        import Exporter.dlg_re_run_export as frerun
+        rRun = frerun.dlg_re_run_export(None)
+        rRun.ShowModal()
+
 
     def rtbn_ExportToRwiseOnRibbonButtonClicked( self, event ):
         import dlg_ExportScenarioDataToHydra as fhExpHyd

@@ -22,7 +22,7 @@ import wx.lib.agw.ribbon as rb
 
 
 from icons.icons import *
-
+from icons.icons1 import *
 
 ###########################################################################
 ## Class frm_Home
@@ -36,7 +36,7 @@ def scale_bitmap(bitmap, width, height):
 class frm_Home ( wx.Frame ):
 
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = 1, title = u"WaMDaM Wizard 1.01", pos = wx.DefaultPosition, size = wx.Size( 892,700 ), style = wx.DEFAULT_FRAME_STYLE|wx.MAXIMIZE_BOX|wx.MINIMIZE_BOX|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = 1, title = u"WaMDaM Wizard 1.02", pos = wx.DefaultPosition, size = wx.Size( 892,700 ), style = wx.DEFAULT_FRAME_STYLE|wx.MAXIMIZE_BOX|wx.MINIMIZE_BOX|wx.TAB_TRAVERSAL )
 
         self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
         # self.SetWindowStyle(wx.STAY_ON_TOP)
@@ -53,20 +53,20 @@ class frm_Home ( wx.Frame ):
         self.rbarPnlConnDB.AddSimpleButton( 6007, u"Connect to an Existing MySQL", mysql.GetBitmap(), wx.EmptyString)
         self.rbarPnlConnDB.AddSimpleButton( 4, u"CLose DB Connection", dissconnetDB.GetBitmap(), wx.EmptyString)
         self.rbarPnlConnDB.AddSimpleButton( 5, u"Exit WaMDaM Wizard", Exit.GetBitmap(), wx.EmptyString)
-        self.rtab_PrepareDataServices = rb.RibbonPage( self.Main_ribbonBar, wx.ID_ANY, u"Prepare Your Data to WaM-DaM" , wx.NullBitmap , 0 )
+        self.rtab_PrepareDataServices = rb.RibbonPage( self.Main_ribbonBar, wx.ID_ANY, u"Prepare Your Data to WaMDaM" , wx.NullBitmap , 0 )
         self.rpnlPrepare = rb.RibbonPanel( self.rtab_PrepareDataServices, wx.ID_ANY, wx.EmptyString , wx.NullBitmap , wx.DefaultPosition, wx.DefaultSize, wx.lib.agw.ribbon.RIBBON_PANEL_DEFAULT_STYLE )
         self.rbarImport1 = rb.RibbonButtonBar( self.rpnlPrepare, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
         self.rbarImport1.AddSimpleButton( 6, u"From Shapefile To WaMDaM", ShapeFileToExcel.GetBitmap(), wx.EmptyString)
         self.rbarImport1.AddSimpleButton( 7, u"Cross Tab Seasonal To WaMDaM", Seasonal.GetBitmap(), wx.EmptyString)
         self.rbarImport1.AddSimpleButton( 8, u"Cross Tab Time Series to WaMDaM",TimeSeries.GetBitmap(), wx.EmptyString)
-        self.rtab_Import = rb.RibbonPage( self.Main_ribbonBar, wx.ID_ANY, u"Import Data to WaM-DaM" , wx.NullBitmap , 0 )
+        self.rtab_Import = rb.RibbonPage( self.Main_ribbonBar, wx.ID_ANY, u"Import Data to WaMDaM" , wx.NullBitmap , 0 )
         self.rpnlImport = rb.RibbonPanel( self.rtab_Import, wx.ID_ANY, wx.EmptyString , wx.NullBitmap , wx.DefaultPosition, wx.DefaultSize, wx.lib.agw.ribbon.RIBBON_PANEL_DEFAULT_STYLE )
         self.rbarImport = rb.RibbonButtonBar( self.rpnlImport, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
         self.rbarImport.AddSimpleButton( 9, u"From Excel", ImportExcel.GetBitmap(), wx.EmptyString)
         self.rbarImport.AddSimpleButton( 5000, u"From CUAHSI", cuahsi.GetBitmap(), wx.EmptyString)
         self.rbarImport.AddSimpleButton( 5001, u"From WaDE", Wade.GetBitmap(), wx.EmptyString)
         self.rbarImport.AddSimpleButton( 10, u"From Bureau of Reclamation", ImportRwise.GetBitmap(), wx.EmptyString)
-        self.rbarImport.AddSimpleButton( 11, u"Add a new source", AddSource.GetBitmap(), wx.EmptyString)
+        self.rbarImport.AddSimpleButton( 11, u"WEAP Model (Area)", WEAP.GetBitmap(), wx.EmptyString)
         self.rtab_Query = rb.RibbonPage( self.Main_ribbonBar, wx.ID_ANY, u"Query WaMDaM" , wx.NullBitmap , 0 )
         self.m_ribbonPanel7 = rb.RibbonPanel( self.rtab_Query, wx.ID_ANY, wx.EmptyString , wx.NullBitmap , wx.DefaultPosition, wx.DefaultSize, wx.lib.agw.ribbon.RIBBON_PANEL_DEFAULT_STYLE )
         self.m_ribbonButtonBar6 = rb.RibbonButtonBar( self.m_ribbonPanel7, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
@@ -79,13 +79,14 @@ class frm_Home ( wx.Frame ):
         self.rtab_Export = rb.RibbonPage( self.Main_ribbonBar, wx.ID_ANY, u"Export Data to Models" , wx.NullBitmap , 0 )
         self.rtab_Export = rb.RibbonPanel( self.rtab_Export, wx.ID_ANY, wx.EmptyString , wx.NullBitmap , wx.DefaultPosition, wx.DefaultSize, wx.lib.agw.ribbon.RIBBON_PANEL_DEFAULT_STYLE )
         self.m_ribbonButtonBar7 = rb.RibbonButtonBar( self.rtab_Export, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
-        self.m_ribbonButtonBar7.AddSimpleButton( 17, u"WEAP", WEAP.GetBitmap(), wx.EmptyString)
-        self.m_ribbonButtonBar7.AddSimpleButton( 18, u"WASH", WASH.GetBitmap(), wx.EmptyString)
+        self.m_ribbonButtonBar7.AddSimpleButton( 17, u"First time", WEAP.GetBitmap(), wx.EmptyString)
+        # self.m_ribbonButtonBar7.AddSimpleButton( 18, u"Re-run a previous export", WASH.GetBitmap(), wx.EmptyString)
+        self.m_ribbonButtonBar7.AddSimpleButton( 18, u"Re-run a previous export", rerun.GetBitmap(), wx.EmptyString)
         self.m_ribbonButtonBar7.AddSimpleButton( 19, u"Hydra", ImportHydra.GetBitmap(), wx.EmptyString)
         self.rtab_About = rb.RibbonPage( self.Main_ribbonBar, wx.ID_ANY, u"About" , wx.NullBitmap , 0 )
         self.rpnl_About = rb.RibbonPanel( self.rtab_About, wx.ID_ANY, wx.EmptyString , wx.NullBitmap , wx.DefaultPosition, wx.DefaultSize, wx.lib.agw.ribbon.RIBBON_PANEL_DEFAULT_STYLE )
         self.rbarAbout = rb.RibbonButtonBar( self.rpnl_About, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
-        self.rbarAbout.AddSimpleButton( 20, u"About WaM-DaM", about.GetBitmap(), wx.EmptyString)
+        self.rbarAbout.AddSimpleButton( 20, u"About WaMDaM", about.GetBitmap(), wx.EmptyString)
         self.rbarAbout.AddSimpleButton( 21, u"License", licence.GetBitmap(), wx.EmptyString)
         self.rbarAbout.AddSimpleButton( 22, u"Help", Help.GetBitmap(), wx.EmptyString)
         self.Main_ribbonBar.Realize()
@@ -273,7 +274,7 @@ class dlg_ConnectNewDatabaseSQLite ( wx.Dialog ):
 
         bSizer57 = wx.BoxSizer( wx.VERTICAL )
 
-        self.m_staticText17111 = wx.StaticText( self, wx.ID_ANY, u"Provide the name of the new WaMDaM SQLite database file", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText17111 = wx.StaticText( self, wx.ID_ANY, u"Provide the name of the new WaMDaM SQLite database file \n (Do not add an extension)", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText17111.Wrap( -1 )
         bSizer57.Add( self.m_staticText17111, 0, wx.ALL, 5 )
 
@@ -2236,13 +2237,13 @@ class dlg_CrossTabTimeSeriesToWaMDaM ( wx.Dialog ):
 class dlg_About ( wx.Dialog ):
 
     def __init__( self, parent ):
-        wx.Dialog.__init__ ( self, parent, id = 104, title = u"About WaM-DaM", pos = wx.DefaultPosition, size = wx.Size( 646,488 ), style = wx.DEFAULT_DIALOG_STYLE )
+        wx.Dialog.__init__ ( self, parent, id = 104, title = u"About WaMDaM", pos = wx.DefaultPosition, size = wx.Size( 646,488 ), style = wx.DEFAULT_DIALOG_STYLE )
 
         self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
 
         bSizer10 = wx.BoxSizer( wx.VERTICAL )
 
-        self.m_staticText7 = wx.StaticText( self, wx.ID_ANY, u"The Water Management Data Model (WaMDaM) is a data model to consistency organize and synthesize disparate water management data for virtually any spatial boundary. These data are for node and link networks with attributes that have data types of, binary, parameters, seasonal parameters, text free, text controlled, file based, rules, time series, and multi column arrays.   \n  \nOrganizing data into WaMDaM helps users to systematically search for their data that has contextual metadata to correctly interpret it   \n  \nThis WaMDaM Data Loader helps users to load their data into WaMDaM database through a user-friendly interface.   \n  \nThe source code and documentation of WaM-DaM and its Data Loader are provided @ https://github.com/WamdamProject/WaMDaM-software-ecosystem and disturbed under a BSD 3-Clause license. All Rights Reserved.  \n  \nWaMDaM was designed and tested at Utah Water Research Laboratory at Utah State University and was funded by the the National Science Foundation as part of the CI-Water Project @ http://ci-water.org \n  \nDevelopent Team: Adel M. Abdallah and David E. Rosenberg @ http://rosenberg.usu.edu \nFor any questions, email Adel @ amabdallah@aggiemail.usu.edu   \n  \nDisclaimers:   \n*Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.  \n*This software has been tested but it comes without any warranty", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText7 = wx.StaticText( self, wx.ID_ANY, u"The Water Management Data Model (WaMDaM) is a data model to consistency organize and synthesize disparate water management data for virtually any spatial boundary. These data are for node and link networks with attributes that have data types of, binary, parameters, seasonal parameters, text free, text controlled, file based, rules, time series, and multi column arrays.   \n  \nOrganizing data into WaMDaM helps users to systematically search for their data that has contextual metadata to correctly interpret it   \n  \nThis WaMDaM Data Loader helps users to load their data into WaMDaM database through a user-friendly interface.   \n  \nThe source code and documentation of WaMDaM and its Data Loader are provided @ https://github.com/WamdamProject/WaMDaM-software-ecosystem and disturbed under a BSD 3-Clause license. All Rights Reserved.  \n  \nWaMDaM was designed and tested at Utah Water Research Laboratory at Utah State University and was funded by the the National Science Foundation as part of the CI-Water Project @ http://ci-water.org \n  \nDevelopent Team: Adel M. Abdallah and David E. Rosenberg @ http://rosenberg.usu.edu \nFor any questions, email Adel @ amabdallah@aggiemail.usu.edu  or visit his site @ adelmabdallah.com \n \nDisclaimers:   \n*Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.  \n*This software has been tested but it comes without any warranty", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText7.Wrap( -1 )
         bSizer10.Add( self.m_staticText7, 1, wx.ALL|wx.EXPAND, 5 )
 

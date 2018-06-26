@@ -16,6 +16,7 @@ from collections import OrderedDict
 
 # Creating a dictionary to map CV tables to the
 # online repository of Controlled Vocabulary http://vocabulary.wamdam.org/
+# key, value
 vocab = OrderedDict({
     "aggregationstatistic": CV_AggregationStatistic,
     "attributedatatype": CV_AttributeDataType,
@@ -27,7 +28,7 @@ vocab = OrderedDict({
     "objecttype": CV_ObjectType,
     "seasonname": CV_SeasonName,
     "spatialreference": CV_SpatialReference,
-    "descriptorvalue": CV_DescriptorValues,
+    "descriptorvalue": CV_Categorical,
     "units": CV_Units,
     "elevationdatum": CV_ElevationDatum
 })
@@ -48,6 +49,8 @@ Network_sheets_ordered = ['InstanceCategory', '3.1_Networks&Scenarios', '3.2_Nod
 
 # Sheet Names for step 4 loading in order (Datavalues)
 datavalues_sheets_ordered = ['4_NumericValues', '4_SeasonalNumericValues', '4_TimeSeries',
-                             '4_DescriptorValues', '4_TimeSeriesValues', '4_ElectronicFiles', '4_MultiAttributeSeries']
+                             '4_CategoricalValues', '4_TimeSeriesValues', '4_ElectronicFiles', '4_MultiAttributeSeries',
+                             '4_FreeText']
+
 
 row_start_data_values = {'4_MultiAttributeSeries': 14}

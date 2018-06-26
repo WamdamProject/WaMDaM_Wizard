@@ -1,6 +1,6 @@
 # MultiAttributeSeries.py
 
-"""In the multiAttribute Series. the main attributes on the big table in excel 
+"""In the multiAttribute Series. the main attributes on the big table in excel
 (below line 15 depicts which row is attributed to the main attribute of the small table
 """
 
@@ -56,7 +56,7 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
         avoid data duplication and creating links between tables.
         For each attribute code in the multicolumn sheet, the properties
         (Instance name, attribute name, etc ...) are loaded with the
-        appropriate value. [[Value sharing is observed if a value exist with
+        appropriate value. [[DataValue sharing is observed if a value exist with
         same properties.]] Is this still true? if yes explain more what is meant by "same properties"
         :return: None
         """
@@ -361,7 +361,7 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
 
                             try:
                                 # we test if the mappingid-scenarioid association exists in scenariomapping, if yes,
-                                # we reuse that association and no new entry is added to scenarioMappings.
+                                # we reuse that association and no new entry is added to scenariomapping.
                                 test = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                                     and_(
                                         SqlAlchemy.ScenarioMappings.MappingID == scenariomap.MappingID,
@@ -406,7 +406,7 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                                         raise Exception()
                                     multicolval.ValueOrder = \
                                         self.__session.query(SqlAlchemy.MultiAttributeSeriesValues.ValueOrder).order_by(
-                                            SqlAlchemy.MultiAttributeSeriesValues.MultiAttributeSeriesValuesID.desc()
+                                            SqlAlchemy.MultiAttributeSeriesValues.MultiAttributeSeriesValueID.desc()
                                         ).first()[0] + 1
                                 except Exception as e:
                                     multicolval.ValueOrder = 1
@@ -426,7 +426,7 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                                     and_(
                                         SqlAlchemy.MultiAttributeSeriesValues.DataValue == multicolval.DataValue
                                     )
-                                ).first().MultiAttributeSeriesValuesID
+                                ).first().MultiAttributeSeriesValueID
                             except:
                                 self.setup.push_data(multicolval)
 
@@ -458,13 +458,13 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                                 try:
                                     scene = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                                         and_(
-                                            SqlAlchemy.ScenarioMappings.MappingID == Mappings.MappingID,
+                                            SqlAlchemy.ScenarioMappings.MappingID == mapping.MappingID,
                                             SqlAlchemy.ScenarioMappings.ScenarioID == scenario_id
                                         )
                                     ).first().ScenarioMappingID
                                     found = True
                                     multi_map = mapping
-                                    main_data_val = Mappings.ValuesMapperID
+                                    main_data_val = mapping.ValuesMapperID
                                 except:
                                     pass
                             datavalue = multi_map.ValuesMapperID
@@ -523,13 +523,13 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
 
                                 datavalmapper = self.load_data_values(self.__session)
                                 main_data_val = datavalmapper.ValuesMapperID
-                                multiarray_mapping .AttributeID = self.__session.query(SqlAlchemy.Attributes).filter(
+                                multiarray_mapping.AttributeID = self.__session.query(SqlAlchemy.Attributes).filter(
                                     SqlAlchemy.Attributes.AttributeName == main_col.value
                                 ).first().AttributeID
-                                multiarray_mapping .InstanceID = instance_id
-                                multiarray_mapping .SourceID = source_id
-                                multiarray_mapping .MethodID = method_id
-                                multiarray_mapping .ValuesMapperID = datavalmapper.ValuesMapperID
+                                multiarray_mapping.InstanceID = instance_id
+                                multiarray_mapping.SourceID = source_id
+                                multiarray_mapping.MethodID = method_id
+                                multiarray_mapping.ValuesMapperID = datavalmapper.ValuesMapperID
                                 self.setup.push_data(datavalmapper)
                                 self.setup.push_data(multiarray_mapping)
 
@@ -571,26 +571,26 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                                     try:
                                         scene = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                                             and_(
-                                                SqlAlchemy.ScenarioMappings.MappingID == Mappings.MappingID,
+                                                SqlAlchemy.ScenarioMappings.MappingID == mapping.MappingID,
                                                 SqlAlchemy.ScenarioMappings.ScenarioID == scenario_id
                                             )
                                         ).first().ScenarioMappingID
                                         found = True
                                         main_var_map = mapping
-                                        sub_data_val = Mappings.ValuesMapperID
+                                        sub_data_val = mapping.ValuesMapperID
                                     except:
                                         pass
                                 test = main_var_map.ValuesMapperID
                             except Exception as e:
                                 datavalmapper = self.load_data_values(self.__session)
                                 multiarray_mapping = SqlAlchemy.Mappings()
-                                multiarray_mapping .AttributeID = self.__session.query(SqlAlchemy.Attributes).filter(
+                                multiarray_mapping.AttributeID = self.__session.query(SqlAlchemy.Attributes).filter(
                                     SqlAlchemy.Attributes.AttributeName == sub_attrib.value
                                 ).first().AttributeID
-                                multiarray_mapping .InstanceID = instance_id
-                                multiarray_mapping .SourceID = source_id
-                                multiarray_mapping .MethodID = method_id
-                                multiarray_mapping .ValuesMapperID = datavalmapper.ValuesMapperID
+                                multiarray_mapping.InstanceID = instance_id
+                                multiarray_mapping.SourceID = source_id
+                                multiarray_mapping.MethodID = method_id
+                                multiarray_mapping.ValuesMapperID = datavalmapper.ValuesMapperID
                                 self.setup.push_data(multiarray_mapping)
                                 self.setup.push_data(datavalmapper)
                                 sub_data_val = datavalmapper.ValuesMapperID
@@ -702,11 +702,11 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                                 try:
                                     scene = self.__session.query(SqlAlchemy.ScenarioMappings).filter(
                                         and_(
-                                            SqlAlchemy.ScenarioMappings.MappingID == Mappings.MappingID,
+                                            SqlAlchemy.ScenarioMappings.MappingID == mapping.MappingID,
                                             SqlAlchemy.ScenarioMappings.ScenarioID == scenario_id
                                         )
                                     ).first().ScenarioMappingID
-                                    multiarray_attrib_id = Mappings.ValuesMapperID
+                                    multiarray_attrib_id = mapping.ValuesMapperID
                                 except:
                                     pass
 
@@ -728,7 +728,7 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                                         raise Exception()
                                     multicolval.ValueOrder = \
                                         self.__session.query(SqlAlchemy.MultiAttributeSeriesValues.ValueOrder).order_by(
-                                            SqlAlchemy.MultiAttributeSeriesValues.MultiAttributeSeriesValuesID.desc()
+                                            SqlAlchemy.MultiAttributeSeriesValues.MultiAttributeSeriesValueID.desc()
                                         ).first()[0] + 1
                                 except Exception as e:
                                     multicolval.ValueOrder = 1

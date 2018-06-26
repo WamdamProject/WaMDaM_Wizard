@@ -15,7 +15,7 @@ import re
 import wx
 from wx.tools import img2py
 
-output = 'icons1.py'
+output = 'icons3.py'
 
 # get the list of BMP files
 #files = [f for f in os.listdir('.') if re.search(r'odm\d*x\d*\.png', f)]

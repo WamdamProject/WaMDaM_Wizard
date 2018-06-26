@@ -22,10 +22,10 @@ class dlg_ExportScenarioDataToHydra( WaMDaMWizard.dlg_ExportScenarioDataToHydra 
 		try:
 			''' init combo model'''
 			self.dataStructure = GetDataStructure()
-			self.datasets = self.dataStructure.getDatasets()
+			self.datasets = self.dataStructure.getResourceType()
 			list_acromy = list()
 			for row in self.datasets:
-				list_acromy.append(row.DatasetAcronym)
+				list_acromy.append(row.ResourceTypeAcronym)
 			if list_acromy.__len__() > 0:
 				self.comboBox_selectModel.SetItems(list_acromy)
 		except Exception as e:

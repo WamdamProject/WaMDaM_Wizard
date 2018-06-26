@@ -73,7 +73,7 @@ class GetNodeLinks(object):
             return complete_result
         except Exception as  e:
             print e
-            raise Exception('Erro occure in reading Data Structure.\n' + e.message)
+            raise Exception('Error occurred in reading Data Structure.\n' + e.message)
     def GetScenaroisResult(self, CV_ObjectType, xmin, ymin, xmax, ymax):
         '''
         This method is used to get Scenarios according to selected CV_ObjectType.
@@ -121,7 +121,7 @@ class GetNodeLinks(object):
             return complete_result
         except Exception as  e:
             print e
-            raise Exception('Erro occure in reading Data Structure.\n' + e.message)
+            raise Exception('Error occurred in reading Data Structure.\n' + e.message)
     def GetNodesResult(self, CV_ObjectType, xmin, ymin, xmax, ymax):
         '''
         This method is used to get Instances according to selected CV_ObjectType.
@@ -169,7 +169,7 @@ class GetNodeLinks(object):
                 return complete_result
         except Exception as  e:
             print e
-            raise Exception('Erro occure in reading Data Structure.\n' + e.message)
+            raise Exception('Error occurred in reading Data Structure.\n' + e.message)
     def GetLinksResult(self, CV_ObjectType, xmin, ymin, xmax, ymax):
         '''
         This method is used to get Links according to selected CV_ObjectType.
@@ -259,4 +259,4 @@ class GetNodeLinks(object):
                 return complete_result
         except Exception as  e:
             print e
-            raise Exception('Erro occure in reading Data Structure.\n' + e.message)
+            raise Exception('Error occurred in reading Data Structure.\n' + e.message)

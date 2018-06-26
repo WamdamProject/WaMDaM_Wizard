@@ -74,7 +74,7 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 		pass
 
 	def FilePicker_compareScenariosOnFileChanged( self, event ):
-		valid_extension = ['xls','xlsx']
+		valid_extension = ['xlsx']
 		self.path = self.FilePicker_compareScenarios.GetPath()
 		if not (self.path.split('.')[-1] in valid_extension):
 			message = msg_somethigWrong(None, msg="Please select a valid Excel File")
@@ -82,6 +82,19 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 			return
 		print 'This is working just fine...'
 		print self.path
+		book2 = load_workbook(self.path)
+		# bring all the checks below to up here?
+		sheetnames = ["ChangeInTopology", "ChangeInMetadata_Topology", "ChangeInMetadata_Attributes", "ChangeInValues"]
+		for name in sheetnames:
+			if not name in book2.sheetnames:
+				book2.close()
+				message = msg_somethigWrong(None, msg="Please select a valid Excel File")
+				message.ShowModal()
+				return
+
+		book2.close()
+
+
 
 	def btn_compare_scenariosOnButtonClick( self, event ):
 		''' Get selected data(Dataset, MasterNetworkName, ScenarioName1, ScenarioName2) '''
@@ -101,7 +114,7 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 			message = 'Select the ScenarioName1.'
 		elif selectedScenarioName2 == None or selectedScenarioName2 == '':
 			message = 'Select the ScenarioName2.'
-		elif not ['xls', 'xlsx', 'xlsm'].__contains__(self.path.split('.')[-1]):
+		elif not ['xlsx'].__contains__(self.path.split('.')[-1]):
 			message = 'please select a valid excel file.'
 
 		'''if warning message exists, then show msg dialog and return.'''
@@ -159,6 +172,8 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 
 		'''get changed metadata'''
 		changeInMetadataList = self.compareScenarios.GetChangeInMetadata_Topology(selectedDataset, selectedMasterNetworkName,selectedScenarioName1, selectedScenarioName2)
+
+		# print the result to this excel sheet: ChangeInMetadata_Attributes
 		changeInMetadataValueList = self.compareScenarios.GetChangeInMetaValues_Attributes(selectedDataset, selectedMasterNetworkName,selectedScenarioName1, selectedScenarioName2)
 
 		''' init metadata'''
@@ -194,6 +209,7 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 			commonScenarioCount = len(commonResultData)
 			totalcount = firstScenarioCount + secondScenarioCount + commonScenarioCount
 
+		''' print the result to this excel sheet: ChangeInMetadata_Attributes '''
 
 		changeInMetadataAttributeList_result = []
 		for unique1Data in changeInMetadataValueList:
@@ -219,105 +235,12 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 
 		print '**************'
 		try:
-			if self.path.split('.')[-1] == 'xls':
-				wb = open_workbook(self.path)
-				# workbook = copy(wb)
-				workbook = wb
-				try:
-					additionsToTopologySheet = workbook.get_sheet(0) #[[[additionsToTopologySheet change it to unique to Scenario x]]]
-					changeInMetadataToTopologySheet = workbook.get_sheet(1)
-					changeInMetavaluesTopologySheet = workbook.get_sheet(2)
-				except:
-					message = msg_somethigWrong(None, msg="Please select a valid Excel File")
-					message.ShowModal()
-					return
-
-				additionsToTopologySheet.write(1, 1, selectedScenarioName2)
-				additionsToTopologySheet.write(1, 3, selectedScenarioName1)
-
-				additionsToTopologySheet.write(1, 1, selectedScenarioName1)
-				additionsToTopologySheet.write(1, 4, selectedScenarioName2)
-
-				additionsToTopologySheet.write(2, 1, firstScenarioCount)
-				additionsToTopologySheet.write(2, 4, commonScenarioCount)
-				additionsToTopologySheet.write(2, 7, secondScenarioCount)
-				additionsToTopologySheet.write(3, 1, str(round(float(firstScenarioCount)/float(1 if totalcount == 0 else totalcount), 3)* 100.0) + "%")
-				additionsToTopologySheet.write(3, 4, str(round(float(commonScenarioCount)/float(1 if totalcount == 0 else totalcount), 3)* 100.0) + "%")
-				additionsToTopologySheet.write(3, 7, str(round(float(secondScenarioCount)/float(1 if totalcount == 0 else totalcount), 3) * 100.0) + "%")
-				rowNumber = 6
-
-				for row_id, row in enumerate(unique2ResultData):
-					for col_id, cell in enumerate(row):
-						additionsToTopologySheet.write(rowNumber, col_id + 0, cell)
-					rowNumber += 1
-
-				for row_id, row in enumerate(unique1ResultData):
-					for col_id, cell in enumerate(row):
-						additionsToTopologySheet.write(rowNumber, col_id + 6, cell)
-					rowNumber += 1
-
-				for row_id, row in enumerate(commonResultData):
-					for col_id, cell in enumerate(row):
-						additionsToTopologySheet.write(rowNumber, col_id + 3, cell)
-					rowNumber += 1
-				i = 0
-				for row_id, row in enumerate(changeInMetadataList_result):
-					# if row.__len__() < 10:
-					# 	continue
-					if row.__len__() > 10 and row[5] == row[10] and row[6] == row[11]:
-						continue
-					for col_id, cell in enumerate(row):
-						if col_id < 4:
-							changeInMetadataToTopologySheet.write(row_id + 5, col_id , cell)
-						elif col_id == 4:
-							if cell == selectedScenarioName1:
-								changeInMetadataToTopologySheet.write(i + 5, col_id , row[6])
-								changeInMetadataToTopologySheet.write(i + 5, 6, row[7])
-							else:
-								changeInMetadataToTopologySheet.write(i + 5, col_id + 1, row[6])
-								changeInMetadataToTopologySheet.write(i + 5, 7, row[7])
-							# if len(row) < 10:
-							# 	break
-						elif col_id == 9:
-							if cell == selectedScenarioName1:
-								changeInMetadataToTopologySheet.write(i + 5, 4, row[10])
-								changeInMetadataToTopologySheet.write(i + 5, 6, row[11])
-							else:
-								changeInMetadataToTopologySheet.write(i + 5, 5, row[10])
-								changeInMetadataToTopologySheet.write(i + 5, 7, row[11])
-							break
-					if row.__len__() > 10 and row[5] == row[10]:
-						changeInMetadataToTopologySheet.write(i + 5, 8, row[10])
-						changeInMetadataToTopologySheet.cell(i + 5, 4, "")
-						changeInMetadataToTopologySheet.cell(i + 5, 5, "")
-					if row.__len__() > 10 and row[6] == row[11]:
-						changeInMetadataToTopologySheet.write(i + 5, 8, row[11])
-						changeInMetadataToTopologySheet.cell(i + 5, 6, "")
-						changeInMetadataToTopologySheet.cell(i + 5, 7, "")
-					i += 1
-
-				for row_id, row in enumerate(changeInMetadataValueList):
-					for col_id, cell in enumerate(row):
-						changeInMetavaluesTopologySheet.write(row_id + 3, col_id + 0, cell)
-
-				changeInMetadataToTopologySheet.write(1, 4, selectedScenarioName1)
-				changeInMetadataToTopologySheet.write(1, 5, selectedScenarioName2)
-				changeInMetadataToTopologySheet.write(1, 7, selectedScenarioName1)
-				changeInMetadataToTopologySheet.write(1, 8, selectedScenarioName2)
-
-				workbook.save(self.path)
-			else:
+			if self.path.split('.')[-1] == 'xlsx':
 				book2 = load_workbook(self.path)
-				try:
-					additionsToTopologySheet = book2.get_sheet_by_name("ChangeInTopology")
-					changeInMetadataToTopologySheet = book2.get_sheet_by_name("ChangeInMetadata_Topology")
-					changeInMetavaluesTopologySheet = book2.get_sheet_by_name("ChangeInMetadata_Attributes")
-					changeInValuesSheet = book2.get_sheet_by_name("ChangeInValues")
-				except:
-					message = msg_somethigWrong(None, msg="Please select a valid Excel File")
-					message.ShowModal()
-					return
-					# raise Exception('Output Sheet {} not found in Excel File \n\n Please select valid Excel File'.format("3.1_Networks&Scenarios"))
+				additionsToTopologySheet = book2["ChangeInTopology"]
+				changeInMetadataToTopologySheet = book2["ChangeInMetadata_Topology"]
+				changeInMetavaluesTopologySheet = book2["ChangeInMetadata_Attributes"]
+				changeInValuesSheet = book2["ChangeInValues"]
 
 
 				additionsToTopologySheet.cell(row=3, column=2, value=firstScenarioCount)
@@ -426,6 +349,9 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 				count_common_source_attr = 0
 				count_common_method_attr = 0
 				i = 0
+
+				''' print the result to this excel sheet: ChangeInMetadata_Attributes '''
+
 				for row_id, row in enumerate(changeInMetadataAttributeList_result):
 					# if row.__len__() < 10:
 					# 	continue
@@ -607,7 +533,7 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 					raise Exception("Permission denied!\nFileName : {}\nThis file is open or used by another application. Please close it first".format(e.filename))
 			from Messages_forms.msg_successLoadDatabase import msg_successLoadDatabase
 			instance = msg_successLoadDatabase(None)
-			instance.m_staticText1.SetLabel("The comparison and writing to Excel where successful. \n Check the excel file you provided to see the results")
+			instance.m_staticText1.SetLabel("\n \n The comparison and writing to Excel where successful. \n Check the excel file you provided to see the results")
 			instance.ShowModal()
 			# self.Destroy()
 		except Exception as e:

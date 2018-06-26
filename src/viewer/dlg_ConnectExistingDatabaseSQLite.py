@@ -40,7 +40,7 @@ class dlg_ConnectExistingDatabaseSQLite(WaMDaMWizard.dlg_ConnectExistingDatabase
         # Get connection of db
         setup = DB_Setup()
         if setup.get_session():
-            define.logger.error('Failed database connect.\n\nError: You are already connected to a database. \n\n to use another '
+            define.logger.error('Failed database connection.\n\nError: You are already connected to a database. \n\n to use another '
 										'database, you need to disconnect from the current one')
             msg_somethigWrong(topframe, msg='\n\nError: You are already connected to a database. \n\n to use another '
 										'database, you need to disconnect from the current one').Show()
@@ -63,7 +63,7 @@ class dlg_ConnectExistingDatabaseSQLite(WaMDaMWizard.dlg_ConnectExistingDatabase
                 from Messages_forms.msg_connSQLiteInvalid import msg_connSQLiteInvalid
 
                 msg_connSQLiteInvalid(topframe).Show()
-        define.logger.info("'" + self.path.split('\\')[-1] + "'was connected successfully.\n")
+        define.logger.info("'" + self.path.split('\\')[-1] + "'was connected to successfully.\n")
         define.dbName = self.path.split('\\')[-1]
         self.Close()
 
@@ -81,9 +81,9 @@ class dlg_ConnectExistingDatabaseSQLite(WaMDaMWizard.dlg_ConnectExistingDatabase
             sql = 'SELECT  DISTINCT  VersionNumber FROM "WaMDaMVersion"'
             result = temp_session.execute(sql)
             for row in result:
-                if row.VersionNumber != 1.01:
-                    define.logger.error('Failed database connect.\n\nError: Version of database is not matched.')
-                    raise Exception('\n\nError: Version of database is not matched.')
+                if row.VersionNumber != 1.02:
+                    define.logger.error('Failed database connection.\n\nError: The database you are trying to connect to does not matched WaMDaM 1.02 schema version.')
+                    raise Exception('\n\nError: The database you are trying to connect to does not matched WaMDaM 1.02 schema version')
 
             ''' get wandam classes'''
             from inspect import isclass
@@ -91,6 +91,7 @@ class dlg_ConnectExistingDatabaseSQLite(WaMDaMWizard.dlg_ConnectExistingDatabase
             extra_class_names = ["Column", "DateTime", "Float", "ForeignKey", "Integer", "Text", "create_engine",
                                  "BLOB", "Date", "relationship", "sessionmaker", "declarative_base", "SAWarning",
                                  "NullPool", "Base", "String"]
+
             result = temp_session.execute("SELECT name FROM sqlite_master WHERE type='table';")
 
             ''' get database table names'''
@@ -103,9 +104,9 @@ class dlg_ConnectExistingDatabaseSQLite(WaMDaMWizard.dlg_ConnectExistingDatabase
                 if extra_class_names.__contains__(class_name):
                     continue
                 if not table_names.__contains__(class_name):  # and not extra_class_names.__contains__(table_name):
-                    define.logger.error('Failed database connect.\n\nError: {} table does not exist in database of current version.\n'
-                                        'Therefore You can not connect with {}.'.format(class_name, db_name))
-                    msg = '\n\nError: {} does not exist in the current version.\n Therefore You can not connect with {}.'.format(class_name, db_name)
+                    define.logger.error('Failed database connection.\n\nError: {} table does not exist in database of WaMDaM 1.02 version.\n'
+                                        'Therefore you can not connect with {}.'.format(class_name, db_name))
+                    msg = '\n\nError: {} does not exist in the current WaMDaM 1.02 version.\n Therefore you can not connect with {}.'.format(class_name, db_name)
                     raise Exception(msg)
 
                 # if not extra_class_names.__contains__(table_name):

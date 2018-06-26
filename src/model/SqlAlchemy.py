@@ -173,8 +173,8 @@ class CV_SpatialReference(Base):
     SourceVocabularyURI = Column(String(255))
 
 
-class CV_DescriptorValues(Base):
-    __tablename__ = 'CV_DescriptorValues'
+class CV_Categorical(Base):
+    __tablename__ = 'CV_Categorical'
 
     Name = Column(String(255), primary_key=False)
     Term = Column(String(255), primary_key=True)
@@ -191,8 +191,10 @@ class CV_Units(Base):
     Term = Column(String(255), primary_key=True)
     Definition = Column(String(5000))
     Category = Column(String(255), nullable=False)
-    UnitSystem = Column(String(255))
-    # UnitAbbreviation = Column(String(50), nullable=False)
+    UnitAbbreviation = Column(String(50))
+    UnitSystem = Column(String(255))# Metric or English
+    ConversionFactor = Column(Float)
+    ConversionRelation = Column(String(255))
     SourceVocabularyURI = Column(String(255))
 
 
@@ -227,6 +229,7 @@ class Attributes(Base):
 
     AttributeID = Column(Integer, primary_key=True)
     AttributeName = Column(String(255), nullable=False)
+    AttributeName_Abstract = Column(String(255))
     AttributeNameCV = Column(ForeignKey('CV_AttributeName.Name'))
     ObjectTypeID = Column(ForeignKey('ObjectTypes.ObjectTypeID'), nullable=False)
     UnitNameCV = Column(ForeignKey('CV_Units.Name'))
@@ -318,6 +321,9 @@ class MultiAttributeSeries(Base):
     MappingID_Attribute = Column(ForeignKey('ValuesMapper.ValuesMapperID'), nullable=False)
     ValuesMapperID = Column(ForeignKey('ValuesMapper.ValuesMapperID'), nullable=False)
 
+    # MultiAttributeSeries = relationship('MappingID_Attribute')
+    # ValuesMapper = relationship('ValuesMapper')
+
     ValuesMapper = relationship('ValuesMapper',
                                     primaryjoin='MultiAttributeSeries.MappingID_Attribute == ValuesMapper.ValuesMapperID')
     ValuesMapper1 = relationship('ValuesMapper',
@@ -350,6 +356,7 @@ class SeasonalNumericValues(Base):
 
     SeasonalNumericValueID = Column(Integer, primary_key=True)
     SeasonName = Column(String(255))
+    SeasonDateFormate=Column(DateTime)
     SeasonNameCV = Column(ForeignKey('CV_SeasonName.Name'))
     SeasonOrder = Column(Integer)
     SeasonNumericValue = Column(String(500), nullable=False)
@@ -359,17 +366,27 @@ class SeasonalNumericValues(Base):
     SeasonNames = relationship('CV_SeasonName')
 
 
-class DescriptorValues(Base):
-    __tablename__ = 'DescriptorValues'
+class CategoricalValues(Base):
+    __tablename__ = 'CategoricalValues'
 
-    DescriptorValueID = Column(Integer, primary_key=True)
-    DescriptorValue = Column(String(500), nullable=False)
-    DescriptorValueCV = Column(ForeignKey('CV_DescriptorValues.Name'))
-    ValuesMapperID = Column(ForeignKey('ValuesMapper.ValuesMapperID'), nullable=False)
+    CategoricalValueID = Column(Integer, primary_key=True)
+    CategoricalValue = Column(String(500), nullable=False)
+    CategoricalValueCV = Column(ForeignKey('CV_Categorical.Name'))
     ValuesMapperID = Column(ForeignKey('ValuesMapper.ValuesMapperID'), nullable=False)
 
     ValuesMapper = relationship('ValuesMapper')
-    DescriptorValues = relationship('CV_DescriptorValues')
+    CategoricalValues = relationship('CV_Categorical')
+
+
+
+class FreeText(Base):
+    __tablename__ = 'FreeText'
+
+    FreeTextID = Column(Integer, primary_key=True)
+    FreeTextValue = Column(Text, nullable=False)
+    ValuesMapperID = Column(ForeignKey('ValuesMapper.ValuesMapperID'), nullable=False)
+
+    ValuesMapper = relationship('ValuesMapper')
 
 
 
@@ -520,6 +537,8 @@ class Mappings(Base):
     SourceID = Column(ForeignKey('Sources.SourceID'), nullable=False)
     MethodID = Column(ForeignKey('Methods.MethodID'), nullable=False)
     ValuesMapperID = Column(ForeignKey('ValuesMapper.ValuesMapperID'))
+    Verified = Column(String(5))
+
 
     ValuesMapper = relationship('ValuesMapper')
     Instances = relationship('Instances')

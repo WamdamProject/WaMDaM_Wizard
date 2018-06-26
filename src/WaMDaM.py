@@ -1,15 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-#
 
-# Wamdam_v1.01.py
+# Wamdam.py
 """"""
 
 """
-WaMDaM: The Water Management Data Model Version 1.01
+WaMDaM: The Water Management Data Model Version 1.02 
 See the schema at http://schema.wamdam.org/diagrams/01_WaMDaM.html
 Instructions at http://docs.wamdam.org/Getting_started/Steps
+
 Adel M. Abdallah
 email: amabdallah@aggiemail.usu.edu
+website: http://adelmabdallah.com/
+
+June 2018
 """
 
 
@@ -20,7 +24,7 @@ Before you start, make sure to install all the required Python libraries listed 
 requirements.md text file/
 
 
-Wamdam.py calls the GUI homepage wxform in the viewer folder called frm_Home.py. In the GUI homepage,
+Wamdam.py calls the GUI homepage wxform in the viewer folder which calls frm_Home.py. In the GUI homepage,
 users can mainly connect to a WaMDaM SQLite database and import data from multiple sources
 into the database using interactive buttons (events: 
 1. WaMDaM spreadsheet template (generic to any dataset or model)  

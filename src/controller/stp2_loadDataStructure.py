@@ -314,11 +314,11 @@ class Load_Struct_To_DB(Parse_Excel_File):
                                 raise Exception('Error in {} row of "Attributes_table" of sheet "{}"\nField named "AttributeName" is empty.\nThis field should not be empty.\nPlease fill this field to a value\n\n'
                                                 .format(row_id, sheet_names[3]))
 
-                            if row[3].value == "":
+                            if row[4].value == "":
                                 raise Exception('Error in {} row of "Attributes_table" of sheet "{}"\nField named "AttributeUnit" is empty.\nThis field should not be empty.\nPlease fill this field to a value\n\n'
                                                 .format(row_id, sheet_names[3]))
 
-                            if row[5].value == "":
+                            if row[6].value == "":
                                 raise Exception('Error in {} row of "Attributes_table" of sheet "{}"\nField named "AttributeDataTypeCV" is empty.\nThis field should not be empty.\nPlease fill this field to a value\n\n'
                                                 .format(row_id, sheet_names[3]))
 
@@ -350,26 +350,26 @@ class Load_Struct_To_DB(Parse_Excel_File):
                                 raise Exception('Error in sheet {}\n could not find {} in ObjectTypes\n\n'
                                                 .format(sheet_names[3], row[0].value))
 
-                            if row[2].value:
-                                attrib.AttributeNameCV = row[2].value
+                            if row[3].value:
+                                attrib.AttributeNameCV = row[3].value
 
                             # if row[2].value:
                             #     attrib.UnitName = row[3].value
                             # else:
                             #     raise Exception('Empty field found in AttributeUnit column of Attributes sheet')
 
-                            if row[4].value:
+                            if row[5].value:
                                 try:
                                     attrib.UnitNameCV = self.__session.query(SqlAlchemy.CV_Units).filter(
-                                            SqlAlchemy.CV_Units.Name == row[4].value
+                                            SqlAlchemy.CV_Units.Name == row[5].value
                                         ).first().Name
                                 except Exception as e:
                                     print e
                                     raise Exception("Error in sheet '{}'\n could not find '{}' in CV_Units table\n\n"
-                                                    .format(sheet_names[3], row[2].value))
+                                                    .format(sheet_names[3], row[5].value))
 
-                            if row[3].value:
-                                attrib.UnitName = row[3].value
+                            if row[4].value:
+                                attrib.UnitName = row[4].value
                                 # try:
                                 #     attrib.UnitName = self.__session.query(SqlAlchemy.CV_Units).filter(
                                 #         SqlAlchemy.CV_Units.Name == row[3].value
@@ -382,27 +382,29 @@ class Load_Struct_To_DB(Parse_Excel_File):
                                 raise Exception('Error in "Attributes_table" of sheet "{}"\nField named "AttributeUnit" is empty.\nThis field should not be empty.\nPlease fill this field to a value'
                                                 .format(sheet_names[3]))
                                 # raise Exception('Empty field found in AttributeDataTypeCV column of Attributes table')
-                            if row[5].value:
+                            if row[6].value:
                                 try:
                                     attrib.AttributeDataTypeCV = self.__session.query(SqlAlchemy.CV_AttributeDataType).filter(
-                                        SqlAlchemy.CV_AttributeDataType.Name == row[5].value
+                                        SqlAlchemy.CV_AttributeDataType.Name == row[6].value
                                     ).first().Name
                                 except Exception as e:
                                     print e
                                     raise Exception('Error in sheet {}\ncould not find {} in AttributeDataTypeCV\n\n'
-                                                    .format(sheet_names[3], row[5].value))
-                            if row[6].value:
+                                                    .format(sheet_names[3], row[6].value))
+                            if row[7].value:
                                 try:
                                     attrib.AttributeCategoryID = self.__session.query(SqlAlchemy.AttributeCategories).filter(
-                                        SqlAlchemy.AttributeCategories.AttributeCategoryName == row[6].value
+                                        SqlAlchemy.AttributeCategories.AttributeCategoryName == row[7].value
                                     ).first().AttributeCategoryID
                                 except Exception as e:
                                     print e
                                     raise Exception('Error in sheet {}\ncould not find {} in AttributeCategory\n\n'
-                                                    .format(sheet_names[3], row[6].value))
+                                                    .format(sheet_names[3], row[7].value))
 
-                            attrib.ModelInputOrOutput = row[7].value
-                            attrib.AttributeDescription = row[8].value
+                            attrib.AttributeName_Abstract = row[2].value
+                            attrib.ModelInputOrOutput = row[8].value
+                            attrib.AttributeDescription = row[9].value
+
                             self.setup.push_data(attrib)
                         break
     def add_data(self):

@@ -11,7 +11,9 @@ from controller.stp3_loadNetworks import Load_Networks_Data
 from controller.stp0_loadCVs import Load_CV_To_DB
 from controller.ConnectDB_ParseExcel import DB_Setup
 from controller.stp4_loadDataValue import *
-from controller.stp4_loadDataValue.loadDescriptorValues import LoadDescriptorValues
+from controller.stp4_loadDataValue.loadFreeTextValues import LoadFreeTextValues
+from controller.stp4_loadDataValue.loadCategoricalValues import LoadCategoricalValues
+
 from controller.ReadWorkbook_SheetsNames import *
 from Messages_forms.msg_somethigWrong import msg_somethigWrong
 from Messages_forms.msg_loading import msg_loading
@@ -139,7 +141,7 @@ class dlg_ImportSpreadsheetBasic(WaMDaMWizard.dlg_ImportSpreadsheetBasic):
                 define.logger.info("NetworksData load was finished successfully.")
                 return instance
             except Exception as e:
-                define.logger.error('Failed networksData load.\n' + e.message)
+                define.logger.error('Failed network Data load.\n' + e.message)
                 print(e)
                 # message = messageDlg(None)
                 # message.SetTitle(u"Sorry: something went wrong")
@@ -148,11 +150,29 @@ class dlg_ImportSpreadsheetBasic(WaMDaMWizard.dlg_ImportSpreadsheetBasic):
                 raise Exception(e.message)
 
         def descriptorValues(msgDlg):
-            define.logger.info("Start textFreeData load.")
+            define.logger.info("Start Categorical Data load.")
             try:
-                instance = LoadDescriptorValues(obj)
+                instance = LoadCategoricalValues(obj)
                 instance.load_data()
                 msgDlg.guage.SetValue(6)
+                define.logger.info("Categorical data load was finished successfully.")
+                return instance
+            except Exception as e:
+                define.logger.error('Failed Categorical data load.\n' + e.message)
+                print(e)
+                # message = messageDlg(None)
+                # message.SetTitle(u"Sorry: something went wrong")
+                # message.setMessage(u'{} \n\n [*] Could not Load TextFree Data'.format(e))
+                # message.Show()
+                raise Exception(e.message)
+
+
+        def freeText(msgDlg):
+            define.logger.info("Start textFreeData load.")
+            try:
+                instance = LoadFreeTextValues(obj)
+                instance.load_data()
+                msgDlg.guage.SetValue(7)
                 define.logger.info("TextFreeData load was finished successfully.")
                 return instance
             except Exception as e:
@@ -164,12 +184,14 @@ class dlg_ImportSpreadsheetBasic(WaMDaMWizard.dlg_ImportSpreadsheetBasic):
                 # message.Show()
                 raise Exception(e.message)
 
+
+
         def numericValues(msgDlg):
             define.logger.info("Start paramsData load.")
             try:
                 instance = LoadNumericValues(obj)
                 instance.load_data()
-                msgDlg.guage.SetValue(7)
+                msgDlg.guage.SetValue(8)
                 define.logger.info("ParamsData load was finished successfully.")
                 return instance
             except Exception as e:
@@ -186,7 +208,7 @@ class dlg_ImportSpreadsheetBasic(WaMDaMWizard.dlg_ImportSpreadsheetBasic):
             try:
                 instance = LoadSeasonalNumericValues(obj)
                 instance.load_data()
-                msgDlg.guage.SetValue(8)
+                msgDlg.guage.SetValue(9)
                 define.logger.info("SeasonParamsData load was finished successfully.")
                 return instance
             except Exception as e:
@@ -203,7 +225,7 @@ class dlg_ImportSpreadsheetBasic(WaMDaMWizard.dlg_ImportSpreadsheetBasic):
             try:
                 instance = LoadTimeSeries(obj)
                 instance.load_data()
-                msgDlg.guage.SetValue(9)
+                msgDlg.guage.SetValue(10)
                 define.logger.info("TimeSeriesData load was finished successfully.")
                 return instance
             except Exception as e:
@@ -232,29 +254,14 @@ class dlg_ImportSpreadsheetBasic(WaMDaMWizard.dlg_ImportSpreadsheetBasic):
                 # message.Show()
                 raise Exception(e.message)
 
-        # def dualValues(msgDlg):
-        #     define.logger.info("Start booleanData load.")
-        #     try:
-        #         instance = LoadDualValues(obj)
-        #         instance.load_data()
-        #         msgDlg.guage.SetValue(11)
-        #         define.logger.info("BooleanData load was finished successfully.")
-        #         return instance
-        #     except Exception as e:
-        #         define.logger.error('Failed booleanData load.\n' + e.message)
-        #         print(e)
-        #         # message = messageDlg(None)
-        #         # message.SetTitle(u"Sorry: something went wrong")
-        #         # message.setMessage(u'{} \n\n [*] Could not Load Boolean Data'.format(e))
-        #         # message.Show()
-        #         raise Exception(e.message)
+
 
         def multiColumnArrayData(msgDlg):
             define.logger.info("Start MultiAttributeSeriesData load.")
             try:
                 instance = LoadMultiCulumnArray(obj)
                 instance.load_data()
-                msgDlg.guage.SetValue(14)
+                msgDlg.guage.SetValue(11)
                 define.logger.info("MultiAttributeSeriesData load was finished successfully.\n\n")
                 return instance
             except Exception as e:
@@ -296,11 +303,12 @@ class dlg_ImportSpreadsheetBasic(WaMDaMWizard.dlg_ImportSpreadsheetBasic):
                     instance_structData = structData(self.msgDlg)
                     instance_networksData = networksData(self.msgDlg)
                     instance_DescriptorValuesData = descriptorValues(self.msgDlg)
+                    instance_freeText = freeText(self.msgDlg)
+
                     instance_paramsData = numericValues(self.msgDlg)
                     instance_seasonParamsData = seasonalNumericValues(self.msgDlg)
                     instance_timeSeriesData = timeSeriesData(self.msgDlg)
                     instance_timeSeriesValueData = timeSeriesValueData(self.msgDlg)
-                    # instance_booleanData = dualValues(self.msgDlg)
                     instance_fileData = electronicFiles(self.msgDlg)
                     instance_multiColumnArrayData = multiColumnArrayData(self.msgDlg)
                     pass
@@ -329,11 +337,12 @@ class dlg_ImportSpreadsheetBasic(WaMDaMWizard.dlg_ImportSpreadsheetBasic):
                 elif self.active[3] and all(value is False for value in self.active[:3]):
                     # textFreeData()
                     instance_DescriptorValuesData = descriptorValues(self.msgDlg)
+                    instance_freeText = freeText(self.msgDlg)
+
                     instance_paramsData = numericValues(self.msgDlg)
                     instance_seasonParamsData = seasonalNumericValues(self.msgDlg)
                     instance_timeSeriesData = timeSeriesData(self.msgDlg)
                     instance_timeSeriesValueData = timeSeriesValueData(self.msgDlg)
-                    # instance_booleanData = dualValues(self.msgDlg)
                     instance_fileData = electronicFiles(self.msgDlg)
                     instance_multiColumnArrayData = multiColumnArrayData(self.msgDlg)
 
@@ -345,6 +354,8 @@ class dlg_ImportSpreadsheetBasic(WaMDaMWizard.dlg_ImportSpreadsheetBasic):
                     instance_structData.add_data()
                     instance_networksData.add_data()
                     instance_DescriptorValuesData.add_data()
+                    instance_freeText.add_data()
+
                     instance_paramsData.add_data()
                     instance_seasonParamsData.add_data()
                     instance_timeSeriesData.add_data()
@@ -361,7 +372,7 @@ class dlg_ImportSpreadsheetBasic(WaMDaMWizard.dlg_ImportSpreadsheetBasic):
                     if self.active[0]:
                         instance_structData.add_data()
                     else:
-                        message = msg_somethigWrong(None, msg='Error, Structure Data Depends on MetaData, \n\n Please '
+                        message = msg_somethigWrong(None, msg='Error, Data Structure Depends on MetaData, \n\n Please '
                                                               'check MetaData box')
                         message.Show()
                         raise Exception
@@ -381,9 +392,10 @@ class dlg_ImportSpreadsheetBasic(WaMDaMWizard.dlg_ImportSpreadsheetBasic):
                     instance_seasonParamsData.add_data()
                     instance_timeSeriesData.add_data()
                     instance_timeSeriesValueData.add_data()
-                    instance_booleanData.add_data()
                     instance_fileData.add_data()
                     instance_DescriptorValuesData.add_data()
+                    instance_freeText.add_data()
+
                     instance_multiColumnArrayData.add_data()
                 # printing success message
                 self.msgDlg.guage.SetValue(14)
@@ -417,6 +429,7 @@ class dlg_ImportSpreadsheetBasic(WaMDaMWizard.dlg_ImportSpreadsheetBasic):
         instance.Destroy()
         self.msgDlg.Destroy()
         self.btn_LoadDataGroups.Enabled = True
+
     def allDone(self):
         from Messages_forms.msg_successLoadDatabase import msg_successLoadDatabase
 
@@ -436,7 +449,7 @@ class dlg_ImportSpreadsheetBasic(WaMDaMWizard.dlg_ImportSpreadsheetBasic):
     def test_db_conn(self):
         setup = DB_Setup()
         if not setup.get_session():
-            message = msg_somethigWrong(None, msg='\n\n\nError, No Database Found, Please first connect to a Database.')
+            message = msg_somethigWrong(None, msg='\n\n\nError, No database Found. Please first connect to a database.')
             message.Show()
             return False
         return True

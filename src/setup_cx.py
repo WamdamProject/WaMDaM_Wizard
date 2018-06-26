@@ -21,7 +21,7 @@ build_exe_options = {
 shortcut_table = [
     ("DesktopShortcut",        # Shortcut
      "DesktopFolder",          # Directory_
-     "WaMDaM_v1.01",           # Name
+     "WaMDaM_v1.02",           # Name
      "TARGETDIR",              # Component_
      "[TARGETDIR]WaMDaM.exe",# Target
      None,                     # Arguments
@@ -44,8 +44,8 @@ base = None
 if sys.platform == 'win32':
     base = 'Win32GUI'
 setup(
-    name="WaMDaM_v1.01_UtahStateUniversity",
-    version="1.01",
+    name="WaMDaM_v1.02_UtahStateUniversity",
+    version="1.02",
     description="The Water Management Data Model (WaMDaM)",
     options={'build_exe': build_exe_options, 'bdist_msi': bdist_msi_options},
     executables=[Executable("WaMDaM.py", base=base, icon="WaMDaM_Wizard.ico")]
