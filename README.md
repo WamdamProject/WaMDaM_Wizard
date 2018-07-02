@@ -19,7 +19,7 @@ Allows the user to run WaMDaM_Wizard without installing it on your local machine
 Install on your pc, get an icon shortcut on your desktop and run WaMDaM Wizard As **Admin**  
 
 
-[1]:https://github.com/WamdamProject/WaMDaM_Wizard/releases
+[1]:https://github.com/WamdamProject/WaMDaM_Wizard/releases/
 
 
 
