@@ -1,0 +1,813 @@
+dimen,id,cr_date,name
+dimensionless,1,2016-09-10 03:22:19,Buffer_Coefficient
+Monetary value,2,2016-09-10 03:22:19,Capital_Costs
+Energy price,3,2016-09-10 03:22:19,Electricity_Revenue
+Energy,4,2016-09-10 03:22:19,Energy_Demand
+Monetary value,5,2016-09-10 03:22:19,Fixed_Benefits
+Monetary value,6,2016-09-10 03:22:19,Fixed_Operating_Costs
+dimensionless,7,2016-09-10 03:22:19,Generating_Efficiency
+dimensionless,8,2016-09-10 03:22:19,Hydropower_Priority
+Volume,9,2016-09-10 03:22:19,Initial_Storage
+Volume,10,2016-09-10 03:22:20,Loss_to_Groundwater
+Volumetric flow rate,11,2016-09-10 03:22:20,Max._Turbine_Flow
+Volumetric flow rate,12,2016-09-10 03:22:20,Maximum_Hydraulic_Outflow
+Length,13,2016-09-10 03:22:20,Net_Evaporation
+Volume,14,2016-09-10 03:22:20,Observed_Volume
+dimensionless,15,2016-09-10 03:22:20,Plant_Factor
+dimensionless,16,2016-09-10 03:22:20,Priority
+Volume,17,2016-09-10 03:22:20,Storage_Capacity
+Length,18,2016-09-10 03:22:20,Tailwater_Elevation
+Volume,19,2016-09-10 03:22:20,Top_of_Buffer
+Volume,20,2016-09-10 03:22:20,Top_of_Conservation
+Volume,21,2016-09-10 03:22:20,Top_of_Inactive
+Unit price (volume),22,2016-09-10 03:22:20,Variable_Benefits
+Unit price (volume),23,2016-09-10 03:22:20,Variable_Operating_Costs
+Length,24,2016-09-10 03:22:20,Volume_Elevation_Curve
+Volume,25,2016-09-10 03:22:20,inflow
+Volume,26,2016-09-10 03:22:20,outflow
+Volume,27,2016-09-10 03:22:20,Maximum_Withdrawal
+Volume,28,2016-09-10 03:22:20,Natural_Recharge
+Volumetric flow rate,29,2016-09-10 03:22:20,Inflow
+Volume,30,2016-09-10 03:22:20,Annual_Water_Use_Rate
+dimensionless,31,2016-09-10 03:22:20,Consumption
+dimensionless,32,2016-09-10 03:22:20,Demand_Level
+dimensionless,33,2016-09-10 03:22:20,Demand_Priority
+Unit price (volume),34,2016-09-10 03:22:20,DSM_Cost
+dimensionless,35,2016-09-10 03:22:20,DSM_Savings
+dimensionless,36,2016-09-10 03:22:20,Loss_Rate
+dimensionless,37,2016-09-10 03:22:20,Reuse_Rate
+Volumetric flow rate,38,2016-09-10 03:22:20,Runoff
+Volumetric flow rate,39,2016-09-10 03:22:20,Daily_Capacity
+Length,40,2016-09-10 03:22:20,Fixed_Head
+Volumetric flow rate,41,2016-09-10 03:22:20,Max_Turbine_Flow
+Volumetric flow rate,42,2016-09-10 03:22:20,Minimum_Flow_Requirement
+Length,43,2016-09-10 03:22:20,Distance_Marker
+dimensionless,44,2016-09-10 03:22:20,Evaporation
+Length,45,2016-09-10 03:22:21,Flow_Stage_Width
+Volume,46,2016-09-10 03:22:21,Groundwater_Inflow
+dimensionless,47,2016-09-10 03:22:21,Groundwater_Outflow
+Length,48,2016-09-10 03:22:21,Reach_Length
+dimensionless,49,2016-09-10 03:22:21,River_Flooding_Fraction
+Volumetric flow rate,50,2016-09-10 03:22:21,River_Flooding_Threshold
+Volumetric flow rate,51,2016-09-10 03:22:21,Surface_Water_Inflow
+dimensionless,52,2016-09-10 03:22:21,Loss_from_System
+dimensionless,53,2016-09-10 03:22:21,Loss_to_Groundwater
+dimensionless,54,2016-09-10 03:22:21,Maximum_Flow___Percent_of_Demand
+Volume,55,2016-09-10 03:22:21,Maximum_Flow___Volume
+dimensionless,56,2016-09-10 03:22:21,Supply_Preference
+Volume,57,2016-09-10 03:22:21,Gain_from_Groundwater
+dimensionless,58,2016-09-10 03:22:21,Return_Flow_Routing
+Volume,59,2016-09-23 22:41:32,Initial Storage
+Volumetric flow rate,60,2016-09-23 22:41:32,Maximum Outflow
+Length,61,2016-09-23 22:41:32,Evaporation
+Length,62,2016-09-23 22:41:32,Precipitation
+Volume,63,2016-09-23 22:41:33,Storage Capacity
+Volume,64,2016-09-23 22:41:33,Conservation Pool
+Volume,65,2016-09-23 22:41:33,Inactive Pool
+Length,66,2016-09-23 22:41:33,Volume Elevation Curve
+Volumetric flow rate,67,2016-09-23 22:41:33,Local Accretions
+Volume,68,2016-09-23 22:41:33,Storage
+dimensionless,69,2016-09-23 22:41:33,Consumptive Loss
+dimensionless,70,2016-09-23 22:41:33,Demand
+dimensionless,71,2016-09-23 22:41:33,Net Evaporation
+Volume,72,2016-09-23 22:41:33,Gain from Groundwater
+dimensionless,73,2016-09-23 22:41:33,Loss to Groundwater
+Length,74,2016-09-23 22:41:33,Reach Length
+Volumetric flow rate,75,2016-09-23 22:41:33,Minimum Flow Requirement
+Unit price (volume),76,2016-09-23 22:41:33,Flow Capacity
+dimensionless,77,2016-09-23 22:41:33,Loss from System
+Volumetric flow rate,78,2016-09-23 22:41:33,Flow Capacity
+Length,79,2016-09-26 15:18:11,Net Evaporation
+Volumetric flow rate,80,2016-11-10 03:46:38,Supply
+Volume,81,2016-11-10 03:46:38,Demand
+Length,82,2016-11-10 03:46:38,Fixed Head
+Volumetric flow rate,83,2016-11-10 03:46:38,Demand
+Volumetric flow rate,84,2017-01-17 18:39:52,Maximum Recharge
+dimensionless,85,2017-03-19 15:22:59,Value
+Volume,86,2017-04-25 01:35:46,Delivery
+Speed,87,2017-11-14 19:39:39,Inflows filename
+Volumetric flow rate,88,2017-11-14 19:39:39,Hydraulic Conductivity
+Volumetric flow rate,89,2017-11-14 19:39:39,Natural Recharge
+Length,90,2017-11-14 19:39:39,Head
+Volume,91,2017-11-19 16:19:06,In
+Volume,92,2017-11-19 16:19:26,Out
+Volume,93,2017-11-20 19:01:15,Observed Storage
+Volumetric flow rate,94,2017-11-20 19:22:46,Outflow
+Volumetric flow rate,95,2017-11-20 19:23:27,Delivery
+Volumetric flow rate,96,2017-11-21 16:07:52,Observed Flow
+Volume,97,2017-11-21 16:14:38,Net Evaporation
+Volumetric flow rate,98,2017-11-22 05:20:29,Gain from Groundwater
+Volumetric flow rate,99,2017-11-22 05:20:46,Net Evaporation
+dimensionless,100,2017-11-28 22:42:26,Buffer coefficient
+dimensionless,101,2017-11-29 23:25:14,test
+Volumetric flow rate,102,2017-12-01 01:38:57,Observed Outflow
+Volumetric flow rate,103,2017-12-01 01:43:59,Observed Delivery
+Volumetric flow rate,104,2017-12-06 04:01:44,Spill
+dimensionless,105,2018-01-04 18:01:01,IWHICH3
+dimensionless,106,2018-01-04 18:01:01,Inflow
+dimensionless,107,2018-01-04 18:01:01,Outflow
+Area,111,2018-01-04 20:46:34,Inflows filename
+Volumetric flow rate,112,2018-01-04 20:46:34,Release
+Volume,113,2018-01-04 20:46:34,Priority
+Density,114,2018-01-08 19:50:46,germiness
+Dollar,115,2018-01-22 02:23:54,b
+Million square mile,116,2018-01-22 02:23:54,Z
+Million cubic meter per month,117,2018-01-22 02:23:54,dReq
+percent,118,2018-01-22 02:23:54,cons
+dimensionless,119,2018-01-22 02:23:54,Dvalue
+dimensionless,120,2018-01-22 02:23:54,LinktoReservoir
+dimensionless,121,2018-01-22 02:23:55,LinkOutReservoir
+Meter per month,122,2018-01-22 02:23:55,evap
+Million cubic meter,123,2018-01-22 02:23:55,minstor
+Million cubic meter,124,2018-01-22 02:23:55,maxstor
+Million cubic meter,125,2018-01-22 02:23:55,initSTOR
+dimensionless,126,2018-01-22 02:23:55,RA_par
+Mm2/(Mm3)^2,127,2018-01-22 02:23:55,RA_par1
+year month day,128,2018-01-22 02:23:56,RA_par2
+Milion square meter,129,2018-01-22 02:23:56,RA_par3
+dimensionless,130,2018-01-22 02:23:56,LinkID
+dimensionless,131,2018-01-22 02:23:56,envSiteExist
+dimensionless,132,2018-01-22 02:23:56,linkexist
+dimensionless,133,2018-01-22 02:23:56,returnFlowExist
+dimensionless,134,2018-01-22 02:23:56,DiversionExist
+dimensionless,135,2018-01-22 02:23:57,WetlandsExist
+dimensionless,136,2018-01-22 02:23:57,wght-riverine
+dimensionless,137,2018-01-22 02:23:57,wght-floodplain
+dimensionless,138,2018-01-22 02:23:57,wght-wetlands
+Milion square meter,139,2018-01-22 02:23:57,aw
+percent,140,2018-01-22 02:23:58,lss
+meter,141,2018-01-22 02:23:58,lng
+meter,142,2018-01-22 02:23:58,InitD
+Milion square meter,143,2018-01-22 02:23:58,InitC
+Milion square meter,144,2018-01-22 02:23:58,rv
+1/m,145,2018-01-22 02:23:58,h
+dimensionless,146,2018-01-22 02:23:58,sf_par_indx
+month/Mm2,147,2018-01-22 02:23:59,sf_par1
+meter,148,2018-01-22 02:23:59,sf_par2
+dimensionless,149,2018-01-22 02:23:59,rsi_indx
+dimensionless,150,2018-01-22 02:23:59,rsi_par1
+dimensionless,151,2018-01-22 02:23:59,rsi_par2
+dimensionless,152,2018-01-22 02:23:59,rsi_par3
+dimensionless,153,2018-01-22 02:24:00,rsi_par4
+dimensionless,154,2018-01-22 02:24:00,Func_typ
+dimensionless,155,2018-01-22 02:24:00,wf_par_indx
+month/Mm2,156,2018-01-22 02:24:00,wf_par1
+meter,157,2018-01-22 02:24:00,wf_par2
+dimensionless,158,2018-01-22 02:24:00,wsi_par_indx
+Mm2/(Mm3/month),159,2018-01-22 02:24:00,wsi_par1
+Milion square meter,160,2018-01-22 02:24:01,wsi_par2
+dimensionless,161,2018-01-22 02:24:01,fci_indx
+dimensionless,162,2018-01-22 02:24:01,fci_par1
+dimensionless,163,2018-01-22 02:24:01,fci_par2
+meter,164,2018-01-22 02:24:01,fci_par3
+meter,165,2018-01-22 02:24:01,fci_par4
+dimensionless,166,2018-01-22 02:24:02,fci_monthYear
+acre foot,167,2018-01-22 03:04:07,Inactive Storage Pool
+acre foot,168,2018-01-22 03:04:08,Max Storage Capacity
+acre foot,169,2018-01-22 03:04:08,Starting End-of-Month Contents
+inch,170,2018-01-22 03:04:08,Net Evaporation - inches
+acre foot/month,171,2018-01-22 03:04:08,Net Evaporation - acre-ft
+acre foot/month,172,2018-01-22 03:04:08,Historic Diversion outflow
+acre foot/month,173,2018-01-22 03:04:08,Import/Export net inflow
+acre foot/month,174,2018-01-22 03:04:09,Average Monthly Streamflow 
+acre foot/month,175,2018-01-22 03:04:09,Total Ungaged Reach Gains
+acre foot/month,176,2018-01-22 03:04:09,Total Ungaged Reach Losses
+acre foot/month,177,2018-01-22 03:04:10,Total Irrigation Returns
+acre foot/month,178,2018-01-22 03:04:10,Total Diversion flow 
+dimensionless,179,2018-01-22 03:05:34,Definitions
+dimensionless,180,2018-01-22 03:05:34,Sqeuence
+percent,181,2018-01-22 03:05:34,DO Decrease
+percent,182,2018-01-22 03:05:34,BOD Decrease
+acre foot,183,2018-01-22 03:05:34,Monthly Demand
+acre foot,184,2018-01-22 03:05:34,Monthly DemandS
+acre foot,185,2018-01-22 03:05:35,Annual Water Use Rate
+percent,186,2018-01-22 03:05:35,Monthly Variation
+percent,187,2018-01-22 03:05:35,Loss Rate
+milligrams Per Liter,188,2018-01-22 03:05:35,DO Inflow
+milligrams Per Liter,189,2018-01-22 03:05:35,BOD Inflow
+milligrams Per Liter,190,2018-01-22 03:05:35,BOD Intensity
+milligrams Per Liter,191,2018-01-22 03:05:35,DO Intensity
+milligrams Per Liter,192,2018-01-22 03:05:36,DO Concentration
+milligrams Per Liter,193,2018-01-22 03:05:36,BOD Concentration
+Dollar,194,2018-01-22 03:05:36,Capital Costs
+Dollar,195,2018-01-22 03:05:36,Variable Operating Costs
+Dollar,196,2018-01-22 03:05:36,Fixed Operating Costs
+Dollar,197,2018-01-22 03:05:36,Variable Benefits
+Dollar,198,2018-01-22 03:05:37,Fixed Benefits
+dimensionless,199,2018-01-22 03:05:37,Demand Priority
+dimensionless,200,2018-01-22 03:05:37,test dual value
+dimensionless,201,2018-01-22 03:05:37,test descriptor
+acre foot,202,2018-01-22 03:05:37,Volume-Curve
+foot,203,2018-01-22 03:05:37,Elevation-Curve
+cubic feet per second,204,2018-01-22 03:05:37,Maximum Hydraulic Outflow
+acre foot,205,2018-01-22 03:05:38,Observed Volume
+acre foot,206,2018-01-22 03:05:38,Top of Conservation
+acre foot,207,2018-01-22 03:05:38,Top of Buffer
+acre foot,208,2018-01-22 03:05:38,Top of Inactive
+cubic feet per second,209,2018-01-22 03:05:38,Max. Turbine Flow
+foot,210,2018-01-22 03:05:38,Tailwater Elevation
+percent,211,2018-01-22 03:05:39,Plant Factor
+percent,212,2018-01-22 03:05:39,Generating Efficiency
+dimensionless,213,2018-01-22 03:05:39,Hydropower Priority
+Thousand Gigajoule,214,2018-01-22 03:05:39,Energy Demand
+Dollar per Gigajoule,215,2018-01-22 03:05:40,Electricity Revenue
+acre foot,216,2018-01-22 03:05:40,Maximum Withdrawal
+cubic feet per second,217,2018-01-22 03:05:41,Headflow
+cubic feet per second,218,2018-01-22 03:05:42,Groundwater Inflow
+percent,219,2018-01-22 03:05:42,Groundwater Outflow
+cubic feet per second,220,2018-01-22 03:05:43,Maximum Diversion
+cubic feet per second,221,2018-01-22 03:05:43,Surface Water Inflow
+dimensionless,222,2018-01-22 03:05:43,Water Temperature
+cubic feet per second,223,2018-01-22 03:05:43,Maximum Flow   Volume
+percent,224,2018-01-22 03:05:43,Maximum Flow   Percent of Demand
+percent,225,2018-01-22 03:05:44,Return Flow Routing
+acre,226,2018-01-22 03:05:44,Capital Costs
+cubic feet per second,227,2018-01-22 03:05:46,Streamflow Data
+milligrams Per Liter,228,2018-01-22 03:05:46,DO Concentration Data
+milligrams Per Liter,229,2018-01-22 03:05:46,BOD Concentration Data
+percent,230,2018-01-22 03:05:47,BOD Removal
+percent,231,2018-01-22 03:05:47,DO Removal
+Million m^3/day,232,2018-01-22 03:05:47,Daily Capacity
+MWH,233,2018-01-22 03:05:48,Energy Demand
+$/MWH,234,2018-01-22 03:05:49,Electricity Revenue
+CMS,235,2018-01-22 03:05:49,Max Turbine Flow
+Area,236,2018-01-30 21:53:27,Buffer coefficient
+Length,237,2018-01-30 22:26:52,test
+Length,238,2018-01-30 22:27:15,Capital Costs
+dimensionless,239,2018-01-30 22:28:17,Elevation-Curve
+acre foot,240,2018-02-01 16:58:27,Buffer Coefficient
+Volume,241,2018-02-01 22:51:09,Minimum Storage Target
+Volume,242,2018-02-02 15:34:58,Minimum Demand
+dimensionless,243,2018-02-13 01:36:57,cons
+dimensionless,244,2018-02-13 01:37:04,dReq
+dimensionless,245,2018-02-13 18:09:12,RA_par1
+dimensionless,246,2018-02-13 18:10:27,RA_par2
+dimensionless,247,2018-02-13 18:10:38,RA_par3
+dimensionless,248,2018-02-13 18:10:51,evap
+dimensionless,249,2018-02-13 18:11:03,initSTOR
+dimensionless,250,2018-02-13 18:11:15,maxstor
+dimensionless,251,2018-02-13 18:11:23,minstor
+dimensionless,252,2018-02-13 18:12:39,Z
+dimensionless,253,2018-02-13 18:12:48,b
+Volumetric flow rate,254,2018-03-02 18:18:40,Capacity
+SeasonalNumericValues,255,2018-03-12 20:07:50,Definitions
+TimeSeries,256,2018-03-12 20:07:50,Sqeuence
+TimeSeries,257,2018-03-12 20:07:50,DO Decrease
+TimeSeries,258,2018-03-12 20:07:50,BOD Decrease
+SeasonalNumericValues,259,2018-03-12 20:07:50,Monthly Demand
+TimeSeries,260,2018-03-12 20:07:50,Monthly DemandS
+NumericValues,261,2018-03-12 20:07:50,Annual Water Use Rate
+SeasonalNumericValues,262,2018-03-12 20:07:51,Monthly Variation
+SeasonalNumericValues,263,2018-03-12 20:07:51,Consumption
+NumericValues,264,2018-03-12 20:07:51,Loss Rate
+TimeSeries,265,2018-03-12 20:07:51,DO Inflow
+TimeSeries,266,2018-03-12 20:07:51,BOD Inflow
+TimeSeries,267,2018-03-12 20:07:51,BOD Intensity
+TimeSeries,268,2018-03-12 20:07:52,DO Intensity
+TimeSeries,269,2018-03-12 20:07:52,DO Concentration
+TimeSeries,270,2018-03-12 20:07:52,BOD Concentration
+TimeSeries,271,2018-03-12 20:07:52,Capital Costs
+TimeSeries,272,2018-03-12 20:07:52,Variable Operating Costs
+TimeSeries,273,2018-03-12 20:07:52,Fixed Operating Costs
+TimeSeries,274,2018-03-12 20:07:52,Variable Benefits
+TimeSeries,275,2018-03-12 20:07:53,Fixed Benefits
+NumericValues,276,2018-03-12 20:07:53,Demand Priority
+NumericValues,277,2018-03-12 20:07:53,Storage Capacity
+TimeSeries,278,2018-03-12 20:07:53,Initial Storage
+MultiAttributeSeries,279,2018-03-12 20:07:53,Volume Elevation Curve
+AttributeSeries,280,2018-03-12 20:07:53,Volume-Curve
+AttributeSeries,281,2018-03-12 20:07:53,Elevation-Curve
+SeasonalNumericValues,282,2018-03-12 20:07:53,Maximum Hydraulic Outflow
+SeasonalNumericValues,283,2018-03-12 20:07:54,Net Evaporation
+SeasonalNumericValues,284,2018-03-12 20:07:54,Priority
+TimeSeries,285,2018-03-12 20:07:54,Loss to Groundwater
+TimeSeries,286,2018-03-12 20:07:54,Observed Volume
+SeasonalNumericValues,287,2018-03-12 20:07:54,Top of Conservation
+TimeSeries,288,2018-03-12 20:07:54,Top of Buffer
+TimeSeries,289,2018-03-12 20:07:54,Top of Inactive
+TimeSeries,290,2018-03-12 20:07:55,Buffer Coefficient
+TimeSeries,291,2018-03-12 20:07:55,Max. Turbine Flow
+TimeSeries,292,2018-03-12 20:07:55,Tailwater Elevation
+TimeSeries,293,2018-03-12 20:07:55,Plant Factor
+TimeSeries,294,2018-03-12 20:07:55,Generating Efficiency
+TimeSeries,295,2018-03-12 20:07:55,Hydropower Priority
+TimeSeries,296,2018-03-12 20:07:55,Energy Demand
+TimeSeries,297,2018-03-12 20:07:56,Electricity Revenue
+NumericValues,298,2018-03-12 20:07:57,Priority seasonal
+SeasonalNumericValues,299,2018-03-12 20:07:57,Priority_seasonal
+TimeSeries,300,2018-03-12 20:07:57,Storage Capacity
+TimeSeries,301,2018-03-12 20:07:57,Maximum Withdrawal
+TimeSeries,302,2018-03-12 20:07:57,Natural Recharge
+TimeSeries,303,2018-03-12 20:07:58,Headflow
+TimeSeries,304,2018-03-12 20:07:59,Evaporation
+TimeSeries,305,2018-03-12 20:07:59,Groundwater Inflow
+TimeSeries,306,2018-03-12 20:07:59,Groundwater Outflow
+ElectronicFiles,307,2018-03-12 20:07:59,Maximum Diversion
+TimeSeries,308,2018-03-12 20:08:00,Reach Length
+TimeSeries,309,2018-03-12 20:08:00,Surface Water Inflow
+TimeSeries,310,2018-03-12 20:08:00,Water Temperature
+TimeSeries,311,2018-03-12 20:08:00,Maximum Flow   Volume
+TimeSeries,312,2018-03-12 20:08:01,Maximum Flow   Percent of Demand
+TimeSeries,313,2018-03-12 20:08:01,Loss from System
+TimeSeries,314,2018-03-12 20:08:02,Return Flow Routing
+NumericValues,315,2018-03-12 20:08:02,Loss from System
+SeasonalNumericValues,316,2018-03-12 20:08:02,Loss to Groundwater
+NumericValues,317,2018-03-12 20:08:02,Gain from Groundwater
+SeasonalNumericValues,318,2018-03-12 20:08:03,Minimum Flow Requirement
+TimeSeries,319,2018-03-12 20:08:03,Priority
+TimeSeries,320,2018-03-12 20:08:04,Streamflow Data
+TimeSeries,321,2018-03-12 20:08:04,DO Concentration Data
+TimeSeries,322,2018-03-12 20:08:04,BOD Concentration Data
+TimeSeries,323,2018-03-12 20:08:04,BOD Removal
+TimeSeries,324,2018-03-12 20:08:04,Consumption
+TimeSeries,325,2018-03-12 20:08:05,DO Removal
+TimeSeries,326,2018-03-12 20:08:05,Daily Capacity
+TimeSeries,327,2018-03-12 20:08:07,Fixed Head
+TimeSeries,328,2018-03-12 20:08:07,Max Turbine Flow
+TimeSeries,329,2018-03-12 20:08:07,Headflow_Time_Series
+SeasonalNumericValues,330,2018-03-12 20:08:08,Headflow_Seasonal
+Volume,331,2018-03-12 22:02:55,Monthly Demand
+Volume,332,2018-03-12 22:21:07,Headflow
+dimensionless,333,2018-03-13 00:44:47,Volume Elevation Curve
+-,334,2018-03-13 17:40:07,Definitions
+-,335,2018-03-13 17:40:07,Sqeuence
+-,336,2018-03-13 17:40:07,DO Decrease
+-,337,2018-03-13 17:40:07,BOD Decrease
+-,338,2018-03-13 17:40:08,Monthly Demand
+-,339,2018-03-13 17:40:08,Monthly DemandS
+-,340,2018-03-13 17:40:08,Annual Water Use Rate
+-,341,2018-03-13 17:40:08,Monthly Variation
+-,342,2018-03-13 17:40:08,Consumption
+-,343,2018-03-13 17:40:09,Loss Rate
+-,344,2018-03-13 17:40:09,DO Inflow
+-,345,2018-03-13 17:40:09,BOD Inflow
+-,346,2018-03-13 17:40:10,BOD Intensity
+-,347,2018-03-13 17:40:10,DO Intensity
+-,348,2018-03-13 17:40:10,DO Concentration
+-,349,2018-03-13 17:40:10,BOD Concentration
+-,350,2018-03-13 17:40:10,Capital Costs
+-,351,2018-03-13 17:40:10,Variable Operating Costs
+-,352,2018-03-13 17:40:10,Fixed Operating Costs
+-,353,2018-03-13 17:40:11,Variable Benefits
+-,354,2018-03-13 17:40:11,Fixed Benefits
+-,355,2018-03-13 17:40:11,Demand Priority
+-,356,2018-03-13 17:40:11,Storage Capacity
+-,357,2018-03-13 17:40:11,Initial Storage
+-,358,2018-03-13 17:40:12,Volume Elevation Curve
+-,359,2018-03-13 17:40:12,Volume-Curve
+-,360,2018-03-13 17:40:12,Elevation-Curve
+-,361,2018-03-13 17:40:12,Maximum Hydraulic Outflow
+-,362,2018-03-13 17:40:12,Net Evaporation
+-,363,2018-03-13 17:40:12,Priority
+-,364,2018-03-13 17:40:13,Loss to Groundwater
+-,365,2018-03-13 17:40:13,Observed Volume
+-,366,2018-03-13 17:40:13,Top of Conservation
+-,367,2018-03-13 17:40:13,Top of Buffer
+-,368,2018-03-13 17:40:14,Top of Inactive
+-,369,2018-03-13 17:40:14,Buffer Coefficient
+-,370,2018-03-13 17:40:14,Max. Turbine Flow
+-,371,2018-03-13 17:40:14,Tailwater Elevation
+-,372,2018-03-13 17:40:14,Plant Factor
+-,373,2018-03-13 17:40:14,Generating Efficiency
+-,374,2018-03-13 17:40:14,Hydropower Priority
+-,375,2018-03-13 17:40:15,Energy Demand
+-,376,2018-03-13 17:40:15,Electricity Revenue
+-,377,2018-03-13 17:40:16,Priority seasonal
+-,378,2018-03-13 17:40:16,Maximum Withdrawal
+-,379,2018-03-13 17:40:16,Natural Recharge
+-,380,2018-03-13 17:40:17,Headflow
+-,381,2018-03-13 17:40:18,Evaporation
+-,382,2018-03-13 17:40:18,Groundwater Inflow
+-,383,2018-03-13 17:40:18,Groundwater Outflow
+-,384,2018-03-13 17:40:18,Maximum Diversion
+-,385,2018-03-13 17:40:19,Reach Length
+-,386,2018-03-13 17:40:19,Surface Water Inflow
+-,387,2018-03-13 17:40:19,Water Temperature
+-,388,2018-03-13 17:40:19,Maximum Flow   Volume
+-,389,2018-03-13 17:40:19,Maximum Flow   Percent of Demand
+-,390,2018-03-13 17:40:20,Loss from System
+-,391,2018-03-13 17:40:21,Return Flow Routing
+-,392,2018-03-13 17:40:21,Gain from Groundwater
+-,393,2018-03-13 17:40:22,Minimum Flow Requirement
+-,394,2018-03-13 17:40:23,Streamflow Data
+-,395,2018-03-13 17:40:23,DO Concentration Data
+-,396,2018-03-13 17:40:23,BOD Concentration Data
+-,397,2018-03-13 17:40:23,BOD Removal
+-,398,2018-03-13 17:40:23,DO Removal
+-,399,2018-03-13 17:40:23,Daily Capacity
+-,400,2018-03-13 17:40:25,Fixed Head
+-,401,2018-03-13 17:40:25,Max Turbine Flow
+-,402,2018-03-13 17:40:26,Headflow_Time_Series
+-,403,2018-03-13 17:40:26,Headflow_Seasonal
+Volumetric flow rate,404,2018-03-13 17:47:02,Capital Costs
+unknown,405,2018-03-13 18:55:52,Definitions
+unknown,406,2018-03-13 18:55:52,Sqeuence
+unknown,407,2018-03-13 18:55:52,DO Decrease
+unknown,408,2018-03-13 18:55:52,BOD Decrease
+unknown,409,2018-03-13 18:55:53,Monthly Demand
+unknown,410,2018-03-13 18:55:53,Monthly DemandS
+unknown,411,2018-03-13 18:55:53,Annual Water Use Rate
+unknown,412,2018-03-13 18:55:53,Monthly Variation
+unknown,413,2018-03-13 18:55:53,Consumption
+unknown,414,2018-03-13 18:55:53,Loss Rate
+unknown,415,2018-03-13 18:55:54,DO Inflow
+unknown,416,2018-03-13 18:55:54,BOD Inflow
+unknown,417,2018-03-13 18:55:54,BOD Intensity
+unknown,418,2018-03-13 18:55:54,DO Intensity
+unknown,419,2018-03-13 18:55:54,DO Concentration
+unknown,420,2018-03-13 18:55:54,BOD Concentration
+unknown,421,2018-03-13 18:55:54,Capital Costs
+unknown,422,2018-03-13 18:55:55,Variable Operating Costs
+unknown,423,2018-03-13 18:55:55,Fixed Operating Costs
+unknown,424,2018-03-13 18:55:55,Variable Benefits
+unknown,425,2018-03-13 18:55:55,Fixed Benefits
+unknown,426,2018-03-13 18:55:55,Demand Priority
+unknown,427,2018-03-13 18:55:55,Storage Capacity
+unknown,428,2018-03-13 18:55:56,Initial Storage
+unknown,429,2018-03-13 18:55:56,Volume Elevation Curve
+unknown,430,2018-03-13 18:55:56,Volume-Curve
+unknown,431,2018-03-13 18:55:56,Elevation-Curve
+unknown,432,2018-03-13 18:55:56,Maximum Hydraulic Outflow
+unknown,433,2018-03-13 18:55:56,Net Evaporation
+unknown,434,2018-03-13 18:55:56,Priority
+unknown,435,2018-03-13 18:55:57,Loss to Groundwater
+unknown,436,2018-03-13 18:55:57,Observed Volume
+unknown,437,2018-03-13 18:55:57,Top of Conservation
+unknown,438,2018-03-13 18:55:57,Top of Buffer
+unknown,439,2018-03-13 18:55:57,Top of Inactive
+unknown,440,2018-03-13 18:55:57,Buffer Coefficient
+unknown,441,2018-03-13 18:55:57,Max. Turbine Flow
+unknown,442,2018-03-13 18:55:58,Tailwater Elevation
+unknown,443,2018-03-13 18:55:58,Plant Factor
+unknown,444,2018-03-13 18:55:58,Generating Efficiency
+unknown,445,2018-03-13 18:55:58,Hydropower Priority
+unknown,446,2018-03-13 18:55:58,Energy Demand
+unknown,447,2018-03-13 18:55:59,Electricity Revenue
+unknown,448,2018-03-13 18:55:59,Priority seasonal
+unknown,449,2018-03-13 18:56:00,Maximum Withdrawal
+unknown,450,2018-03-13 18:56:00,Natural Recharge
+unknown,451,2018-03-13 18:56:01,Headflow
+unknown,452,2018-03-13 18:56:02,Evaporation
+unknown,453,2018-03-13 18:56:02,Groundwater Inflow
+unknown,454,2018-03-13 18:56:02,Groundwater Outflow
+unknown,455,2018-03-13 18:56:02,Maximum Diversion
+unknown,456,2018-03-13 18:56:03,Reach Length
+unknown,457,2018-03-13 18:56:03,Surface Water Inflow
+unknown,458,2018-03-13 18:56:03,Water Temperature
+unknown,459,2018-03-13 18:56:03,Maximum Flow   Volume
+unknown,460,2018-03-13 18:56:03,Maximum Flow   Percent of Demand
+unknown,461,2018-03-13 18:56:04,Loss from System
+unknown,462,2018-03-13 18:56:05,Return Flow Routing
+unknown,463,2018-03-13 18:56:05,Gain from Groundwater
+unknown,464,2018-03-13 18:56:06,Minimum Flow Requirement
+unknown,465,2018-03-13 18:56:07,Streamflow Data
+unknown,466,2018-03-13 18:56:07,DO Concentration Data
+unknown,467,2018-03-13 18:56:07,BOD Concentration Data
+unknown,468,2018-03-13 18:56:07,BOD Removal
+unknown,469,2018-03-13 18:56:08,DO Removal
+unknown,470,2018-03-13 18:56:08,Daily Capacity
+unknown,471,2018-03-13 18:56:10,Fixed Head
+unknown,472,2018-03-13 18:56:10,Max Turbine Flow
+unknown,473,2018-03-13 18:56:11,Headflow_Time_Series
+unknown,474,2018-03-13 18:56:11,Headflow_Seasonal
+unknown2,475,2018-03-13 20:07:14,Definitions
+unknown2,476,2018-03-13 20:07:15,Sqeuence
+unknown2,477,2018-03-13 20:07:15,DO Decrease
+unknown2,478,2018-03-13 20:07:15,BOD Decrease
+unknown2,479,2018-03-13 20:07:15,Monthly Demand
+unknown2,480,2018-03-13 20:07:15,Monthly DemandS
+unknown2,481,2018-03-13 20:07:15,Annual Water Use Rate
+unknown2,482,2018-03-13 20:07:16,Monthly Variation
+unknown2,483,2018-03-13 20:07:16,Consumption
+unknown2,484,2018-03-13 20:07:16,Loss Rate
+unknown2,485,2018-03-13 20:07:16,DO Inflow
+unknown2,486,2018-03-13 20:07:16,BOD Inflow
+unknown2,487,2018-03-13 20:07:16,BOD Intensity
+unknown2,488,2018-03-13 20:07:16,DO Intensity
+unknown2,489,2018-03-13 20:07:17,DO Concentration
+unknown2,490,2018-03-13 20:07:17,BOD Concentration
+unknown2,491,2018-03-13 20:07:17,Capital Costs
+unknown2,492,2018-03-13 20:07:17,Variable Operating Costs
+unknown2,493,2018-03-13 20:07:17,Fixed Operating Costs
+unknown2,494,2018-03-13 20:07:17,Variable Benefits
+unknown2,495,2018-03-13 20:07:17,Fixed Benefits
+unknown2,496,2018-03-13 20:07:18,Demand Priority
+unknown2,497,2018-03-13 20:07:18,Storage Capacity
+unknown2,498,2018-03-13 20:07:18,Initial Storage
+unknown2,499,2018-03-13 20:07:18,Volume Elevation Curve
+unknown2,500,2018-03-13 20:07:18,Volume-Curve
+unknown2,501,2018-03-13 20:07:18,Elevation-Curve
+unknown2,502,2018-03-13 20:07:18,Maximum Hydraulic Outflow
+unknown2,503,2018-03-13 20:07:19,Net Evaporation
+unknown2,504,2018-03-13 20:07:19,Priority
+unknown2,505,2018-03-13 20:07:19,Loss to Groundwater
+unknown2,506,2018-03-13 20:07:19,Observed Volume
+unknown2,507,2018-03-13 20:07:19,Top of Conservation
+unknown2,508,2018-03-13 20:07:19,Top of Buffer
+unknown2,509,2018-03-13 20:07:19,Top of Inactive
+unknown2,510,2018-03-13 20:07:20,Buffer Coefficient
+unknown2,511,2018-03-13 20:07:20,Max. Turbine Flow
+unknown2,512,2018-03-13 20:07:20,Tailwater Elevation
+unknown2,513,2018-03-13 20:07:20,Plant Factor
+unknown2,514,2018-03-13 20:07:20,Generating Efficiency
+unknown2,515,2018-03-13 20:07:20,Hydropower Priority
+unknown2,516,2018-03-13 20:07:20,Energy Demand
+unknown2,517,2018-03-13 20:07:21,Electricity Revenue
+unknown2,518,2018-03-13 20:07:21,Priority seasonal
+unknown2,519,2018-03-13 20:07:22,Maximum Withdrawal
+unknown2,520,2018-03-13 20:07:22,Natural Recharge
+unknown2,521,2018-03-13 20:07:23,Headflow
+unknown2,522,2018-03-13 20:07:24,Evaporation
+unknown2,523,2018-03-13 20:07:24,Groundwater Inflow
+unknown2,524,2018-03-13 20:07:24,Groundwater Outflow
+unknown2,525,2018-03-13 20:07:24,Maximum Diversion
+unknown2,526,2018-03-13 20:07:24,Reach Length
+unknown2,527,2018-03-13 20:07:25,Surface Water Inflow
+unknown2,528,2018-03-13 20:07:25,Water Temperature
+unknown2,529,2018-03-13 20:07:25,Maximum Flow   Volume
+unknown2,530,2018-03-13 20:07:25,Maximum Flow   Percent of Demand
+unknown2,531,2018-03-13 20:07:25,Loss from System
+unknown2,532,2018-03-13 20:07:26,Return Flow Routing
+unknown2,533,2018-03-13 20:07:27,Gain from Groundwater
+unknown2,534,2018-03-13 20:07:28,Minimum Flow Requirement
+unknown2,535,2018-03-13 20:07:29,Streamflow Data
+unknown2,536,2018-03-13 20:07:29,DO Concentration Data
+unknown2,537,2018-03-13 20:07:29,BOD Concentration Data
+unknown2,538,2018-03-13 20:07:29,BOD Removal
+unknown2,539,2018-03-13 20:07:29,DO Removal
+unknown2,540,2018-03-13 20:07:29,Daily Capacity
+unknown2,541,2018-03-13 20:07:31,Fixed Head
+unknown2,542,2018-03-13 20:07:31,Max Turbine Flow
+unknown2,543,2018-03-13 20:07:32,Headflow_Time_Series
+unknown2,544,2018-03-13 20:07:32,Headflow_Seasonal
+Angle,545,2018-03-13 21:25:27,Definitions
+Angle,546,2018-03-13 21:25:27,Sqeuence
+Angle,547,2018-03-13 21:25:28,DO Decrease
+Angle,548,2018-03-13 21:25:28,BOD Decrease
+Angle,549,2018-03-13 21:25:28,Monthly Demand
+Angle,550,2018-03-13 21:25:28,Monthly DemandS
+Angle,551,2018-03-13 21:25:28,Annual Water Use Rate
+Angle,552,2018-03-13 21:25:28,Monthly Variation
+Angle,553,2018-03-13 21:25:28,Consumption
+Angle,554,2018-03-13 21:25:29,Loss Rate
+Angle,555,2018-03-13 21:25:29,DO Inflow
+Angle,556,2018-03-13 21:25:29,BOD Inflow
+Angle,557,2018-03-13 21:25:29,BOD Intensity
+Angle,558,2018-03-13 21:25:29,DO Intensity
+Angle,559,2018-03-13 21:25:29,DO Concentration
+Angle,560,2018-03-13 21:25:30,BOD Concentration
+Angle,561,2018-03-13 21:25:30,Capital Costs
+Angle,562,2018-03-13 21:25:30,Variable Operating Costs
+Angle,563,2018-03-13 21:25:30,Fixed Operating Costs
+Angle,564,2018-03-13 21:25:30,Variable Benefits
+Angle,565,2018-03-13 21:25:30,Fixed Benefits
+Angle,566,2018-03-13 21:25:30,Demand Priority
+Angle,567,2018-03-13 21:25:31,Storage Capacity
+Angle,568,2018-03-13 21:25:31,Initial Storage
+Angle,569,2018-03-13 21:25:31,Volume Elevation Curve
+Angle,570,2018-03-13 21:25:31,Volume-Curve
+Angle,571,2018-03-13 21:25:31,Elevation-Curve
+Angle,572,2018-03-13 21:25:31,Maximum Hydraulic Outflow
+Angle,573,2018-03-13 21:25:31,Net Evaporation
+Angle,574,2018-03-13 21:25:32,Priority
+Angle,575,2018-03-13 21:25:32,Loss to Groundwater
+Angle,576,2018-03-13 21:25:32,Observed Volume
+Angle,577,2018-03-13 21:25:32,Top of Conservation
+Angle,578,2018-03-13 21:25:32,Top of Buffer
+Angle,579,2018-03-13 21:25:32,Top of Inactive
+Angle,580,2018-03-13 21:25:32,Buffer Coefficient
+Angle,581,2018-03-13 21:25:33,Max. Turbine Flow
+Angle,582,2018-03-13 21:25:33,Tailwater Elevation
+Angle,583,2018-03-13 21:25:33,Plant Factor
+Angle,584,2018-03-13 21:25:33,Generating Efficiency
+Angle,585,2018-03-13 21:25:33,Hydropower Priority
+Angle,586,2018-03-13 21:25:33,Energy Demand
+Angle,587,2018-03-13 21:25:34,Electricity Revenue
+Angle,588,2018-03-13 21:25:34,Priority seasonal
+Angle,589,2018-03-13 21:25:35,Maximum Withdrawal
+Angle,590,2018-03-13 21:25:35,Natural Recharge
+Angle,591,2018-03-13 21:25:36,Headflow
+Angle,592,2018-03-13 21:25:37,Evaporation
+Angle,593,2018-03-13 21:25:37,Groundwater Inflow
+Angle,594,2018-03-13 21:25:37,Groundwater Outflow
+Angle,595,2018-03-13 21:25:37,Maximum Diversion
+Angle,596,2018-03-13 21:25:38,Reach Length
+Angle,597,2018-03-13 21:25:38,Surface Water Inflow
+Angle,598,2018-03-13 21:25:38,Water Temperature
+Angle,599,2018-03-13 21:25:38,Maximum Flow   Volume
+Angle,600,2018-03-13 21:25:38,Maximum Flow   Percent of Demand
+Angle,601,2018-03-13 21:25:39,Loss from System
+Angle,602,2018-03-13 21:25:40,Return Flow Routing
+Angle,603,2018-03-13 21:25:40,Gain from Groundwater
+Angle,604,2018-03-13 21:25:41,Minimum Flow Requirement
+Angle,605,2018-03-13 21:25:42,Streamflow Data
+Angle,606,2018-03-13 21:25:42,DO Concentration Data
+Angle,607,2018-03-13 21:25:42,BOD Concentration Data
+Angle,608,2018-03-13 21:25:42,BOD Removal
+Angle,609,2018-03-13 21:25:43,DO Removal
+Angle,610,2018-03-13 21:25:43,Daily Capacity
+Angle,611,2018-03-13 21:25:45,Fixed Head
+Angle,612,2018-03-13 21:25:45,Max Turbine Flow
+Angle,613,2018-03-13 21:25:45,Headflow_Time_Series
+Angle,614,2018-03-13 21:25:46,Headflow_Seasonal
+Volume,615,2018-03-15 16:21:59,Monthly DemandS
+Volume,616,2018-03-15 16:21:59,Annual Water Use Rate
+percent,617,2018-03-15 16:21:59,Consumption
+Concentration,618,2018-03-15 16:22:07,DO Inflow
+Concentration,619,2018-03-15 16:22:07,BOD Inflow
+Concentration,620,2018-03-15 16:22:08,BOD Intensity
+Concentration,621,2018-03-15 16:22:08,DO Intensity
+Concentration,622,2018-03-15 16:22:08,DO Concentration
+Concentration,623,2018-03-15 16:22:08,BOD Concentration
+Money,624,2018-03-15 16:22:08,Capital Costs
+Money,625,2018-03-15 16:22:08,Variable Operating Costs
+Money,626,2018-03-15 16:22:08,Fixed Operating Costs
+Money,627,2018-03-15 16:22:16,Variable Benefits
+Money,628,2018-03-15 16:22:16,Fixed Benefits
+Volume,629,2018-03-15 16:22:17,Volume-Curve
+distance,630,2018-03-15 16:22:17,Elevation-Curve
+Flow,631,2018-03-15 16:22:17,Maximum Hydraulic Outflow
+distance,632,2018-03-15 16:22:17,Net Evaporation
+distance,633,2018-03-15 16:22:25,Priority
+Volume,634,2018-03-15 16:22:25,Loss to Groundwater
+Volume,635,2018-03-15 16:22:25,Observed Volume
+Volume,636,2018-03-15 16:22:25,Top of Conservation
+Volume,637,2018-03-15 16:22:25,Top of Buffer
+Volume,638,2018-03-15 16:22:26,Top of Inactive
+Flow,639,2018-03-15 16:22:26,Max. Turbine Flow
+distance,640,2018-03-15 16:22:26,Tailwater Elevation
+dimensionless,641,2018-03-15 16:22:34,Generating Efficiency
+Energy,642,2018-03-15 16:22:34,Energy Demand
+Energy,643,2018-03-15 16:22:35,Electricity Revenue
+dimensionless,644,2018-03-15 16:22:35,Priority seasonal
+Volume,645,2018-03-15 16:22:43,Maximum Withdrawal
+Volume,646,2018-03-15 16:22:43,Natural Recharge
+Flow,647,2018-03-15 16:22:52,Headflow
+Flow,648,2018-03-15 16:22:53,Groundwater Inflow
+dimensionless,649,2018-03-15 16:22:53,Groundwater Outflow
+Flow,650,2018-03-15 16:23:01,Maximum Diversion
+distance,651,2018-03-15 16:23:01,Reach Length
+Flow,652,2018-03-15 16:23:01,Surface Water Inflow
+dimensionless,653,2018-03-15 16:23:02,Maximum Flow   Percent of Demand
+dimensionless,654,2018-03-15 16:23:11,Return Flow Routing
+dimensionless,655,2018-03-15 16:23:11,Gain from Groundwater
+dimensionless,656,2018-03-15 16:23:20,Minimum Flow Requirement
+Volume,657,2018-03-15 16:23:28,Streamflow Data
+Concentration,658,2018-03-15 16:23:28,DO Concentration Data
+Concentration,659,2018-03-15 16:23:28,BOD Concentration Data
+dimensionless,660,2018-03-15 16:23:29,BOD Removal
+Money,661,2018-03-15 16:23:29,DO Concentration
+dimensionless,662,2018-03-15 16:23:37,Variable Operating Costs
+Energy,663,2018-03-15 16:23:38,Plant Factor
+Money,664,2018-03-15 16:23:38,Energy Demand
+distance,665,2018-03-15 16:23:38,Electricity Revenue
+Flow,666,2018-03-15 16:23:38,Fixed Head
+Money,667,2018-03-15 16:23:46,Max Turbine Flow
+dimensionless,668,2018-03-15 16:48:12,Top of Inactive
+Flow,669,2018-03-15 17:16:10,Buffer Coefficient
+percent,670,2018-03-15 17:16:10,Tailwater Elevation
+Flow,671,2018-03-15 17:16:27,Maximum Flow   Volume
+percent,672,2018-03-15 17:16:28,Loss from System
+percent,673,2018-03-15 17:16:28,Loss to Groundwater
+percent,674,2018-03-15 17:16:28,Gain from Groundwater
+Concentration,675,2018-03-15 17:16:36,DO Removal
+Concentration,676,2018-03-15 17:16:36,Daily Capacity
+Flow,677,2018-03-15 17:16:37,Headflow_Time_Series
+percent,678,2018-03-15 17:16:37,Headflow_Seasonal
+Angle,679,2018-03-23 23:52:06,test
+TimeSeries,680,2018-04-03 19:42:29,flow
+NumericValues,681,2018-04-03 19:47:57,Priority
+SeasonalNumericValues,682,2018-04-03 19:48:00,Priority seasonal
+Flow,683,2018-04-03 19:52:24,flow
+Volume,684,2018-04-05 18:00:39,Volume Elevation Curve
+NumericValues,685,2018-04-05 18:40:22,Capacity
+Flow,686,2018-04-05 18:44:04,Capacity
+Flow,687,2018-04-05 18:44:14,Volume Elevation Curve
+Volume,688,2018-04-09 23:22:07,flow
+Volume,689,2018-04-09 23:22:07,Capacity
+Volume,690,2018-04-11 21:40:30,Owner
+dimensionless,691,2018-04-11 21:48:26,Owner
+dimensionless,692,2018-04-25 18:28:47,DO Decrease
+dimensionless,693,2018-04-25 18:28:47,BOD Decrease
+dimensionless,694,2018-04-25 18:28:47,Annual Activity Level
+dimensionless,695,2018-04-25 18:28:47,Annual Water Use Rate
+dimensionless,696,2018-04-25 18:28:48,BOD Concentration
+dimensionless,697,2018-04-25 18:28:48,BOD Inflow
+dimensionless,698,2018-04-25 18:28:48,BOD Intensity
+dimensionless,699,2018-04-25 18:28:48,Capital Costs
+dimensionless,700,2018-04-25 18:28:49,DO Concentration
+dimensionless,701,2018-04-25 18:28:49,DO Inflow
+dimensionless,702,2018-04-25 18:28:49,DO Intensity
+dimensionless,703,2018-04-25 18:28:49,DSM Cost
+dimensionless,704,2018-04-25 18:28:49,DSM Savings
+dimensionless,705,2018-04-25 18:28:50,Fixed Benefits
+dimensionless,706,2018-04-25 18:28:50,Fixed Operating Costs
+dimensionless,707,2018-04-25 18:28:50,Loss Rate
+dimensionless,708,2018-04-25 18:28:50,Method
+dimensionless,709,2018-04-25 18:28:50,Monthly Demand
+dimensionless,710,2018-04-25 18:28:50,Monthly Variation
+dimensionless,711,2018-04-25 18:28:51,Reuse Rate
+dimensionless,712,2018-04-25 18:28:51,Variable Benefits
+dimensionless,713,2018-04-25 18:28:52,Buffer Priority
+dimensionless,714,2018-04-25 18:28:52,Electricity Revenue
+dimensionless,715,2018-04-25 18:28:53,Energy Demand
+dimensionless,716,2018-04-25 18:28:54,Initial Storage
+dimensionless,717,2018-04-25 18:28:54,Max. Turbine Flow
+dimensionless,718,2018-04-25 18:28:54,Maximum Hydraulic Outflow
+dimensionless,719,2018-04-25 18:28:55,Observed Volume
+dimensionless,720,2018-04-25 18:28:55,Plant Factor
+dimensionless,721,2018-04-25 18:28:55,Storage Capacity
+dimensionless,722,2018-04-25 18:28:55,Tailwater Elevation
+dimensionless,723,2018-04-25 18:28:56,Temperature
+dimensionless,724,2018-04-25 18:28:56,Top of Buffer
+dimensionless,725,2018-04-25 18:28:56,Top of Conservation
+dimensionless,726,2018-04-25 18:28:57,Volume-Curve
+dimensionless,727,2018-04-25 18:28:58,Distance Marker
+dimensionless,728,2018-04-25 18:28:58,Flow Stage Width
+dimensionless,729,2018-04-25 18:28:59,Groundwater Inflow
+dimensionless,730,2018-04-25 18:28:59,Reach Length
+dimensionless,731,2018-04-25 18:28:59,River Flooding Fraction
+dimensionless,732,2018-04-25 18:28:59,River Flooding Threshold
+dimensionless,733,2018-04-25 18:28:59,Surface Water Inflow
+dimensionless,734,2018-04-25 18:29:01,Maximum Flow   Volume
+dimensionless,735,2018-04-25 18:29:02,Supply Preference
+dimensionless,736,2018-04-25 18:29:05,BOD Concentration Data
+dimensionless,737,2018-04-25 18:29:05,DO Concentration Data
+dimensionless,738,2018-04-25 18:29:05,Streamflow Data
+dimensionless,739,2018-04-25 18:29:06,Headflow
+dimensionless,740,2018-04-25 18:29:06,Model Water Quality?
+Volume,741,2018-04-25 18:40:29,Annual Activity Level
+percent,742,2018-04-25 18:40:29,BOD Concentration
+percent,743,2018-04-25 18:40:30,BOD Inflow
+percent,744,2018-04-25 18:40:30,BOD Intensity
+Concentration,745,2018-04-25 18:40:30,Capital Costs
+Concentration,746,2018-04-25 18:40:30,Consumption
+Money,747,2018-04-25 18:40:31,DSM Cost
+Money,748,2018-04-25 18:40:31,DSM Savings
+Money,749,2018-04-25 18:40:31,Demand Priority
+Flow,750,2018-04-25 18:40:32,Method
+Concentration,751,2018-04-25 18:40:32,Monthly Demand
+Money,752,2018-04-25 18:40:32,Monthly Variation
+Concentration,753,2018-04-25 18:40:32,Reuse Rate
+Money,754,2018-04-25 18:40:32,BOD Concentration
+Volume,755,2018-04-25 18:40:33,Buffer Priority
+Volume,756,2018-04-25 18:40:33,Capital Costs
+Volume,757,2018-04-25 18:40:33,Electricity Revenue
+Flow,758,2018-04-25 18:40:33,Energy Demand
+distance,759,2018-04-25 18:40:33,Fixed Benefits
+Volume,760,2018-04-25 18:40:33,Fixed Operating Costs
+Volume,761,2018-04-25 18:40:34,Generating Efficiency
+Volume,762,2018-04-25 18:40:34,Hydropower Priority
+Flow,763,2018-04-25 18:40:34,Net Evaporation
+percent,764,2018-04-25 18:40:34,Net Evaporation
+Energy,765,2018-04-25 18:40:35,Priority
+Concentration,766,2018-04-25 18:40:35,Storage Capacity
+Money,767,2018-04-25 18:40:35,Tailwater Elevation
+Money,768,2018-04-25 18:40:35,Temperature
+Money,769,2018-04-25 18:40:35,Top of Buffer
+Energy,770,2018-04-25 18:40:36,Top of Conservation
+Money,771,2018-04-25 18:40:36,Volume Elevation Curve
+Money,772,2018-04-25 18:40:36,Volume-Curve
+Flow,773,2018-04-25 18:40:37,Capital Costs
+Money,774,2018-04-25 18:40:37,Flow Stage Width
+Money,775,2018-04-25 18:40:37,Groundwater Inflow
+Money,776,2018-04-25 18:40:38,Groundwater Outflow
+percent,777,2018-04-25 18:40:38,Reach Length
+percent,778,2018-04-25 18:40:38,River Flooding Fraction
+percent,779,2018-04-25 18:40:38,River Flooding Threshold
+percent,780,2018-04-25 18:40:38,Surface Water Inflow
+Money,781,2018-04-25 18:40:38,Surface Water Inflow
+Money,782,2018-04-25 18:40:39,Water Temperature
+Energy,783,2018-04-25 18:40:39,Fixed Benefits
+distance,784,2018-04-25 18:40:39,Loss from System
+Flow,785,2018-04-25 18:40:39,Loss to Groundwater
+Money,786,2018-04-25 18:40:40,Maximum Flow   Percent of Demand
+Money,787,2018-04-25 18:40:40,Maximum Flow   Volume
+Money,788,2018-04-25 18:40:40,Supply Preference
+Money,789,2018-04-25 18:40:40,BOD Decrease
+Volume,790,2018-04-25 18:40:41,DO Decrease
+Concentration,791,2018-04-25 18:40:41,Fixed Benefits
+Concentration,792,2018-04-25 18:40:41,Fixed Operating Costs
+Volume,793,2018-04-25 18:40:41,Loss from System
+Volume,794,2018-04-25 18:40:42,Return Flow Routing
+Concentration,795,2018-04-25 18:40:42,Variable Benefits
+Concentration,796,2018-04-25 18:40:42,Variable Operating Costs
+Flow,797,2018-04-25 18:40:42,Fixed Benefits
+Flow,798,2018-04-25 18:40:43,Minimum Flow Requirement
+Flow,799,2018-04-25 18:40:43,Variable Benefits
+Money,800,2018-04-25 18:40:43,BOD Concentration Data
+Money,801,2018-04-25 18:40:44,Headflow
+Money,802,2018-04-25 18:40:44,Model Water Quality?
+Unknown2,803,2018-04-25 18:43:45,Annual Activity Level
+Unknown2,804,2018-04-25 18:43:46,DSM Cost
+Unknown2,805,2018-04-25 18:43:47,DSM Savings
+Unknown2,806,2018-04-25 18:43:47,Method
+Unknown2,807,2018-04-25 18:43:48,Reuse Rate
+Unknown2,808,2018-04-25 18:43:49,Buffer Priority
+Unknown2,809,2018-04-25 18:43:52,Temperature
+Unknown2,810,2018-04-25 18:43:54,Distance Marker
+Unknown2,811,2018-04-25 18:43:55,Flow Stage Width
+Unknown2,812,2018-04-25 18:43:56,River Flooding Fraction
+Unknown2,813,2018-04-25 18:43:56,River Flooding Threshold
+Unknown2,814,2018-04-25 18:43:58,Supply Preference
+Unknown2,815,2018-04-25 18:44:03,Model Water Quality?

@@ -1,5 +1,6 @@
 # coding: utf-8
 
+# ...layout: {svg: "<svg>...</svg>"}
 
 # This file builds a hydra template from the wamdam workbook.
 # The file intends to export WaMDaM data that exist in the workbook
@@ -75,12 +76,14 @@ get_all_dimensions=conn.call('get_all_dimensions', ({}))
 
 
 # Load the excel file into pandas
-wamdam_data = pd.read_excel('./Qatar3.xlsm', sheetname=None)
-# wamdam_data = pd.read_excel('./Qatar4.xlsm', sheetname=None)
-# wamdam_data = pd.read_excel('./WEAP_PrB14.xlsm', sheetname=None)
-# wamdam_data = pd.read_excel('./WEAP_March15.xlsm', sheetname=None)
+# wamdam_data = pd.read_excel('./Qatar3.xlsm', sheetname=None)
+# wamdam_data = pd.read_excel('./WASH_June_2018_Hydra.xlsm', sheetname=None)
 
-#
+
+wamdam_data = pd.read_excel('./PRB_14_WEAP.xlsm', sheetname=None)
+# wamdam_data = pd.read_excel('./WEAP_July_2018.xlsm', sheetname=None)
+
+#WEAP_July_2018_Network
 
 # This returns an object, which is a dictionary of pandas 'dataframe'.
 # The keys are sheet names and the dataframes are the sheets themselves.
@@ -88,7 +91,7 @@ wamdam_data.keys()
 
 # Define the WaMDaM sheets to import
 # Import the Datasets and Object Types
-type_sheet = wamdam_data['2.1_Datasets&ObjectTypes']
+type_sheet = wamdam_data['2.1_ResourceTypes&ObjectTypes']
 
 # Import the attributes
 attr_sheet = wamdam_data['2.2_Attributes']
@@ -132,7 +135,6 @@ for a in all_attributes:
     all_attr_dict[(a.name, a.dimen)] = {'id': a.id, 'dimension': a.dimen}
 
 
-
 # -------------------------
 
 # Create a new template (dataset)
@@ -170,6 +172,7 @@ for i in range(len(type_sheet)):
 #  Based on the link below, add a layout =Icon
 # http://umwrg.github.io/HydraPlatform/devdocs/HydraServer/index.html?highlight=typeattrs#HydraServer.soap_server.hydra_complexmodels.TemplateType
 
+    # layout: {svg: "<svg>...</svg>"}
     # read value of layout from  "Layout" column in 2.1_Datasets&ObjectTypes.
 
     value_of_layout_in_type_sheet = {}
@@ -197,8 +200,11 @@ for i in range(len(type_sheet)):
         #  attr_sheet.values[j][3]--AttributeUnit
         if type_sheet.values[i + 16][0] == attr_sheet.values[j][0]:
             ObjectType=attr_sheet.values[j][0] #ObjectType
-            attr_name = attr_sheet.values[j][1]
-            attr_dimension = attr_sheet.values[j][5].strip()
+            attr_name = attr_sheet.values[j][1] #AttributeName
+            attr_dimension = attr_sheet.values[j][10].strip()
+
+
+
 
             # if not all_attr_dict.get(name,dimension) :
             # if not all_attr_dict.get(attr_name,attr_dimension) :
@@ -215,6 +221,7 @@ for i in range(len(type_sheet)):
             Dataset_attr_Name_Dim_list[(ObjectType,attr_name)] = attr_dimension
 
 
+
             #
             # Temp_all_attr_dict.append()
 
@@ -223,7 +230,7 @@ for i in range(len(type_sheet)):
 # http://umwrg.github.io/HydraPlatform/devdocs/HydraServer/index.html?highlight=typeattrs#HydraServer.soap_server.hydra_complexmodels.TypeAttr
 
             # read value of unit from  "AttributeUnit" column in 2.2_Attributes.
-            attr_unit = attr_sheet.values[j][3]
+            attr_unit = attr_sheet.values[j][4]
             if not attr_unit:
                 attr_unit = ''
 
@@ -243,9 +250,11 @@ for i in range(len(type_sheet)):
             elif attr_datatype =='TimeSeries':
                 attr_datatype='timeseries'
 
-            elif attr_datatype =='DescriptorValues':
+            elif attr_datatype =='FreeText':
                 attr_datatype='descriptor'
 
+            elif attr_datatype == 'CategoricalValues':
+                attr_datatype = 'descriptor'
             #
             elif attr_datatype == 'AttributeSeries':
                  attr_datatype = 'array'
@@ -258,7 +267,7 @@ for i in range(len(type_sheet)):
     # Add some object types to the Template Type  (resource type can be NODE, LINK, GROUP, NETWORK)
     template['types'].append(mytemplatetype)
     # print mytemplatetype
-
+# print Dataset_attr_Name_Dim_list
 
 ## Load the Template name and types to the Hydra db
 tempDB = conn.call('get_templates', {})
@@ -268,12 +277,14 @@ for template_item in tempDB:
         flag_exist_template = True
         new_template = conn.call('get_template', {'template_id' : template_item['id']})
         break
+
+#print template
 if not flag_exist_template:
     # if not flag_exist_template:
     # save template to csv to check if it has duplicates
 
         new_template = conn.call('add_template', {'tmpl': template})
-        print new_template
+        # print new_template
 print 'new_template is uploaded to the server'
 
 # # Build up a dict by attribute names to call them later.
@@ -311,7 +322,8 @@ for templateType in new_template['types']:
 # ScenarioEndDate
 ScenarioStartDate= str(network_sheet.values[18][4])
 ScenarioEndDate= str(network_sheet.values[18][5])
-TimeStep = str(network_sheet.values[18][6])
+TimeStep = str(network_sheet.values[18][7]) #TimeStepUnitCV
+
 
 settings_str={'template':template['name'],'start': ScenarioStartDate, 'end': ScenarioEndDate, 'timestep': TimeStep}
 
@@ -321,7 +333,7 @@ Netlayout = {'settings': settings_str}
 
 network_template = {'template':template['name'],'name': network_sheet.values[8][0], 'description': network_sheet.values[8][4],
                     'project_id': my_new_project.id, 'types': [{'id': type_id}],'layout':Netlayout}
-print network_template
+# network_template
 # add_nodes
 nodes_sheet = wamdam_data['3.2_Nodes']
 
@@ -343,7 +355,7 @@ for j in range(len(attr_sheet)):
         if templateType['resource_type'] == 'NETWORK':
             if attr_sheet.values[j][0] == templateType['name']:
                 name = attr_sheet.values[j][1]
-                dimension = attr_sheet.values[j][5]
+                dimension = attr_sheet.values[j][10]
 
             # res_id = (len(list_res_attr) + 1) * -1
 
@@ -401,7 +413,7 @@ for i in range(len(nodes_sheet)):
     for j in range(len(attr_sheet)):
         if nodes_sheet.values[i][0] == attr_sheet.values[j][0]:
             name = attr_sheet.values[j][1]
-            dimension = attr_sheet.values[j][5]
+            dimension = attr_sheet.values[j][10]
 
             # res_id = (len(list_res_attr) + 1) * -1
             if (name, dimension) in all_attr_dict.keys():
@@ -479,7 +491,7 @@ for i in range(len(links_sheet)):
     for j in range(len(attr_sheet)):
         if links_sheet.values[i][0] == attr_sheet.values[j][0]:
             name = attr_sheet.values[j][1]
-            dimension = attr_sheet.values[j][5]
+            dimension = attr_sheet.values[j][10]
 
             # res_id = (len(list_res_attr) + 1) * -1
 
@@ -537,7 +549,7 @@ for i in range(len(network_sheet)):
         ScenarioStartDate = enddate.isoformat()
 
 
-    TimeStep = str(network_sheet.values[i][6])
+    TimeStep = str(network_sheet.values[i][7])
     #
 
     scenario = {'name': ScenarioName, 'start_time':ScenarioStartDate,'end_time':ScenarioEndDate,'time_step':TimeStep,'description': description, 'resourcescenarios': []}
@@ -567,7 +579,7 @@ for i in range(len(network_sheet)):
             else:
                 raise Exception("Unable to find resource_attr_id for %s" % numerical_sheet.values[j][3])
 
-            dataset = {'type': 'scalar', 'name': attr_name, 'unit': 'Cubic metre [m3]', 'dimension': dimension,
+            dataset = {'type': 'scalar', 'name': attr_name, 'unit': '-', 'dimension': dimension,
                        'hidden': 'N', 'value': str(numerical_sheet.values[j][6])}
             # The provided dimension here must match the attribute as defined earlier.
 
@@ -582,20 +594,18 @@ for i in range(len(network_sheet)):
 # network = conn.call('add_network', {'net':network_template})
 
 # ****************************************************
-# 5.3 Descriptor Values (4_DescriptorValues )
-# Iterate over the rows in the 4_DescriptorValuess sheet and associate the value with its scenario, and resource attribute
-    Descriptor_sheet = wamdam_data['4_DescriptorValues']
+# 5.3 4_FreeText Values (4_FreeText )
+# Iterate over the rows in the 4_FreeText sheet and associate the value with its scenario, and resource attribute
+    Descriptor_sheet = wamdam_data['4_FreeText']
 
     list_rs_desc=[]
     # Iterate over the rows in the Numeric Values sheet [scalars dataset] and associate the value with resource attribute (node instance and attribute)
     for j in range(8, len(Descriptor_sheet)):
         if network_sheet.values[i][0] == Descriptor_sheet.values[j][2]:
-            attr_name = Descriptor_sheet.values[j][3]
-            ObjectType = Descriptor_sheet.values[j][0]
+            ObjectType = Descriptor_sheet.values[j][0] #ObjectType
+            attr_name = Descriptor_sheet.values[j][3] #AttributeName
             dimension =Dataset_attr_Name_Dim_list[ObjectType,attr_name]
 
-            # so this one, I think we look up the dimension
-            # dimension = all_attr_dict[(Descriptor_sheet.values[j][3], )]['dimension']
 
             if (Descriptor_sheet.values[j][1], Descriptor_sheet.values[j][3]) in dict_res_attr.keys():
                 rs_desc = {'resource_attr_id': dict_res_attr[(Descriptor_sheet.values[j][1], Descriptor_sheet.values[j][3])]['id']}
@@ -604,7 +614,7 @@ for i in range(len(network_sheet)):
 
             dataset = {'type': 'descriptor', 'name': attr_name, 'unit': '-', 'dimension': dimension,
                        'hidden': 'N', 'value': str(Descriptor_sheet.values[j][6])}
-            print dataset
+            # print dataset
             # The provided dimension here must match the attribute as defined earlier.
 
             rs_desc['value'] = dataset
@@ -619,6 +629,64 @@ for i in range(len(network_sheet)):
 # network_template['scenarios'] = list_scenario
 # network = conn.call('add_network', {'net':network_template})
 # ******************************************************************************************************************
+
+# 5.7 Seasonal
+
+# http://umwrg.github.io/HydraPlatform/devdocs/techdocs/timeseries.html?highlight=seasonal#normal-time-series-and-seasonal-time-series
+
+    SeasonalNumericValues_sheet = wamdam_data['4_SeasonalNumericValues']
+
+            # add new script here (see time series above)
+
+    seasonal_list = {}
+    list_rs_seas=[]
+    for j in range(8, len(SeasonalNumericValues_sheet)):  # //8: reall value row in sheet
+        if network_sheet.values[i][0] == SeasonalNumericValues_sheet.values[j][2]:
+            attr_name = SeasonalNumericValues_sheet.values[j][3]
+            if (SeasonalNumericValues_sheet.values[j][1], attr_name) in seasonal_list.keys():
+                seasonal_list[(SeasonalNumericValues_sheet.values[j][1], attr_name)].append(
+                    (SeasonalNumericValues_sheet.values[j][9], SeasonalNumericValues_sheet.values[j][8]))
+            else:
+                values = []
+                values.append((SeasonalNumericValues_sheet.values[j][9], SeasonalNumericValues_sheet.values[j][8]))
+                seasonal_list[(SeasonalNumericValues_sheet.values[j][1], attr_name)] = values
+    # df = pd.DataFrame()
+    for key in seasonal_list.keys():
+        seasonals = {"Header": {}, "0": {}}
+        for time, value in seasonal_list[key]:
+            try:
+                t = datetime.datetime.strptime(str(time), "%Y/%m/%d").isoformat()
+            except:
+                t = time.isoformat()
+            seasonals["0"][t] = value
+
+        # dimension = all_attr_dict[key[1]]['dimension']
+        attr_name=SeasonalNumericValues_sheet.values[j][3]
+        ObjectType = SeasonalNumericValues_sheet.values[j][0]
+
+        dimension = Dataset_attr_Name_Dim_list[ObjectType, attr_name]
+
+        if key in dict_res_attr.keys():
+            rs_seas = {'resource_attr_id': dict_res_attr[key]['id']}
+        else:
+            raise Exception("Unable to find resource_attr_id for %s" % key)
+
+        # rs = {'resource_attr_id': all_attr_dict[attr_name]['id']}
+
+        dataset = {'type': 'timeseries', 'name': attr_name, 'unit': 'metre [m', 'dimension': dimension,
+                   'hidden': 'N', 'value': json.dumps(seasonals)}
+        # The provided dimension here must match the attribute as defined earlier.
+
+        # tsdata.ts_time = PluginLib.date_to_string(time, seasonal=True)
+
+        rs_seas['value'] = dataset
+        list_rs_seas.append(rs_seas)
+    # associate the values, resources attributes to their scenario
+    for index in range(len(list_scenario)):
+        if list_scenario[index]['name'] == network_sheet.values[i][0]:
+            list_scenario[index]['resourcescenarios'].extend(list_rs_seas)
+    # scenario['resourcescenarios'] = list_rs
+    # list_scenario.append(scenario)
 
 
 # 5.5 Time Series
@@ -661,16 +729,20 @@ for i in range(len(network_sheet)):
         timeseries = {"Header": {}, "0": {}}
         for time, value in timeseries_list[key]:
             try:
-                t = datetime.datetime.strptime(str(time), "%Y/%m/%d").isoformat()
+                if isinstance(time, datetime.datetime):
+                    ts = time.isoformat()
+                else:
+                    ts = datetime.datetime.strptime(str(time), "%d/%m/%y").isoformat()
+                timeseries["0"][ts] = value
             except:
-                t = time.isoformat()
-            timeseries["0"][t] = value
+                ts= datetime.datetime.strptime(str(time), "%m/%d/%Y").isoformat()
+
+                timeseries["0"][ts] = value
 
         # timeseries['ts_values'] = json.dumps(timeseries)
 
-        # attr_name = key
-        # dimension = all_attr_dict[key[1]]['dimension']
         ObjectType = TimeSeriesValues_sheet.values[j][0]
+        attr_name=TimeSeriesValues_sheet.values[j][3]
         dimension = Dataset_attr_Name_Dim_list[ObjectType,attr_name ]
 
         if key in dict_res_attr.keys():
@@ -694,70 +766,6 @@ for i in range(len(network_sheet)):
     # list_scenario.append(scenario)
 
 
-# print list_scenario
-# network_template['scenarios'] = list_scenario
-# network = conn.call('add_network', {'net':network_template})
-
-# 5.7 Seasonal
-
-# http://umwrg.github.io/HydraPlatform/devdocs/techdocs/timeseries.html?highlight=seasonal#normal-time-series-and-seasonal-time-series
-
-    SeasonalNumericValues_sheet = wamdam_data['4_SeasonalNumericValues']
-
-            # add new script here (see time series above)
-
-    seasonal_list = {}
-    list_rs_seas=[]
-    for j in range(8, len(SeasonalNumericValues_sheet)):  # //8: reall value row in sheet
-        if network_sheet.values[i][0] == SeasonalNumericValues_sheet.values[j][2]:
-            attr_name = SeasonalNumericValues_sheet.values[j][3]
-            if (SeasonalNumericValues_sheet.values[j][1], attr_name) in seasonal_list.keys():
-                seasonal_list[(SeasonalNumericValues_sheet.values[j][1], attr_name)].append(
-                    (SeasonalNumericValues_sheet.values[j][6], SeasonalNumericValues_sheet.values[j][8]))
-            else:
-                values = []
-                values.append((SeasonalNumericValues_sheet.values[j][6], SeasonalNumericValues_sheet.values[j][8]))
-                seasonal_list[(SeasonalNumericValues_sheet.values[j][1], attr_name)] = values
-    df = pd.DataFrame()
-    for key in seasonal_list.keys():
-        seasonals = {"Header": {}, "0": {}}
-        for time, value in seasonal_list[key]:
-            try:
-                t = datetime.datetime.strptime(str(time), "%Y/%m/%d").isoformat()
-            except:
-                t = time.isoformat()
-            seasonals["0"][t] = value
-
-        attr_name = key[1]
-        # dimension = all_attr_dict[key[1]]['dimension']
-        ObjectType = SeasonalNumericValues_sheet.values[j][0]
-        dimension = Dataset_attr_Name_Dim_list[ObjectType, attr_name]
-
-        if key in dict_res_attr.keys():
-            rs_seas = {'resource_attr_id': dict_res_attr[key]['id']}
-        else:
-            raise Exception("Unable to find resource_attr_id for %s" % key)
-
-        # rs = {'resource_attr_id': all_attr_dict[attr_name]['id']}
-
-        dataset = {'type': 'timeseries', 'name': attr_name, 'unit': 'metre [m', 'dimension': dimension,
-                   'hidden': 'N', 'value': json.dumps(seasonals)}
-        # The provided dimension here must match the attribute as defined earlier.
-
-        # tsdata.ts_time = PluginLib.date_to_string(time, seasonal=True)
-
-        rs_seas['value'] = dataset
-        list_rs_seas.append(rs_seas)
-    # associate the values, resources attributes to their scenario
-    for index in range(len(list_scenario)):
-        if list_scenario[index]['name'] == network_sheet.values[i][0]:
-            list_scenario[index]['resourcescenarios'].extend(list_rs_seas)
-    # scenario['resourcescenarios'] = list_rs
-    # list_scenario.append(scenario)
-
-
-
-
 # ********************************************************
 # 5.6 Arrays
 # Iterate over the rows in the MultiColumns Series sheet and associate the value with its scenario, and resource attribute
@@ -771,6 +779,7 @@ for i in range(len(network_sheet)):
 # Here Column D in excel starting row 19 has the attribute name that for the whole array (its just like the attribute for the descriptor)
 # Columns G, H,....L, etc starting row 4 in excel have the names of the Array "items" or sub-attributes
 # so each value belongs to an Attribute (array name) and a sub-attribute (array item) under an ObjectType and Instance name
+
 
 multiAttr_sheet = wamdam_data['4_MultiAttributeSeries']
 #get attribut field count
@@ -813,16 +822,17 @@ for i in range(18, len(network_sheet)):
                 if len(array_value) > 0 :
                     # Use the attribuite id to look up its dimension
                     ObjectType = multiAttr_sheet.values[j][0]
+                    attr_name=multiAttr_sheet.values[j][3]
                     dimension = Dataset_attr_Name_Dim_list[ObjectType,attr_name]
                     # unitname=all_attr_dict[multiAttr_sheet.values[j][3]]['dimension']
                     if (multiAttr_sheet.values[j][1], multiAttr_sheet.values[j][3]) in dict_res_attr.keys():
                         rs_multi = {'resource_attr_id': dict_res_attr[(name, multiAttr_sheet.values[j-1][3])]['id']}
                     else:
                         raise Exception("Unable to find resource_attr_id for %s" % multiAttr_sheet.values[j][3])
-                    dataset = {'type': 'array', 'name': multiAttr_sheet.values[j][3], 'unit': 'Cubic metre [m3]', 'dimension': dimension, 'hidden': 'N'}
+                    dataset = {'type': 'array', 'name': multiAttr_sheet.values[j][3], 'unit': '', 'dimension': dimension, 'hidden': 'N'}
 
                     dataset['value'] = json.dumps(array_value)
-                    # print dataset
+                    print dataset
                     # dataset['metadata'] = [
                     #     { 'name' : 'ObjectType', 'value' : multiAttr_sheet.values[j-1][0]},
                     #     { 'name' : 'ScenarioName', 'value' : multiAttr_sheet.values[j-1][2]},
@@ -847,22 +857,23 @@ for i in range(18, len(network_sheet)):
     if len(array_value) > 0:
         if (multiAttr_sheet.values[j][1], multiAttr_sheet.values[j][3]) in dict_res_attr.keys():
 
+            attr_name = multiAttr_sheet.values[j][3]
             ObjectType = multiAttr_sheet.values[j][0]
             dimension = Dataset_attr_Name_Dim_list[ObjectType,attr_name]
 
             # unitname = all_attr_dict[multiAttr_sheet.values[j][3]]['unit']
 
             rs_multi = {'resource_attr_id': dict_res_attr[(multiAttr_sheet.values[j][1], multiAttr_sheet.values[j][3])]['id']}
-            rs_multi = {'resource_attr_id': dict_res_attr[(multiAttr_sheet.values[j][1], multiAttr_sheet.values[j][3])]['id']}
 
-            dataset = {'type': 'array', 'name': multiAttr_sheet.values[j][3], 'unit': 'Cubic metre [m3]', 'dimension': dimension,
+            dataset = {'type': 'array', 'name': multiAttr_sheet.values[j][3], 'unit': '', 'dimension': dimension,
                                'hidden': 'N', 'value': json.dumps(array_value)}
             rs_multi['value'] = dataset
             list_rs_multi.append(rs_multi)
-            # print list_rs_multi
+            print list_rs_multi
         # print rs
         # print array_value
         # The provided dimension here must match the attribute as defined earlier.
+
 
                     # rs['value'] = dataset
                     # list_rs.append(rs)
@@ -873,11 +884,14 @@ for i in range(18, len(network_sheet)):
 
         # scenario['resourcescenarios'] = list_rs
         # list_scenario.append(scenario)
+# print list_rs_multi
 
 network_template['scenarios'] = list_scenario
 
-# print network_template
+#print list_scenario
 
+# print network_template
+# print network_template
 network = conn.call('add_network', {'net':network_template})
 
-print network_template
+

@@ -13,7 +13,7 @@ def GetValues_WEAP(WEAP,BranchesNew_list, unique_object_types_value_list):
     # print unique_object_types_value_list
     # unique_object_types_value_list = ['Reservoir']
     # unique_object_types_value_list = ['Demand Site']
-    #
+    # unique_object_types_value_list = ['Transmission Link']
     # unique_object_types_value_list = ['Streamflow Gauge']
     # unique_object_types_value_list = ['River Headflow']
 
@@ -104,7 +104,7 @@ def GetValues_WEAP(WEAP,BranchesNew_list, unique_object_types_value_list):
 
             # limit the loop to the unique_object_types_value
             if Branch.TypeName == unique_object_types_value:  # and Branch.TypeName==branch_data['ObjectType']:
-                print Branch.TypeName, unique_object_types_value
+                # print Branch.TypeName, unique_object_types_value
 
                 for branch_data in BranchesNew_list:
                     #                 print branch_data['BranchName']
@@ -125,8 +125,10 @@ def GetValues_WEAP(WEAP,BranchesNew_list, unique_object_types_value_list):
                     # print 'Branch.TypeName=',Branch.TypeName
                     # print 'Branch_data_Value=',branch_data_Value
 
-                    if Branch.Name == branch_data['BranchName'] and Branch.TypeName==branch_data_Value:
-                    # there is an issue in this above if cluse that foes not allow passing/getting the variables of a river headflow
+                    if Branch.FullName == branch_data['FullBranchName'] and Branch.TypeName==branch_data_Value:
+                        # print 'BranchName='+ Branch.FullName
+                        # print '''branch_data['BranchName']'''+branch_data['FullBranchName']
+                    # there is an issue in this above if clause that does not allow passing/getting the variables of a river headflow
                     # maybe it has to do with how the headflow word is added to the branch name. check
                         #                     print  branch_data['ObjectType']
                         #                     print  branch_data['BranchName']
@@ -205,7 +207,7 @@ def GetValues_WEAP(WEAP,BranchesNew_list, unique_object_types_value_list):
                                     UniqObjectAtt['AttributeUnit']=AttributeUnit
                                     UniqObjectAtt['AttributeDataTypeCV'] = 'MultiAttributeSeries'
 
-                                # Numeirc if the value is a float (single value) e.g., "0", "100" etc
+                                # Numeric if the value is a float (single value) e.g., "0", "100" etc
 
                                 else:
                                     try:

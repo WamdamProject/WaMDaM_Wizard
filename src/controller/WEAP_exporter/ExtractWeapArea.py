@@ -2,7 +2,7 @@
 import win32com.client
 from controller.ConnectDB_ParseExcel import DB_Setup
 from controller.ConnectDB_ParseExcel import SqlAlchemy as sq
-
+from datetime import datetime
 from sqlalchemy.orm import aliased
 # 1. Connect to WEAP
 
@@ -69,7 +69,8 @@ class WEAP_export():
     def SaveToExcel(self, result_list,UniqObjectAtt_list):
         from SaveToExcel import SaveExcel
         #add dir here?
-        excel_filename = self.fileDir +  '/' + self.textCtrl_AreaNameOnText + '.xlsx'
+        DateStamp= datetime.now().strftime('%m-%d-%Y')
+        excel_filename = self.fileDir +  '/' + self.textCtrl_AreaNameOnText +'_'+DateStamp + '.xlsx'
         SaveExcel(self.NodesSheetList, self.LinksSheetList, result_list,UniqObjectAtt_list, self.WEAP, excel_filename)
 
 

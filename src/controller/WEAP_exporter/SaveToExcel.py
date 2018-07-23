@@ -243,7 +243,7 @@ def write_Seasonal(Result_list, wb, WEAP):
 
 
     SeasonalFields = ['ObjectType', 'InstanceName', 'ScenarioName', 'AttributeName', 'SourceName', 'MethodName',
-                      'SeasonName', 'SeasonNameCV', 'SeasonValue']
+                      'SeasonName', 'SeasonNameCV', 'SeasonValue','SeasonDateFormate']
 
     for i in range(len(SeasonalFields)):
         ws.write(0, i, SeasonalFields[i])
@@ -263,6 +263,8 @@ def write_Seasonal(Result_list, wb, WEAP):
             InstanceName = re['InstanceName']
             VariableName = re['VariableName']
             SeasonNameCV=''
+            SeasonDateFormate=''
+
             n = 1
             for e in ExpresValue1:
                 # It means the remainder of dividing by 2. Because always first value is AttributeName1_Values and  second value is AttributeName2_Values.
@@ -273,28 +275,51 @@ def write_Seasonal(Result_list, wb, WEAP):
                     # add controlled vocabulary to each season shortcut name used in WEAP
                     if month_name == 'Oct':
                         SeasonNameCV='October'
+                        SeasonDateFormate='1999/10/1'
+
                     elif month_name == 'Nov':
                         SeasonNameCV = 'November'
+                        SeasonDateFormate='1999/11/1'
+
                     elif month_name == 'Dec':
                         SeasonNameCV = 'December'
+                        SeasonDateFormate='1999/12/1'
                     elif month_name == 'Jan':
                         SeasonNameCV = 'January'
+                        SeasonDateFormate='1999/01/1'
+
                     elif month_name == 'Feb':
                         SeasonNameCV = 'February'
+                        SeasonDateFormate='1999/02/1'
+
                     elif month_name == 'Mar':
                         SeasonNameCV = 'March'
+                        SeasonDateFormate='1999/03/1'
+
                     elif month_name == 'Apr':
                         SeasonNameCV = 'April'
+                        SeasonDateFormate='1999/04/1'
+
                     elif month_name == 'May':
                         SeasonNameCV = 'May'
+                        SeasonDateFormate='1999/05/1'
+
                     elif month_name == 'Jun':
                         SeasonNameCV = 'June'
+                        SeasonDateFormate='1999/06/1'
+
+
                     elif month_name == 'Jul':
                         SeasonNameCV = 'July'
+                        SeasonDateFormate='1999/07/1'
+
                     elif month_name == 'Aug':
                         SeasonNameCV = 'August'
+                        SeasonDateFormate='1999/08/1'
+
                     elif month_name == 'Sep':
                         SeasonNameCV = 'September'
+                        SeasonDateFormate='1999/09/1'
 
                     SeasonValue = ExpresValue1[n - 1]
                     #                 print month_name, value
@@ -309,6 +334,7 @@ def write_Seasonal(Result_list, wb, WEAP):
                     Result['SeasonName'] = month_name
                     Result['SeasonNameCV'] = SeasonNameCV
                     Result['SeasonValue'] = SeasonValue
+                    Result['SeasonDateFormate'] = SeasonDateFormate
 
                     col = 0
                     for key in Result.keys():
@@ -457,8 +483,9 @@ def write_TimeSeriesValues(Result_list, wb,WEAP):
                 csv_items_temp = f.readlines()
                 csv_items = []
                 for line_str in csv_items_temp:
-                    if line_str.strip()[0] in flag_list: continue
-                    csv_items.append(line_str)
+                    datas = line_str.split(',')
+                    if datas[0].strip()[0] in flag_list: continue
+                    csv_items.append(datas)
             else:
                 print "Error: the extension, " + file_extension + " is not supported"
                 return
