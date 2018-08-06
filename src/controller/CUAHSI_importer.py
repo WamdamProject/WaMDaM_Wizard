@@ -10,7 +10,7 @@ from stp4_loadDataValue.helper import LoadingUtils
 
 
 
-class CUAHS_importer():
+class CUAHSI_importer():
     '''
     This class is used to get data putting to WaMDaM database
         from data responded of web.
@@ -182,6 +182,8 @@ class CUAHS_importer():
             objectTypes = SqlAlchemy.ObjectTypes()
             objectTypes.ObjectTypeID = objectTypeID
             objectTypes.ObjectType = objecttype
+            objectTypes.ObjectTypeCV = 'Site'
+
             objectTypes.ObjectTypologyCV = "Node"
             objectTypes.ResourceTypeID = resourceTypeID
             self.setup.push_data(objectTypes)
@@ -282,6 +284,8 @@ class CUAHS_importer():
         instanceID += 1
 
         node_instance_name = response_data.timeSeries[0].sourceInfo.siteName
+        # not working
+        # node_instance_Longitude = response_data.timeSeries[0].sourceInfo.Longitude
 
         # Check whether same name exist in Instances table
         exsting = None
@@ -295,6 +299,11 @@ class CUAHS_importer():
             instances.InstanceID = instanceID
             instances.InstanceName = node_instance_name
             instances.InstanceNameCV = 'USGS 10046500 BEAR RIVER BL STEWART DAM NR MONTPELIER, ID'
+
+            if node_instance_name=='BEAR RIVER NEAR UTAH-WYOMING STATE LINE':
+                instances.Longitude_x='-111.062'
+                instances.Latitude_y = '42.211'
+
 
             self.setup.push_data(instances)
             self.setup.add_data()

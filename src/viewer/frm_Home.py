@@ -68,7 +68,7 @@ class frm_Home( WaMDaMWizard.frm_Home ):
         EXB=fEXB.dlg_ImportSpreadsheetBasic(None)
         EXB.ShowModal()
     def rtbn_ImportCUAHSIOnRibbonButtonClicked( self, event ):
-        import dlg_ImportFromCUAHS as cuahs
+        import dlg_ImportFromCUAHSI as cuahs
         CUAHS = cuahs.dlg_ImportFromCUAHS(None)
         CUAHS.ShowModal()
 

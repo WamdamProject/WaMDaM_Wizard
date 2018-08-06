@@ -2,7 +2,7 @@
 
 import wx, define, threading
 import WaMDaMWizard
-from controller.CUAHS_importer import CUAHSI_importer
+from controller.CUAHSI_importer import CUAHSI_importer
 from controller.ConnectDB_ParseExcel import DB_Setup
 from Messages_forms.msg_somethigWrong import msg_somethigWrong
 from Messages_forms.msg_loadingToExit import msg_sureToExit
@@ -138,7 +138,8 @@ class dlg_ImportFromCUAHS( WaMDaMWizard.dlg_ImportFromCUAHS ):
         self.waiting_dlg = messageDlg(None)
         self.waiting_dlg.btn_OK.Shown = False
         self.waiting_dlg.Title = "Loading Data..."
-        self.waiting_dlg.setMessage("Please wait for Wizard to call and retrieve Water One Flow web-service.\nIt might take seconds to several minutes depending on the \n\tsize of the data.")
+        self.waiting_dlg.setMessage("Please wait for Wizard to call and retrieve Water One Flow web-service.\nIt might take seconds to several minutes depending on the \n\tsize of the data. \n"
+                                    "Warning!! this loader is inefficient and takes much longer than expected ")
         self.waiting_dlg.btn_Cancel.Bind(wx.EVT_BUTTON, self.stop_loading)
         self.waiting_dlg.Show()
     #///////////////////////////////////////////////////////////////////////#
@@ -150,7 +151,7 @@ class dlg_ImportFromCUAHS( WaMDaMWizard.dlg_ImportFromCUAHS ):
 
     def load_data(self):
     # Load CUAHS data within db
-        importer = CUAHS_importer()
+        importer = CUAHSI_importer()
         importer.load_data(self.response)
     #/////////////////////////////////////////////////////////////#
 

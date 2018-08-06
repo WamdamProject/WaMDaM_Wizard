@@ -82,7 +82,7 @@ class frm_Home ( wx.Frame ):
         self.m_ribbonButtonBar7.AddSimpleButton( 17, u"First time", WEAP.GetBitmap(), wx.EmptyString)
         # self.m_ribbonButtonBar7.AddSimpleButton( 18, u"Re-run a previous export", WASH.GetBitmap(), wx.EmptyString)
         self.m_ribbonButtonBar7.AddSimpleButton( 18, u"Re-run a previous export", rerun.GetBitmap(), wx.EmptyString)
-        self.m_ribbonButtonBar7.AddSimpleButton( 19, u"Hydra", ImportHydra.GetBitmap(), wx.EmptyString)
+        self.m_ribbonButtonBar7.AddSimpleButton( 19, u"Export WaMDaM to Excel Template", ImportExcel.GetBitmap(), wx.EmptyString)
         self.rtab_About = rb.RibbonPage( self.Main_ribbonBar, wx.ID_ANY, u"About" , wx.NullBitmap , 0 )
         self.rpnl_About = rb.RibbonPanel( self.rtab_About, wx.ID_ANY, wx.EmptyString , wx.NullBitmap , wx.DefaultPosition, wx.DefaultSize, wx.lib.agw.ribbon.RIBBON_PANEL_DEFAULT_STYLE )
         self.rbarAbout = rb.RibbonButtonBar( self.rpnl_About, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
@@ -1072,10 +1072,11 @@ class dlg_ExportScenarioDataToHydra  ( wx.Dialog ):
         self.comboBox_selectScenario = wx.ComboBox( self, 7003, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, comboBox_selectScenarioChoices, 0 )
         bSizer15.Add( self.comboBox_selectScenario, 0, wx.ALL|wx.EXPAND, 5 )
 
-        self.m_staticText17111 = wx.StaticText( self, wx.ID_ANY, u"Select the excel workbook template to export results to", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText17111 = wx.StaticText( self, wx.ID_ANY, u"Choose the folder where you want to export the excel file", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText17111.Wrap( -1 )
         bSizer15.Add( self.m_staticText17111, 0, wx.ALL, 5 )
 
+        # change this one to directory pickup
         self.FilePicker_ExportToRwise = wx.FilePickerCtrl( self, 7006, wx.EmptyString, u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
         bSizer15.Add( self.FilePicker_ExportToRwise, 0, wx.ALL|wx.EXPAND, 5 )
 

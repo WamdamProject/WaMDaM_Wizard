@@ -12,7 +12,7 @@ class GetDataStructure(object):
         self.session = self.setup.get_session()
         self.excel_pointer = None
 
-    def getResourceTypes(self, dset_acro=None):
+    def getResourceTypes(self):
         '''
             This method is used to get all data in "ResourceTypes" table of sqlite db.
             :return: list of row
@@ -29,37 +29,46 @@ class GetDataStructure(object):
 
     def get_excel(self):
         pass
-    def getResourceType(self, selectedResourceType):
-        '''
-            This method is used to get DatasetTypes by selected ResourceTypeAcronym.
-            First, It is filtered ResourceTypes table by selected ResourceTypeAcronym.
-            Next, Get data by comparing SourceID of Sources and ResourceTypes.
-            :param  selectedResourceType: value of selected ResourceTypeAcronym.
-            :return: list of set of ResourceType, ResourceTypeAcronym, SourceName and Description queried
-        '''
-        try:
-            result = self.session.query(sq.ResourceTypes.ResourceTypeAcronym, sq.ResourceTypes.ResourceType,
-                                        sq.ResourceTypes.Description, sq.Sources.SourceName).filter(sq.ResourceTypes.ResourceTypeAcronym == selectedResourceType).\
-                    join(sq.Sources,
-                         sq.Sources.SourceID == sq.ResourceTypes.SourceID).all()
-            complete_result = list()
+    def getResourceType(self, selectedResourceType =None):
+        if selectedResourceType== None:
+            try:
+                result = self.session.query(sq.ResourceTypes).all()
+                return result
+            except Exception as e:
+                # define.logger.error('Failed metAData load.\n' + e.message)
+                raise Exception('Could not open ResourceTypes table.\n' + e.message)
+                print(e)
+        else:
+            '''
+                This method is used to get DatasetTypes by selected ResourceTypeAcronym.
+                First, It is filtered ResourceTypes table by selected ResourceTypeAcronym.
+                Next, Get data by comparing SourceID of Sources and ResourceTypes.
+                :param  selectedResourceType: value of selected ResourceTypeAcronym.
+                :return: list of set of ResourceType, ResourceTypeAcronym, SourceName and Description queried
+            '''
+            try:
+                result = self.session.query(sq.ResourceTypes.ResourceTypeAcronym, sq.ResourceTypes.ResourceType,
+                                            sq.ResourceTypes.Description, sq.Sources.SourceName).filter(sq.ResourceTypes.ResourceTypeAcronym == selectedResourceType).\
+                        join(sq.Sources,
+                             sq.Sources.SourceID == sq.ResourceTypes.SourceID).all()
+                complete_result = list()
 
-            nameResult = list()
-            for row in result:
-                isExisting = False
-                for name in nameResult:
-                    if name == row.ResourceTypeAcronym:
-                        isExisting = True
-                        break
-                if not isExisting:
-                    nameResult.append(row.ResourceTypeAcronym)
-                    complete_result.append([row.ResourceType, row.ResourceTypeAcronym, row.SourceName, row.Description])
+                nameResult = list()
+                for row in result:
+                    isExisting = False
+                    for name in nameResult:
+                        if name == row.ResourceTypeAcronym:
+                            isExisting = True
+                            break
+                    if not isExisting:
+                        nameResult.append(row.ResourceTypeAcronym)
+                        complete_result.append([row.ResourceType, row.ResourceTypeAcronym, row.SourceName, row.Description])
 
-            return complete_result
-        except Exception as e:
-            # define.logger.error('Failed metAData load.\n' + e.message)
-            raise Exception('Error occurred in reading Data Structure.\n' + e.message)
-        pass
+                return complete_result
+            except Exception as e:
+                # define.logger.error('Failed metAData load.\n' + e.message)
+                raise Exception('Error occurred in reading Data Structure.\n' + e.message)
+            pass
     def getObjecttypes(self, selectedResourceType):
         '''
             This method is used to get ObjectTypes by selected ResourceTypeAcronym.

@@ -1,0 +1,7 @@
+"ObjectType","InstanceName","ScenarioName","MultiAttributeName","AttributeDataTypeCV","Elevation-Curve","Volume-Curve","ValueOrder","Date exported to this file"
+"Reservoir","Birch Creek","USU WEAP Model 2017","Volume Elevation Curve_MA","MultiAttributeSeries"," 0"," 6805","1","04/23/2018"
+"Reservoir","Birch Creek","USU WEAP Model 2017","Volume Elevation Curve_MA","MultiAttributeSeries"," 15"," 6810","2","04/23/2018"
+"Reservoir","Birch Creek","USU WEAP Model 2017","Volume Elevation Curve_MA","MultiAttributeSeries"," 50"," 6815","3","04/23/2018"
+"Reservoir","Birch Creek","USU WEAP Model 2017","Volume Elevation Curve_MA","MultiAttributeSeries"," 100"," 6820","4","04/23/2018"
+"Reservoir","Birch Creek","USU WEAP Model 2017","Volume Elevation Curve_MA","MultiAttributeSeries"," 130"," 6822","5","04/23/2018"
+"Reservoir","Birch Creek","USU WEAP Model 2017","Volume Elevation Curve_MA","MultiAttributeSeries"," 200"," 6826 ","6","04/23/2018"
