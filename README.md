@@ -7,7 +7,7 @@ The Wizard is built using Python 2.7 and the [wxPython](https://www.wxpython.org
 ## [Download the WaMDaM Excel Workbook Templates for Input Data][5]  
 1. Excel Workbook template to prepare your data into it. Each dataset into one workbook
 
-[5]:https://github.com/WamdamProject/WaMDaM_UseCases/raw/master/UseCases_files/0WorkbookTemplates/InputData_Template/WaMDaM_InputData_template.xlsm
+[5]:https://github.com/WamdamProject/WaMDaM_UseCases/blob/master/UseCases_files/0WorkbookTemplates/InputData_Template/WaMDaM_InputData_template_June_2018.xlsm
 
 ## [Download the Wizard GUI for Windows [7 and 10] 64 bit operating systems][1]
 Download and install the latest release. Choose one of these two options. 
