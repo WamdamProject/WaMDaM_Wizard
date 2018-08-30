@@ -69,8 +69,8 @@ class WEAP_export():
     def SaveToExcel(self, result_list,UniqObjectAtt_list):
         from SaveToExcel import SaveExcel
         #add dir here?
-        DateStamp= datetime.now().strftime('%m-%d-%Y')
-        excel_filename = self.fileDir +  '/' + self.textCtrl_AreaNameOnText +'_'+DateStamp + '.xlsx'
+        DateStamp = datetime.now().strftime('%m-%d-%Y')
+        excel_filename = self.fileDir + '/' + self.textCtrl_AreaNameOnText + '_' + DateStamp + '.xlsx'
         SaveExcel(self.NodesSheetList, self.LinksSheetList, result_list,UniqObjectAtt_list, self.WEAP, excel_filename)
 
 

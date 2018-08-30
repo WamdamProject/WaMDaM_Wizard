@@ -5,7 +5,7 @@
 """"""
 
 """
-WaMDaM: The Water Management Data Model Version 1.02 
+WaMDaM: The Water Management Data Model Version 1.03 
 See the schema at http://schema.wamdam.org/diagrams/01_WaMDaM.html
 Instructions at http://docs.wamdam.org/Getting_started/Steps
 
@@ -13,7 +13,7 @@ Adel M. Abdallah
 email: amabdallah@aggiemail.usu.edu
 website: http://adelmabdallah.com/
 
-June 2018
+September 2018
 """
 
 
@@ -21,7 +21,7 @@ June 2018
 Wamdam.py is the calling/initializing function for the Wizard. 
 
 Before you start, make sure to install all the required Python libraries listed in 
-requirements.md text file/
+requirements.md text file
 
 
 Wamdam.py calls the GUI homepage wxform in the viewer folder which calls frm_Home.py. In the GUI homepage,

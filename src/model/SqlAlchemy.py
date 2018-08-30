@@ -238,6 +238,7 @@ class Attributes(Base):
     AttributeCategoryID = Column(ForeignKey('AttributeCategories.AttributeCategoryID'))
     ModelInputOrOutput = Column(String(50))
     Description = Column(Text)
+    UnitType = Column(String(50))
 
     ObjectTypes = relationship('ObjectTypes')
     Units = relationship('CV_Units')

@@ -5,13 +5,17 @@ import viewer.WaMDaMWizard
 from controller.wamdamAPI.GetDataValues import GetDataValues
 from viewer.Messages_forms.msg_somethigWrong import msg_somethigWrong
 # This library is used here to write data to an excel file
-
+from controller.ConnectDB_ParseExcel import DB_Setup
 
 # Implementing dlg_SearchDataValues
 class dlg_SearchDataValues(viewer.WaMDaMWizard.dlg_SearchDataValues):
 	def __init__( self, parent ):
 		viewer.WaMDaMWizard.dlg_SearchDataValues.__init__(self, parent)
 		try:
+			if not DB_Setup().get_session():
+				msg = "\n\nWarning: Please connect to sqlite first."
+				raise Exception(msg)
+
 			''' Get Controlled object type'''
 			self.getDataValues = GetDataValues()
 			'''Get C_VObjectType'''
@@ -43,7 +47,7 @@ class dlg_SearchDataValues(viewer.WaMDaMWizard.dlg_SearchDataValues):
 			self.path = ""
 		except Exception as e:
 			message = msg_somethigWrong(None, msg=e.message)
-			message.Show()
+			message.ShowModal()
 			self.Destroy()
 	# Handlers for dlg_SearchDataValues events.
 	def dlg_SearchDataValuesOnInitDialog( self, event ):

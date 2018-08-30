@@ -19,7 +19,7 @@ def create_logger(selectedDBName):
     if not fileCheck:
         logFileFullPath = os.getcwdu() + "/wamdam_log_" + selectedDBName +".log"
         logfile = open(logFileFullPath, "w")
-        content = """WaMDaM: The Water Management Data Model Version 1.02 \n\nSee the schema at http://schema.wamdam.org/diagrams/01_WaMDaM.html\n\nWebsite: WaMDaM.org \n\nInstructions at http://docs.wamdam.org/Getting_started/Steps \n\nDeveloper: Adel M. Abdallah\n\nEmail: amabdallah@aggiemail.usu.edu \n\n\n """
+        content = """WaMDaM: The Water Management Data Model Version 1.03 \n\nSee the schema at http://schema.wamdam.org/diagrams/01_WaMDaM.html\n\nWebsite: WaMDaM.org \n\nInstructions at http://docs.wamdam.org/Getting_started/Steps \n\nDeveloper: Adel M. Abdallah\n\nEmail: amabdallah@aggiemail.usu.edu \n\n\n """
         logfile.write(content)
         logfile.flush()
         logfile.close()
@@ -41,5 +41,5 @@ logger = None
 dbName = ""
 # WaMDaM schema version
 # http://schema.wamdam.org/diagrams/01_WaMDaM.html
-version = 1.02
+version = 1.03
 datasetName = ""

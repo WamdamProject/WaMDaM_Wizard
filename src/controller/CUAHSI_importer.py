@@ -298,7 +298,12 @@ class CUAHSI_importer():
             instances = SqlAlchemy.Instances()
             instances.InstanceID = instanceID
             instances.InstanceName = node_instance_name
-            instances.InstanceNameCV = 'USGS 10046500 BEAR RIVER BL STEWART DAM NR MONTPELIER, ID'
+
+            if node_instance_name=='BEAR RIVER BL STEWART DAM NR MONTPELIER, ID':
+                instances.InstanceNameCV = 'USGS 10046500 BEAR RIVER BL STEWART DAM NR MONTPELIER, ID'
+
+            else:
+                instances.InstanceNameCV =''
 
             if node_instance_name=='BEAR RIVER NEAR UTAH-WYOMING STATE LINE':
                 instances.Longitude_x='-111.062'

@@ -41,7 +41,7 @@ log = logging.getLogger(__name__)
 # More info: http://umwrg.github.io/HydraPlatform/tutorials/plug-in/tutorial_json.html#creating-a-client
 ur = "https://data.openagua.org"
 conn = JsonConnection(ur)
-login_response = conn.login('amabdallah@aggiemail.usu.edu', 'TestOpenAgua!')
+login_response = conn.login('amabdallah@aggiemail.usu.edu', 'xxxxxx')
 
 
 # url = "http://server.basinit.hydra.org.uk/"

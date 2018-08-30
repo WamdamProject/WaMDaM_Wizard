@@ -9,6 +9,7 @@ from xlrd import open_workbook
 from viewer.Messages_forms.msg_somethigWrong import msg_somethigWrong
 # This library is used here to write data to an excel file
 from openpyxl import load_workbook
+from controller.ConnectDB_ParseExcel import DB_Setup
 
 # Implementing dlg_query_network
 class dlg_query_network(viewer.WaMDaMWizard.dlg_query_network):
@@ -17,16 +18,20 @@ class dlg_query_network(viewer.WaMDaMWizard.dlg_query_network):
 
 		self.path = ''
 		try:
+			if not DB_Setup().get_session():
+				msg = "\n\nWarning: Please connect to sqlite first."
+				raise Exception(msg)
+
 			self.dataStructure = GetDataStructure()
-			self.datasets = self.dataStructure.getDatasets()
+			self.datasets = self.dataStructure.getResourceTypes()
 			list_acromy = list()
 			for row in self.datasets:
-				list_acromy.append(row.DatasetAcronym)
+				list_acromy.append(row.ResourceTypeAcronym)
 			if list_acromy.__len__() > 0:
 				self.comboBox_selectModel.SetItems(list_acromy)
 		except Exception as e:
 			message = msg_somethigWrong(None, msg=e.message)
-			message.Show()
+			message.ShowModal()
 			self.Destroy()
 	
 	# Handlers for dlg_query_network events.

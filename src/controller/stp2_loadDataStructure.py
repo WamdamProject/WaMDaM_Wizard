@@ -404,6 +404,7 @@ class Load_Struct_To_DB(Parse_Excel_File):
                             attrib.AttributeName_Abstract = row[2].value
                             attrib.ModelInputOrOutput = row[8].value
                             attrib.AttributeDescription = row[9].value
+                            attrib.UnitType = row[10].value
 
                             self.setup.push_data(attrib)
                         break

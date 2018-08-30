@@ -3,6 +3,10 @@
 import wx
 import WaMDaMWizard
 from controller.wamdamAPI.GetDataStructure import GetDataStructure
+from controller.wamdamAPI.GetInstances import GetInstances
+from controller.ConnectDB_ParseExcel import DB_Setup
+from Messages_forms.msg_loading import msg_loading
+
 from controller.wamdamAPI.GetComapreScenarios import GetComapreScenarios
 from xlrd import open_workbook
 # from xlutils.copy import copy
@@ -15,11 +19,15 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 	def __init__( self, parent ):
 		WaMDaMWizard.dlg_compare_scenarios.__init__( self, parent )
 
-
 		self.path = ''
 		try:
+			if not self.checkConnectingToSqlite():
+				msg = "\n\nWarning: Please connect to sqlite first."
+				raise Exception(msg)
+
 			''' init model combobox'''
 			self.dataStructure = GetDataStructure()
+			self.instances = GetInstances()
 			self.datasets = self.dataStructure.getResourceTypes()
 			self.compareScenarios = GetComapreScenarios()
 			
@@ -30,14 +38,14 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 				self.comboBox_selectModel.SetItems(list_acromy)
 		except Exception as e:
 			message = msg_somethigWrong(None, msg=e.message)
-			message.Show()
+			message.ShowModal()
 			self.Destroy()
 
 	# Handlers for dlg_compare_scenarios events.
 	def comboBox_selectModelOnCombobox( self, event ):
 		''' init network combobox once model combobox change'''
 		selectedDataset = self.comboBox_selectModel.Value
-		result = GetDataStructure()
+		result = GetInstances()
 		gettedMasterNetworkNames, data = result.getMasterNetwork(selectedDataset)
 		if gettedMasterNetworkNames.__len__() <= 0:
 			return
@@ -47,7 +55,7 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 		''' init first scenario combobox once network combobox change'''
 		selectedMasterNetworkName = self.comboBox_selectNetwork.Value
 		selectedDataset = self.comboBox_selectModel.Value
-		result = GetDataStructure()
+		result = GetInstances()
 		gettedScenarioNames, data = result.getScenario(selectedDataset, selectedMasterNetworkName)
 		if gettedScenarioNames.__len__() <= 0:
 			return
@@ -59,7 +67,7 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 		''' init second scenario combobox once first scenario change'''
 		selectedMasterNetworkName = self.comboBox_selectNetwork.Value
 		selectedDataset = self.comboBox_selectModel.Value
-		result = GetDataStructure()
+		result = GetInstances()
 		gettedScenarioNames, data = result.getScenario(selectedDataset, selectedMasterNetworkName)
 		if gettedScenarioNames.__len__() <= 0:
 			return
@@ -97,11 +105,16 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 
 
 	def btn_compare_scenariosOnButtonClick( self, event ):
+		self.btn_compare_scenarios.Enabled = False
+
+
 		''' Get selected data(Dataset, MasterNetworkName, ScenarioName1, ScenarioName2) '''
 		selectedDataset = self.comboBox_selectModel.Value
 		selectedMasterNetworkName = self.comboBox_selectNetwork.Value
 		selectedScenarioName1 = self.comboBox_selectScenario1.Value
 		selectedScenarioName2 = self.comboBox_selectScenario2.Value
+
+
 
 
 		''' Check if needed names are correctly selected '''
@@ -454,17 +467,26 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 					for col_id, cell in enumerate(row):
 						changeInValuesSheet.cell(row=row_id + 6, column=col_id+1, value=cell)
 
+				# print the scenario names in F and G
+				changeInValuesSheet.cell(row=4, column=6, value=selectedScenarioName1)
+				changeInValuesSheet.cell(row=4, column=7, value=selectedScenarioName2)
 
-				changeInValuesSheet.cell(row=2, column=6, value=selectedScenarioName1)
-				changeInValuesSheet.cell(row=2, column=7, value=selectedScenarioName2)
 				allValueCount = self.compareScenarios.AllValuesMapperCount(selectedDataset, selectedMasterNetworkName)
+
+				# print values to column F: Unique to Scenario 1
 				changeInValuesSheet.cell(row=2, column=6, value=first_scenario_value_count)
 				changeInValuesSheet.cell(row=3, column=6, value=str(round(float(first_scenario_value_count)*100.0/ float(allValueCount) , 2)) + '%')
+
+				# print values to column G: Unique to Scenario 2
 				changeInValuesSheet.cell(row=2, column=7, value=second_scenario_value_count)
 				changeInValuesSheet.cell(row=3, column=7, value=str(round(float(second_scenario_value_count)*100/ float(allValueCount), 2)) + '%')
+
 				common_count = allValueCount - first_scenario_value_count - second_scenario_value_count
+
+				# print values to column H: Common to both
 				changeInValuesSheet.cell(row=2, column=8, value=common_count)
 				changeInValuesSheet.cell(row=3, column=8, value=str(round(float(common_count) * 100/ float(allValueCount), 2)) + '%')
+
 				changeInValuesSheet.cell(row=2, column=9, value=allValueCount)
 				changeInValuesSheet.cell(row=3, column=9, value='100%')
 
@@ -535,12 +557,21 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 			instance = msg_successLoadDatabase(None)
 			instance.m_staticText1.SetLabel("\n \n The comparison and writing to Excel where successful. \n Check the excel file you provided to see the results")
 			instance.ShowModal()
-			# self.Destroy()
+			self.Destroy()
 		except Exception as e:
 			print e
 			messageDlg = msg_somethigWrong(None, msg=e.message)
 			messageDlg.ShowModal()
 			# raise Exception(e.message)
+
+	def checkConnectingToSqlite(self):
+		db_setup = DB_Setup()
+		if not db_setup.get_session():
+			return False
+		return True
+
+
+
 
 	def btn_cancelOnButtonClick( self, event ):
 		self.Close()

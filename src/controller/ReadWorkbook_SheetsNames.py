@@ -28,7 +28,7 @@ vocab = OrderedDict({
     "objecttype": CV_ObjectType,
     "seasonname": CV_SeasonName,
     "spatialreference": CV_SpatialReference,
-    "descriptorvalue": CV_Categorical,
+    "categorical": CV_Categorical,
     "units": CV_Units,
     "elevationdatum": CV_ElevationDatum
 })

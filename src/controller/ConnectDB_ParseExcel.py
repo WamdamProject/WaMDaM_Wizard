@@ -77,6 +77,14 @@ class DB_Setup(object):
         '''
         return self.__session
 
+    def get_dbpath(self):
+        '''
+            used to return an active session to
+            the caller
+        :return: active session
+        '''
+        return self.__path
+
     '''If the user cancels data loading in the middle, the thread might continue loading data
        for a bit of time until it finishes the job at hand. 
        The Data loader has a rule to load all or nothing. so if the user cancels in the middle, 

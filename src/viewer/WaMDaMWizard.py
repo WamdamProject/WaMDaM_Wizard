@@ -22,7 +22,7 @@ import wx.lib.agw.ribbon as rb
 
 
 from icons.icons import *
-from icons.icons1 import *
+
 
 ###########################################################################
 ## Class frm_Home
@@ -36,7 +36,7 @@ def scale_bitmap(bitmap, width, height):
 class frm_Home ( wx.Frame ):
 
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = 1, title = u"WaMDaM Wizard 1.02", pos = wx.DefaultPosition, size = wx.Size( 892,700 ), style = wx.DEFAULT_FRAME_STYLE|wx.MAXIMIZE_BOX|wx.MINIMIZE_BOX|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = 1, title = u"WaMDaM Wizard 1.03", pos = wx.DefaultPosition, size = wx.Size( 1000,800 ), style = wx.DEFAULT_FRAME_STYLE|wx.MAXIMIZE_BOX|wx.MINIMIZE_BOX|wx.TAB_TRAVERSAL )
 
         self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
         # self.SetWindowStyle(wx.STAY_ON_TOP)
@@ -76,6 +76,8 @@ class frm_Home ( wx.Frame ):
         self.m_ribbonButtonBar6.AddSimpleButton( 14, u"Compare Scenarios of a Network",  Query.GetBitmap(), wx.EmptyString)
         self.m_ribbonButtonBar6.AddSimpleButton( 15, u"Search for nodes and links",  Query.GetBitmap(), wx.EmptyString)
         self.m_ribbonButtonBar6.AddSimpleButton( 16, u"Search for Data Values",  Query.GetBitmap(), wx.EmptyString)
+
+
         self.rtab_Export = rb.RibbonPage( self.Main_ribbonBar, wx.ID_ANY, u"Export Data to Models" , wx.NullBitmap , 0 )
         self.rtab_Export = rb.RibbonPanel( self.rtab_Export, wx.ID_ANY, wx.EmptyString , wx.NullBitmap , wx.DefaultPosition, wx.DefaultSize, wx.lib.agw.ribbon.RIBBON_PANEL_DEFAULT_STYLE )
         self.m_ribbonButtonBar7 = rb.RibbonButtonBar( self.rtab_Export, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
@@ -83,6 +85,19 @@ class frm_Home ( wx.Frame ):
         # self.m_ribbonButtonBar7.AddSimpleButton( 18, u"Re-run a previous export", WASH.GetBitmap(), wx.EmptyString)
         self.m_ribbonButtonBar7.AddSimpleButton( 18, u"Re-run a previous export", rerun.GetBitmap(), wx.EmptyString)
         self.m_ribbonButtonBar7.AddSimpleButton( 19, u"Export WaMDaM to Excel Template", ImportExcel.GetBitmap(), wx.EmptyString)
+
+
+        self.rtab_Publish_Viz = rb.RibbonPage(self.Main_ribbonBar, wx.ID_ANY, u"Visualize and Publish", wx.NullBitmap, 0)
+        self.rtab_Publish_Viz = rb.RibbonPanel( self.rtab_Publish_Viz, wx.ID_ANY, wx.EmptyString , wx.NullBitmap , wx.DefaultPosition, wx.DefaultSize, wx.lib.agw.ribbon.RIBBON_PANEL_DEFAULT_STYLE )
+
+        self.Main_ribbonBar.SetActivePage(self.rtab_Publish_Viz)
+
+        self.m_ribbonButtonBar71 = rb.RibbonButtonBar(self.rtab_Publish_Viz, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
+                                                      0)
+        self.m_ribbonButtonBar71.AddSimpleButton(4444, u"OpenAgua", OpenAgua.GetBitmap(), wx.EmptyString)
+        self.m_ribbonButtonBar71.AddSimpleButton(4443, u"HydroShare", HydroShare.GetBitmap(), wx.EmptyString)
+
+
         self.rtab_About = rb.RibbonPage( self.Main_ribbonBar, wx.ID_ANY, u"About" , wx.NullBitmap , 0 )
         self.rpnl_About = rb.RibbonPanel( self.rtab_About, wx.ID_ANY, wx.EmptyString , wx.NullBitmap , wx.DefaultPosition, wx.DefaultSize, wx.lib.agw.ribbon.RIBBON_PANEL_DEFAULT_STYLE )
         self.rbarAbout = rb.RibbonButtonBar( self.rpnl_About, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
@@ -172,6 +187,8 @@ class frm_Home ( wx.Frame ):
         self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.rtbn_WASHOnRibbonButtonClicked, id = 18 )
         self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.rtbn_ExportToRwiseOnRibbonButtonClicked, id = 19 )
         # event EVT_COMMAND_RIBBONPANEL_EXTBUTTON_ACTIVATED isn't currently supported by wxPython
+        self.Bind(rb.EVT_RIBBONBUTTONBAR_CLICKED, self.rtbn_OpenAguaOnRibbonButtonClicked, id=4444)
+        self.Bind(rb.EVT_RIBBONBUTTONBAR_CLICKED, self.rtbn_HydroShareOnRibbonButtonClicked, id=4443)
         self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.btnAboutWaMDaMOnRibbonButtonClicked, id = 20 )
         self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.btnLicenseOnRibbonButtonClicked, id = 21 )
         self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.btnHelpOnRibbonButtonClicked, id = 22 )
@@ -237,6 +254,12 @@ class frm_Home ( wx.Frame ):
         event.Skip()
 
     def rtbn_WASHOnRibbonButtonClicked( self, event ):
+        event.Skip()
+
+    def rtbn_OpenAguaOnRibbonButtonClicked(self, event):
+        event.Skip()
+
+    def rtbn_HydroShareOnRibbonButtonClicked(self, event):
         event.Skip()
 
     def rtbn_AddModelOnRibbonButtonClicked( self, event ):
@@ -357,6 +380,9 @@ class dlg_ConnectExistingDatabaseSQLite ( wx.Dialog ):
         self.btn_cancel = wx.Button( self, 31, u"Cancel", wx.DefaultPosition, wx.DefaultSize, 0 )
         gSizer111.Add( self.btn_cancel, 1, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
+        # self.btn_publish = wx.Button(self, 32, u"Publish", wx.DefaultPosition, wx.DefaultSize, 0)
+        # gSizer111.Add(self.btn_publish, 2, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+
 
         bSizer57.Add( gSizer111, 1, wx.EXPAND, 5 )
 
@@ -370,6 +396,7 @@ class dlg_ConnectExistingDatabaseSQLite ( wx.Dialog ):
         self.FilePicker_ConnectSQLite.Bind( wx.EVT_FILEPICKER_CHANGED, self.FilePicker_ConnectSQLiteOnFileChanged )
         self.btn_connect.Bind( wx.EVT_BUTTON, self.btn_connectOnButtonClick )
         self.btn_cancel.Bind( wx.EVT_BUTTON, self.btn_cancelOnButtonClick )
+        # self.btn_publish.Bind(wx.EVT_BUTTON, self.btn_publishOnButtonClick)
 
     def __del__( self ):
         pass
@@ -383,6 +410,9 @@ class dlg_ConnectExistingDatabaseSQLite ( wx.Dialog ):
         event.Skip()
 
     def btn_cancelOnButtonClick( self, event ):
+        event.Skip()
+
+    def btn_publishOnButtonClick( self, event ):
         event.Skip()
 
 class dlg_ExitDB ( wx.Dialog ):
@@ -1077,8 +1107,8 @@ class dlg_ExportScenarioDataToHydra  ( wx.Dialog ):
         bSizer15.Add( self.m_staticText17111, 0, wx.ALL, 5 )
 
         # change this one to directory pickup
-        self.FilePicker_ExportToRwise = wx.FilePickerCtrl( self, 7006, wx.EmptyString, u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
-        bSizer15.Add( self.FilePicker_ExportToRwise, 0, wx.ALL|wx.EXPAND, 5 )
+        self.DirectoryPicker_ExportToRwise = wx.DirPickerCtrl( self, 7006, wx.EmptyString, u"Select a directory", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+        bSizer15.Add( self.DirectoryPicker_ExportToRwise, 0, wx.ALL|wx.EXPAND, 5 )
 
         gSizer11 = wx.GridSizer( 1, 2, 1, 1 )
 
@@ -1101,7 +1131,7 @@ class dlg_ExportScenarioDataToHydra  ( wx.Dialog ):
         self.comboBox_selectModel.Bind( wx.EVT_COMBOBOX, self.comboBox_selectModelOnCombobox )
         self.comboBox_selectNetwork.Bind( wx.EVT_COMBOBOX, self.comboBox_selectNetworkOnCombobox )
         self.comboBox_selectScenario.Bind( wx.EVT_COMBOBOX, self.comboBox_selectScenarioOnCombobox )
-        self.FilePicker_ExportToRwise.Bind( wx.EVT_FILEPICKER_CHANGED, self.FilePicker_ExportToRwiseOnFileChanged )
+        self.DirectoryPicker_ExportToRwise.Bind( wx.EVT_DIRPICKER_CHANGED, self.DirectoryPicker_ExportToRwiseOnFileChanged )
         self.btn_Export_ScenarioData.Bind( wx.EVT_BUTTON, self.btn_Export_ScenarioDataOnButtonClick )
         self.btn_cancel.Bind( wx.EVT_BUTTON, self.btn_cancelOnButtonClick )
 
@@ -1119,7 +1149,7 @@ class dlg_ExportScenarioDataToHydra  ( wx.Dialog ):
     def comboBox_selectScenarioOnCombobox( self, event ):
         event.Skip()
 
-    def FilePicker_ExportToRwiseOnFileChanged( self, event ):
+    def DirectoryPicker_ExportToRwiseOnFileChanged( self, event ):
         event.Skip()
 
     def btn_Export_ScenarioDataOnButtonClick( self, event ):

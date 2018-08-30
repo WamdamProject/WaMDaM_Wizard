@@ -222,7 +222,7 @@ class Load_CV_To_DB(Parse_Excel_File):
                         if model:
                             self.setup.push_data(model)
 
-                if key == "descriptorvalue":
+                if key == "categorical":
                     result = self.__session.query(SqlAlchemy.CV_Categorical.Name).all()
                     # print result
                     result = [row[0] for row in result]

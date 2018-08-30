@@ -70,7 +70,7 @@ class GetDataValues(object):
         This method is used to check validations of bellow tables within db.
         :return: None
         '''
-        table_list = ["DualValues", "DescriptorValues", "NumericValues", "CV_ElectronicFormat", "SeasonalParameters", "TimeSeries",
+        table_list = ["CategoricalValues", "NumericValues", "CV_ElectronicFormat", "SeasonalNumericValues", "TimeSeries",
                       "MultiAttributeSeriesValues"]
         for table_name in table_list:
             recordCountResult = self.session.execute('SELECT COUNT(*) FROM {};'.format(table_name))
@@ -80,9 +80,75 @@ class GetDataValues(object):
             if i == 0:
                 raise Exception('Warning!\n{} table is empty. Please fill this table.'.format(table_name))
 
-    def exportDualValuesSheet(self, selectedType, selectedAttribute, selectedInstance, excelPath):
+    # def exportDualValuesSheet(self, selectedType, selectedAttribute, selectedInstance, excelPath):
+    #     '''
+    #     This method is used to get data making DualValues_table.
+    #     :param selectedType: selected Object Type
+    #     :param selectedAttribute: controlled Attribute
+    #     :param selectedInstance: controlled Instance Name
+    #     :param excelPath: full path of excel file to export data
+    #     :return: None
+    #     '''
+    #     try:
+    #         # result = self.session.query(sq.ResourceTypes.ResourceTypeAcronym, sq.Attributes.AttributeName, sq.Attributes.UnitNameCV,
+    #         #                 sq.Instances.InstanceName, sq.MasterNetworks.MasterNetworkName,
+    #         #                 sq.Scenarios.ScenarioName, sq.Sources.SourceName, sq.Methods.MethodName,
+    #         #                 sq.DualValues.DualValuesValueMeaningCV)\
+    #         #     .join(sq.ObjectTypes, sq.ObjectTypes.ResourceTypeID == sq.ResourceTypes.ResourceTypeID)\
+    #         #     .join(sq.Attributes, sq.Attributes.ObjectTypeID == sq.ObjectTypes.ObjectTypeID)\
+    #         #     .join(sq.Mapping, sq.Mapping.AttributeID == sq.Attributes.AttributeID)\
+    #         #     .join(sq.ValuesMapper, sq.ValuesMapper.ValuesMapperID == sq.Mapping.ValuesMapperID)\
+    #         #     .join(sq.ScenarioMapping, sq.ScenarioMapping.MappingID == sq.Mapping.MappingID)\
+    #         #     .join(sq.Scenarios, sq.Scenarios.ScenarioID == sq.ScenarioMapping.ScenarioID)\
+    #         #     .join(sq.MasterNetworks, sq.MasterNetworks.MasterNetworkID == sq.Scenarios.MasterNetworkID)\
+    #         #     .join(sq.Methods, sq.Methods.MethodID == sq.Mapping.MethodID)\
+    #         #     .join(sq.Sources, sq.Sources.SourceID == sq.Mapping.SourceID)\
+    #         #     .join(sq.Instances, sq.Instances.InstanceID == sq.Mapping.InstanceID)\
+    #         #     .join(sq.DualValues, sq.DualValues.ValuesMapperID == sq.ValuesMapper.ValuesMapperID)\
+    #         #     .join(sq.CV_DualValueMeaning, sq.CV_DualValueMeaning.Name == sq.DualValues.DualValuesValueMeaningCV)\
+    #         #     .filter(sq.Attributes.AttributeDataTypeCV=='DualValues')\
+    #         #     .all()
+    #
+    #         sql = 'SELECT AttributeName, SourceName, InstanceName,MasterNetworkName,ScenarioName,MethodName,dualvaluemeaningCV ' \
+    #             'FROM "ResourceTypes" '\
+    #             'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+    #             'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+    #             'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+    #             'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+    #             'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+    #             'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+    #             'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+    #             'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+    #             'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+    #             'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+    #             'LEFT JOIN "DualValues" ON "DualValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+    #             'LEFT JOIN "CV_DualValueMeaning" ON "CV_DualValueMeaning"."Name"= "DualValues"."dualvaluemeaningCV" '\
+    #             'WHERE "AttributeDataTypeCV"="DualValues" AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
+    #             .format( selectedType, selectedInstance, selectedAttribute)
+    #
+    #         result = self.session.execute(sql)
+    #         # nameResult = list()
+    #         complete_result = list()
+    #         for row in result:
+    #             # isExisting = False
+    #             # for name in nameResult:
+    #             #     if name == row.InstanceName:
+    #             #         isExisting = True
+    #             #         break
+    #             # if not isExisting:
+    #             #     nameResult.append(row.InstanceName)
+    #             complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName,
+    #                                     row.AttributeName, row.SourceName, row.MethodName,
+    #                                     row.dualvaluemeaningCV])
+    #         self.isMatching_query(complete_result, "DualValues")
+    #         self.write2excel(complete_result, '4_DualValues', 9, 10, excelPath)
+    #     except Exception as  e:
+    #         print e
+    #         raise Exception('Error occurred in reading Data Structure.\n' + e.message)
+
+    def exportCategoricalValuesSheet(self, selectedType='', selectedAttribute='', selectedInstance='', excelPath=''):
         '''
-        This method is used to get data making DualValues_table.
+        This method is used to get data making CategoricalValues_table.
         :param selectedType: selected Object Type
         :param selectedAttribute: controlled Attribute
         :param selectedInstance: controlled Instance Name
@@ -90,41 +156,41 @@ class GetDataValues(object):
         :return: None
         '''
         try:
-            # result = self.session.query(sq.ResourceTypes.DatasetAcronym, sq.Attributes.AttributeName, sq.Attributes.UnitNameCV,
-            #                 sq.Instances.InstanceName, sq.MasterNetworks.MasterNetworkName,
-            #                 sq.Scenarios.ScenarioName, sq.Sources.SourceName, sq.Methods.MethodName,
-            #                 sq.DualValues.DualValuesValueMeaningCV)\
-            #     .join(sq.ObjectTypes, sq.ObjectTypes.ResourceTypeID == sq.ResourceTypes.ResourceTypeID)\
-            #     .join(sq.Attributes, sq.Attributes.ObjectTypeID == sq.ObjectTypes.ObjectTypeID)\
-            #     .join(sq.Mapping, sq.Mapping.AttributeID == sq.Attributes.AttributeID)\
-            #     .join(sq.ValuesMapper, sq.ValuesMapper.ValuesMapperID == sq.Mapping.ValuesMapperID)\
-            #     .join(sq.ScenarioMapping, sq.ScenarioMapping.MappingID == sq.Mapping.MappingID)\
-            #     .join(sq.Scenarios, sq.Scenarios.ScenarioID == sq.ScenarioMapping.ScenarioID)\
-            #     .join(sq.MasterNetworks, sq.MasterNetworks.MasterNetworkID == sq.Scenarios.MasterNetworkID)\
-            #     .join(sq.Methods, sq.Methods.MethodID == sq.Mapping.MethodID)\
-            #     .join(sq.Sources, sq.Sources.SourceID == sq.Mapping.SourceID)\
-            #     .join(sq.Instances, sq.Instances.InstanceID == sq.Mapping.InstanceID)\
-            #     .join(sq.DualValues, sq.DualValues.ValuesMapperID == sq.ValuesMapper.ValuesMapperID)\
-            #     .join(sq.CV_DualValueMeaning, sq.CV_DualValueMeaning.Name == sq.DualValues.DualValuesValueMeaningCV)\
-            #     .filter(sq.Attributes.AttributeDataTypeCV=='DualValues')\
-            #     .all()
-
-            sql = 'SELECT AttributeName, SourceName, InstanceName,MasterNetworkName,ScenarioName,MethodName,dualvaluemeaningCV ' \
-                'FROM "ResourceTypes" '\
-                'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
-                'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
-                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
-                'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
-                'LEFT JOIN "DualValues" ON "DualValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
-                'LEFT JOIN "CV_DualValueMeaning" ON "CV_DualValueMeaning"."Name"= "DualValues"."dualvaluemeaningCV" '\
-                'WHERE "AttributeDataTypeCV"="DualValues" AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
-                .format( selectedType, selectedInstance, selectedAttribute)
+            if selectedType == '' and selectedAttribute == '' and selectedInstance == '':
+                sql = 'SELECT Attributes.AttributeName, ObjectType, SourceName, InstanceName,MasterNetworkName,' \
+                      'ScenarioName,MethodName,CategoricalValueCV ' \
+                    'FROM "ResourceTypes" '\
+                    'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+                    'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+                    'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                    'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+                    'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                    'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+                    'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+                    'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                    'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                    'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+                    'LEFT JOIN "CategoricalValues" ON "CategoricalValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                    'LEFT JOIN "CV_Categorical" ON "CV_Categorical"."Name"= "CategoricalValues"."CategoricalValueCV" '\
+                    'WHERE "AttributeDataTypeCV"="CategoricalValues"'
+            else:
+                sql = 'SELECT Attributes.AttributeName, ObjectType, SourceName, InstanceName,MasterNetworkName,' \
+                      'ScenarioName,MethodName,CategoricalValueCV ' \
+                    'FROM "ResourceTypes" '\
+                    'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+                    'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+                    'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                    'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+                    'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                    'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+                    'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+                    'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                    'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                    'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+                    'LEFT JOIN "CategoricalValues" ON "CategoricalValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                    'LEFT JOIN "CV_Categorical" ON "CV_Categorical"."Name"= "CategoricalValues"."CategoricalValueCV" '\
+                    'WHERE "AttributeDataTypeCV"="CategoricalValues" AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
+                    .format(selectedType, selectedInstance, selectedAttribute)
 
             result = self.session.execute(sql)
             # nameResult = list()
@@ -139,88 +205,60 @@ class GetDataValues(object):
                 #     nameResult.append(row.InstanceName)
                 complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName,
                                         row.AttributeName, row.SourceName, row.MethodName,
-                                        row.dualvaluemeaningCV])
-            self.isMatching_query(complete_result, "DualValues")
-            self.write2excel(complete_result, '4_DualValues', 9, 10, excelPath)
+                                        row.CategoricalValueCV])
+            if excelPath != '':
+                if complete_result.__len__() > 0:
+                    self.isMatching_query(complete_result, "CategoricalValues")
+                    self.write2excel(complete_result, '4_CategoricalValues', 13, 10, excelPath)
+
+            return complete_result
         except Exception as  e:
             print e
-            raise Exception('Error occurred in reading Data Structure.\n' + e.message)
+            raise Exception('Error occured in reading Data Structure.\n' + e.message)
 
-    def exportTextConrolledSheet(self, selectedType, selectedAttribute, selectedInstance, excelPath):
-        '''
-        This method is used to get data making DescriptorValues_table.
-        :param selectedType: selected Object Type
-        :param selectedAttribute: controlled Attribute
-        :param selectedInstance: controlled Instance Name
-        :param excelPath: full path of excel file to export data
-        :return: None
-        '''
-        try:
-            sql = 'SELECT Attributes.AttributeName, ObjectType, SourceName, InstanceName,MasterNetworkName,' \
-                  'ScenarioName,MethodName,descriptorvalueCV ' \
-                'FROM "ResourceTypes" '\
-                'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
-                'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
-                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
-                'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
-                'LEFT JOIN "DescriptorValues" ON "DescriptorValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
-                'LEFT JOIN "CV_DescriptorValues" ON "CV_DescriptorValues"."Name"= "DescriptorValues"."descriptorvalueCV" '\
-                'WHERE "AttributeDataTypeCV"="DescriptorValues" AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
-                .format(selectedType, selectedInstance, selectedAttribute)
-
-            result = self.session.execute(sql)
-            # nameResult = list()
-            complete_result = list()
-            for row in result:
-                # isExisting = False
-                # for name in nameResult:
-                #     if name == row.InstanceName:
-                #         isExisting = True
-                #         break
-                # if not isExisting:
-                #     nameResult.append(row.InstanceName)
-                complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName,
-                                        row.AttributeName, row.SourceName, row.MethodName,
-                                        row.descriptorvalueCV])
-            if complete_result.__len__() > 0:
-                self.isMatching_query(complete_result, "DescriptorValues")
-                self.write2excel(complete_result, '4_DescriptorValues', 13, 10, excelPath)
-        except Exception as  e:
-            print e
-            raise Exception('Erro occure in reading Data Structure.\n' + e.message)
-
-    def exportNumericValuesheet(self, selectedType, selectedAttribute, selectedInstance, excelPath):
+    def exportNumericValuesheet(self, selectedType='', selectedAttribute='', selectedInstance='', excelPath=''):
         '''
         This method is used to get data making NumericValues_table.
         :param selectedType: selected Object Type
-        :param selectedAttribute: controlled Attribute
+        :param selecttedAttribute: controlled Attribute
         :param selectedInstance: controlled Instance Name
         :param excelPath: full path of excel file to export data
         :return: None
         '''
         try:
-            sql = 'SELECT "ResourceTypes"."DatasetName", ObjectType,AttributeName, SourceName, InstanceName,MasterNetworkName,' \
-                  'ScenarioName,MethodName, NumericValue ' \
-                'FROM "ResourceTypes" '\
-                'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
-                'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
-                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
-                'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
-                'LEFT JOIN "NumericValues" ON "NumericValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
-                'WHERE "AttributeDataTypeCV"="Parameter" AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
-                .format(selectedType, selectedInstance, selectedAttribute)
+            if selectedType == '' and selectedAttribute == '' and selectedInstance == '':
+                sql = 'SELECT "ResourceTypes"."ResourceType", ObjectType,AttributeName, SourceName, InstanceName,MasterNetworkName,' \
+                      'ScenarioName,MethodName, NumericValue ' \
+                    'FROM "ResourceTypes" '\
+                    'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+                    'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+                    'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                    'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+                    'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                    'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+                    'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+                    'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                    'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                    'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+                    'LEFT JOIN "NumericValues" ON "NumericValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                    'WHERE "AttributeDataTypeCV"="Parameter"'
+            else:
+                sql = 'SELECT "ResourceTypes"."ResourceType", ObjectType,AttributeName, SourceName, InstanceName,MasterNetworkName,' \
+                      'ScenarioName,MethodName, NumericValue ' \
+                    'FROM "ResourceTypes" '\
+                    'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+                    'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+                    'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                    'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+                    'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                    'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+                    'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+                    'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                    'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                    'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+                    'LEFT JOIN "NumericValues" ON "NumericValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                    'WHERE "AttributeDataTypeCV"="Parameter" AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
+                    .format(selectedType, selectedInstance, selectedAttribute)
 
             result = self.session.execute(sql)
             # nameResult = list()
@@ -236,61 +274,86 @@ class GetDataValues(object):
                 complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName,
                                         row.AttributeName, row.SourceName, row.MethodName,
                                         row.NumericValue])
-            if complete_result.__len__() > 0:
-                self.isMatching_query(complete_result, "Parameter")
-                self.write2excel(complete_result, '4_Parameter', 10, 10, excelPath)
-        except Exception as  e:
-            print e
-            raise Exception('Erro occure in reading Data Structure.\n' + e.message)
-    def exportElectronicFilesSheet(self, selectedType, selectedAttribute, selectedInstance, excelPath):
-        '''
-        This method is used to get data making ElectronicFiles_table.
-        :param selectedType: selected Object Type
-        :param selectedAttribute: controlled Attribute
-        :param selectedInstance: controlled Instance Name
-        :param excelPath: full path of excel file to export data
-        :return: None
-        '''
-        try:
-            sql = 'SELECT ObjectType, AttributeName, SourceName, InstanceName,MasterNetworkName,' \
-                  'ScenarioName,MethodName,FileName, ElectronicFileFormatCV, "File"."Description" ' \
-                'FROM "ResourceTypes" '\
-                'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
-                'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
-                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
-                'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
-                'LEFT JOIN "File" ON "File"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
-                'Left JOIN "CV_ElectronicFormat" ON "CV_ElectronicFormat"."Name"="File"."ElectronicFileFormatCV" '\
-                'WHERE "AttributeDataTypeCV"="File" AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
-                .format(selectedType, selectedInstance, selectedAttribute)
+            if excelPath != '':
+                if complete_result.__len__() > 0:
+                    self.isMatching_query(complete_result, "Parameter")
+                    self.write2excel(complete_result, '4_Parameter', 10, 10, excelPath)
 
-            result = self.session.execute(sql)
-            # nameResult = list()
-            complete_result = list()
-            for row in result:
-                # isExisting = False
-                # for name in nameResult:
-                #     if name == row.InstanceName:
-                #         isExisting = True
-                #         break
-                # if not isExisting:
-                #     nameResult.append(row.InstanceName)
-                complete_result.append([row.InstanceName, row.ScenarioName,
-                                        row.AttributeName, row.SourceName, row.MethodName,
-                                        row.FileName, row.ElectronicFileFormatCV, excelPath, row.Description])
-            if complete_result.__len__() > 0:
-                self.isMatching_query(complete_result, "ElectronicFiles")
-                self.write2excel(complete_result, '4_ElectronicFiles', 14, 10, excelPath)
+            return complete_result
         except Exception as  e:
             print e
             raise Exception('Erro occure in reading Data Structure.\n' + e.message)
-    def exportSeasonalSheet(self, selectedType, selectedAttribute, selectedInstance, excelPath):
+    # def exportElectronicFilesSheet(self, selectedType='', selectedAttribute='', selectedInstance='', excelPath=''):
+    #     '''
+    #     This method is used to get data making ElectronicFiles_table.
+    #     :param selectedType: selected Object Type
+    #     :param selectedAttribute: controlled Attribute
+    #     :param selectedInstance: controlled Instance Name
+    #     :param excelPath: full path of excel file to export data
+    #     :return: None
+    #     '''
+    #     try:
+    #         if selectedType == '' and selectedAttribute == '' and selectedInstance == '':
+    #             sql = 'SELECT ObjectType, AttributeName, SourceName, InstanceName,MasterNetworkName,' \
+    #                   'ScenarioName,MethodName,FileName, ElectronicFileFormatCV, "File"."Description" ' \
+    #                 'FROM "ResourceTypes" '\
+    #                 'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+    #                 'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+    #                 'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+    #                 'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+    #                 'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+    #                 'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+    #                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+    #                 'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+    #                 'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+    #                 'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+    #                 'LEFT JOIN "File" ON "File"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+    #                 'Left JOIN "CV_ElectronicFormat" ON "CV_ElectronicFormat"."Name"="File"."ElectronicFileFormatCV" '\
+    #                 'WHERE "AttributeDataTypeCV"="File"'
+    #         else:
+    #             sql = 'SELECT ObjectType, AttributeName, SourceName, InstanceName,MasterNetworkName,' \
+    #                   'ScenarioName,MethodName,FileName, ElectronicFileFormatCV, "File"."Description" ' \
+    #                 'FROM "ResourceTypes" '\
+    #                 'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+    #                 'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+    #                 'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+    #                 'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+    #                 'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+    #                 'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+    #                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+    #                 'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+    #                 'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+    #                 'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+    #                 'LEFT JOIN "File" ON "File"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+    #                 'Left JOIN "CV_ElectronicFormat" ON "CV_ElectronicFormat"."Name"="File"."ElectronicFileFormatCV" '\
+    #                 'WHERE "AttributeDataTypeCV"="File" AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
+    #                 .format(selectedType, selectedInstance, selectedAttribute)
+    #
+    #         result = self.session.execute(sql)
+    #         # nameResult = list()
+    #         complete_result = list()
+    #         for row in result:
+    #             # isExisting = False
+    #             # for name in nameResult:
+    #             #     if name == row.InstanceName:
+    #             #         isExisting = True
+    #             #         break
+    #             # if not isExisting:
+    #             #     nameResult.append(row.InstanceName)
+    #             complete_result.append([row.InstanceName, row.ScenarioName,
+    #                                     row.AttributeName, row.SourceName, row.MethodName,
+    #                                     row.FileName, row.ElectronicFileFormatCV, excelPath, row.Description])
+    #
+    #         if excelPath != '':
+    #             if complete_result.__len__() > 0:
+    #                 self.isMatching_query(complete_result, "ElectronicFiles")
+    #                 self.write2excel(complete_result, '4_ElectronicFiles', 14, 10, excelPath)
+    #         return complete_result
+    #     except Exception as  e:
+    #         print e
+    #         return []
+    #         # raise Exception('Erro occure in reading Data Structure.\n' + e.message)
+    def exportSeasonalSheet(self, selectedType='', selectedAttribute='', selectedInstance='', excelPath=''):
         '''
         This method is used to get data making SeasonalNumericValues_table.
         :param selectedType: selected Object Type
@@ -300,8 +363,24 @@ class GetDataValues(object):
         :return: None
         '''
         try:
-            sql = 'SELECT ObjectType, AttributeName, SourceName, InstanceName,MasterNetworkName,' \
-                  'ScenarioName,MethodName,SeasonName, SeasonValue, SeasonNameCV ' \
+            if selectedType == '' and selectedAttribute == '' and selectedInstance == '':
+                sql = 'SELECT ObjectType, AttributeName, SourceName, InstanceName,MasterNetworkName,' \
+                      'ScenarioName,MethodName,SeasonName, SeasonNumericValue, SeasonNameCV ' \
+                    'FROM "Attributes" '\
+                    'Left JOIN "ObjectTypes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+                    'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                    'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+                    'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                    'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+                    'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+                    'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                    'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                    'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+                    'LEFT JOIN "SeasonalNumericValues" ON "SeasonalNumericValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                    'WHERE "AttributeDataTypeCV"="SeasonalNumericValues"'
+            else:
+                sql = 'SELECT ObjectType, AttributeName, SourceName, InstanceName,MasterNetworkName,' \
+                  'ScenarioName,MethodName,SeasonName, SeasonNumericValue, SeasonNameCV ' \
                 'FROM "Attributes" '\
                 'Left JOIN "ObjectTypes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
                 'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
@@ -312,8 +391,8 @@ class GetDataValues(object):
                 'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
                 'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
                 'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
-                'LEFT JOIN "SeasonalParameters" ON "SeasonalParameters"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
-                'WHERE "AttributeDataTypeCV"="SeasonalParameter" AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
+                'LEFT JOIN "SeasonalNumericValues" ON "SeasonalNumericValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                'WHERE "AttributeDataTypeCV"="SeasonalNumericValues" AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
                 .format(selectedType, selectedInstance, selectedAttribute)
 
             result = self.session.execute(sql)
@@ -329,14 +408,16 @@ class GetDataValues(object):
                 #     nameResult.append(row.InstanceName)
                 complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName,
                                         row.AttributeName, row.SourceName, row.MethodName,
-                                        row.SeasonName, row.SeasonNameCV, row.SeasonValue])
-            if complete_result.__len__() > 0:
-                self.isMatching_query(complete_result, "SeasonalParameter")
-                self.write2excel(complete_result, '4_SeasonaNumericValues', 11, 10, excelPath)
+                                        row.SeasonName, row.SeasonNameCV, row.SeasonNumericValue])
+            if excelPath != '':
+                if complete_result.__len__() > 0:
+                    self.isMatching_query(complete_result, "SeasonaNumericValues")
+                    self.write2excel(complete_result, '4_SeasonaNumericValues', 11, 10, excelPath)
+            return complete_result
         except Exception as  e:
             print e
             raise Exception('Erro occure in reading Data Structure.\n' + e.message)
-    def exportTimeSeriesSheet(self, selectedType, selectedAttribute, selectedInstance, excelPath):
+    def exportTimeSeriesSheet(self, selectedType='', selectedAttribute='', selectedInstance='', excelPath=''):
         '''
         This method is used to get data making TimeSeries_table.
         :param selectedType: selected Object Type
@@ -346,24 +427,42 @@ class GetDataValues(object):
         :return: None
         '''
         try:
-            sql = 'SELECT DatasetName ObjectType, AttributeName, SourceName, InstanceName,WaterOrCalendarYear,' \
-                  'ScenarioName,MethodName,AggregationStatisticCV, AggregationInterval, IntervalTimeUnitCV,' \
-                  'IsRegular, NoDataValue, "TimeSeries"."Description" ' \
-                'FROM "ResourceTypes" '\
-                'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
-                'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
-                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
-                'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
-                'LEFT JOIN "TimeSeries" ON "TimeSeries"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
-                'WHERE AttributeName!="ObjectInstances"  AND AttributeDataTypeCV="TimeSeries" ' \
-                  ' AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
-                .format(selectedType, selectedInstance, selectedAttribute)
+            if selectedType == '' and selectedAttribute == '' and selectedInstance == '':
+                sql = 'SELECT ResourceType ObjectType, AttributeName, SourceName, InstanceName,YearType,' \
+                      'ScenarioName,MethodName,AggregationStatisticCV, AggregationInterval, IntervalTimeUnitCV,' \
+                      'IsRegular, NoDataValue, "TimeSeries"."Description" ' \
+                    'FROM "ResourceTypes" '\
+                    'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+                    'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+                    'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                    'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+                    'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                    'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+                    'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+                    'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                    'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                    'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+                    'LEFT JOIN "TimeSeries" ON "TimeSeries"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                    'WHERE AttributeName!="ObjectInstances"  AND AttributeDataTypeCV="TimeSeries" '
+            else:
+                sql = 'SELECT ResourceType ObjectType, AttributeName, SourceName, InstanceName,YearType,' \
+                      'ScenarioName,MethodName,AggregationStatisticCV, AggregationInterval, IntervalTimeUnitCV,' \
+                      'IsRegular, NoDataValue, "TimeSeries"."Description" ' \
+                    'FROM "ResourceTypes" '\
+                    'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+                    'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+                    'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                    'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+                    'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                    'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+                    'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+                    'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                    'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                    'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+                    'LEFT JOIN "TimeSeries" ON "TimeSeries"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                    'WHERE AttributeName!="ObjectInstances"  AND AttributeDataTypeCV="TimeSeries" ' \
+                      ' AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
+                    .format(selectedType, selectedInstance, selectedAttribute)
 
             result = self.session.execute(sql)
             # nameResult = list()
@@ -378,18 +477,19 @@ class GetDataValues(object):
                 #     nameResult.append(row.InstanceName)
                 complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName,
                                         row.AttributeName, row.SourceName, row.MethodName,
-                                        row.WaterOrCalendarYear, row.AggregationStatisticCV, row.AggregationInterval,
-                                        row.IntervalTimeUnit, row.IsRegular, row.NoDataValue, row.Description])
-
-            if complete_result.__len__() > 0:
-                self.isMatching_query(complete_result, "TimeSeries")
-                self.write2excel(complete_result, '4_TimeSeries', 15, 10, excelPath)
+                                        row.YearType, row.AggregationStatisticCV, row.AggregationInterval,
+                                        row.IntervalTimeUnitCV, row.IsRegular, row.NoDataValue, row.Description])
+            if excelPath != '':
+                if complete_result.__len__() > 0:
+                    self.isMatching_query(complete_result, "TimeSeries")
+                    self.write2excel(complete_result, '4_TimeSeries', 15, 10, excelPath)
+            return complete_result
         except Exception as  e:
             print e
             raise Exception('Erro occure in reading Data Structure.\n' + e.message)
-    def exportTextFreeSheet(self, selectedType, selectedAttribute, selectedInstance, excelPath):
+    def exportFreeTextSheet(self, selectedType='', selectedAttribute='', selectedInstance='', excelPath=''):
         '''
-        This method is used to get data making TextFreeSheet.
+        This method is used to get data making FreeTextSheet.
         :param selectedType: selected Object Type
         :param selectedAttribute: controlled Attribute
         :param selectedInstance: controlled Instance Name
@@ -397,23 +497,40 @@ class GetDataValues(object):
         :return: None
         '''
         try:
-            sql = 'SELECT DatasetName ObjectType, AttributeName, SourceName, InstanceName,TextFreeValue,' \
-                  'ScenarioName,MethodName ' \
-                'FROM "ResourceTypes" '\
-                'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
-                'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
-                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
-                'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
-                'LEFT JOIN "TextFree" ON "TextFree"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
-                'WHERE AttributeDataTypeCV="TextFree" ' \
-                  ' AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
-                .format(selectedType, selectedInstance, selectedAttribute)
+            if selectedType == '' and selectedAttribute == ''and selectedInstance == '':
+                sql = 'SELECT ResourceType, ObjectType, AttributeName, SourceName, InstanceName,FreeTextValue,' \
+                      'ScenarioName,MethodName ' \
+                    'FROM "ResourceTypes" '\
+                    'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+                    'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+                    'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                    'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+                    'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                    'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+                    'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+                    'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                    'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                    'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+                    'LEFT JOIN "FreeText" ON "FreeText"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                    'WHERE AttributeDataTypeCV="FreeText" '
+            else:
+                sql = 'SELECT ResourceType, ObjectType, AttributeName, SourceName, InstanceName,FreeTextValue,' \
+                      'ScenarioName,MethodName ' \
+                    'FROM "ResourceTypes" '\
+                    'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+                    'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+                    'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                    'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+                    'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                    'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+                    'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+                    'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                    'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                    'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+                    'LEFT JOIN "FreeText" ON "FreeText"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                    'WHERE AttributeDataTypeCV="FreeText" ' \
+                      ' AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "AttributeNameCV" = "{}"'\
+                    .format(selectedType, selectedInstance, selectedAttribute)
 
             result = self.session.execute(sql)
             # nameResult = list()
@@ -427,14 +544,16 @@ class GetDataValues(object):
                 # if not isExisting:
                 #     nameResult.append(row.InstanceName)
                 complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName,
-                                        row.AttributeName, row.SourceName, row.MethodName,row.TextFreeValue])
-            if complete_result.__len__() > 0:
-                self.isMatching_query(complete_result, "TextFree")
-                self.write2excel(complete_result, '4_TextFree', 12, 10, excelPath)
+                                        row.AttributeName, row.SourceName, row.MethodName,row.FreeTextValue])
+            if excelPath != '':
+                if complete_result.__len__() > 0:
+                    self.isMatching_query(complete_result, "FreeText")
+                    self.write2excel(complete_result, '4_FreeText', 12, 10, excelPath)
+            return complete_result
         except Exception as  e:
             print e
             raise Exception('Erro occure in reading Data Structure.\n' + e.message)
-    def exportMultiSheet(self, selectedType, selectedAttribute, selectedInstance, excelPath):
+    def exportMultiSheet(self, selectedType='', selectedAttribute='', selectedInstance='', excelPath=''):
         '''
         This method is used to get data making MultiAttributeSeries_table.
         :param selectedType: selected Object Type
@@ -444,28 +563,178 @@ class GetDataValues(object):
         :return: None
         '''
         try:
-            sql = 'SELECT "ObjectTypes"."ObjectType", "Attributes"."AttributeName", SourceName, InstanceName,' \
-                  'ScenarioName,MethodName, "AttributesColumns"."AttributeName" AS "ColumName", "AttributesColumns"."UnitNameCV" AS "ColUnitName", "Value","ValueOrder" '\
-                'FROM "ResourceTypes" '\
-                'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
-                'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
-                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
-                'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
-                'Left JOIN "MultiAttributeSeries" ON "MultiAttributeSeries"."ValuesMapperID"="ValuesMapper"."ValuesMapperID" '\
-                'Left JOIN "ValuesMapper" As "ValuesMapperColumn" ON "ValuesMapperColumn"."ValuesMapperID"="MultiAttributeSeries"."AttriNameID" '\
-                'Left JOIN "Mappings" As "MappingColumns" ON "MappingColumns"."ValuesMapperID"="ValuesMapperColumn"."ValuesMapperID" '\
-                'Left JOIN "Attributes" AS "AttributesColumns" ON "AttributesColumns"."AttributeID"="MappingColumns"."AttributeID" '\
-                'Left JOIN "MultiAttributeSeriesValues" ON "MultiAttributeSeriesValues"."MultiAttributeSeriesID"="MultiAttributeSeries"."MultiAttributeSeriesID" '\
-                'WHERE Attributes.AttributeDataTypeCV="MultiAttributeSeries" '\
-                'AND "ObjectTypeCV" = "{}" AND "InstanceNameCV" = "{}" AND "Attributes"."AttributeNameCV" = "{}"'\
-                'Order By ScenarioName, AttributeName,ValueOrder asc '\
-                .format(selectedType, selectedInstance, selectedAttribute)
+            if selectedType == '' and selectedInstance == '' and selectedAttribute == '':
+                sql ="""
+                    SELECT "ObjectTypes"."ObjectType",
+                    "Instances"."InstanceName",ScenarioName,"Attributes"."AttributeName" AS MultiAttributeName,"Attributes".AttributeDataTypeCV,
+                    SourceName,MethodName,
+                    "AttributesColumns"."AttributeName" AS "AttributeName",
+                    "AttributesColumns"."AttributeNameCV",
+                    "AttributesColumns"."UnitNameCV" AS "AttributeNameUnitName",
+                    "ValueOrder","DataValue"
+
+                    FROM ResourceTypes
+
+                    Left JOIN "ObjectTypes"
+                    ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID"
+
+                    -- Join the Object types to get their attributes
+                    LEFT JOIN  "Attributes"
+                    ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID"
+
+                    -- Join the Attributes to get their Mappings
+                    LEFT JOIN "Mappings"
+                    ON Mappings.AttributeID= Attributes.AttributeID
+
+                    -- Join the Mappings to get their Instances
+                    LEFT JOIN "Instances"
+                    ON "Instances"."InstanceID"="Mappings"."InstanceID"
+
+                    -- Join the Mappings to get their ScenarioMappings
+                    LEFT JOIN "ScenarioMappings"
+                    ON "ScenarioMappings"."MappingID"="Mappings"."MappingID"
+
+                    -- Join the ScenarioMappings to get their Scenarios
+                    LEFT JOIN "Scenarios"
+                    ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID"
+
+
+                    -- Join the Scenarios to get their MasterNetworks
+                    LEFT JOIN "MasterNetworks"
+                    ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID"
+
+                    -- Join the Mappings to get their Methods
+                    LEFT JOIN "Methods"
+                    ON "Methods"."MethodID"="Mappings"."MethodID"
+
+                    -- Join the Mappings to get their Sources
+                    LEFT JOIN "Sources"
+                    ON "Sources"."SourceID"="Mappings"."SourceID"
+
+                    -- Join the Mappings to get their DataValuesMappers
+                    LEFT JOIN "ValuesMapper"
+                    ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID"
+
+                    -- Join the DataValuesMapper to get their MultiAttributeSeries
+                    LEFT JOIN "MultiAttributeSeries"
+                    ON "MultiAttributeSeries" ."ValuesMapperID"="ValuesMapper"."ValuesMapperID"
+
+
+                    /*This is an extra join to get to each column name within the MultiColumn Array */
+
+                    -- Join the MultiAttributeSeries to get to their specific DataValuesMapper, now called DataValuesMapperColumn
+                    LEFT JOIN "ValuesMapper" As "ValuesMapperColumn"
+                    ON "ValuesMapperColumn"."ValuesMapperID"="MultiAttributeSeries"."MappingID_Attribute"
+
+                    -- Join the DataValuesMapperColumn to get back to their specific Mapping, now called MappingColumns
+                    LEFT JOIN "Mappings" As "MappingColumns"
+                    ON "MappingColumns"."ValuesMapperID"="ValuesMapperColumn"."ValuesMapperID"
+
+                    -- Join the MappingColumns to get back to their specific Attribute, now called AttributeColumns
+                    LEFT JOIN  "Attributes" AS "AttributesColumns"
+                    ON "AttributesColumns"."AttributeID"="MappingColumns"."AttributeID"
+                    /* Finishes here */
+
+                    -- Join the MultiAttributeSeries to get access to their MultiAttributeSeriesValues
+                    LEFT JOIN "MultiAttributeSeriesValues"
+                    ON "MultiAttributeSeriesValues"."MultiAttributeSeriesID"="MultiAttributeSeries"."MultiAttributeSeriesID"
+
+                    -- Select one InstanceName and restrict the query AttributeDataTypeCV that is MultiAttributeSeries
+                    WHERE
+                    "Attributes".AttributeDataTypeCV='MultiAttributeSeries'
+
+
+                    Order By ScenarioName, AttributeName,ValueOrder asc
+
+                    """
+            else:
+                sql ="""
+                    SELECT "ObjectTypes"."ObjectType",
+                    "Instances"."InstanceName",ScenarioName,"Attributes"."AttributeName" AS MultiAttributeName,"Attributes".AttributeDataTypeCV,
+                    SourceName,MethodName,
+                    "AttributesColumns"."AttributeName" AS "AttributeName",
+                    "AttributesColumns"."AttributeNameCV",
+                    "AttributesColumns"."UnitNameCV" AS "AttributeNameUnitName",
+                    "ValueOrder","DataValue"
+
+                    FROM ResourceTypes
+
+                    Left JOIN "ObjectTypes"
+                    ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID"
+
+                    -- Join the Object types to get their attributes
+                    LEFT JOIN  "Attributes"
+                    ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID"
+
+                    -- Join the Attributes to get their Mappings
+                    LEFT JOIN "Mappings"
+                    ON Mappings.AttributeID= Attributes.AttributeID
+
+                    -- Join the Mappings to get their Instances
+                    LEFT JOIN "Instances"
+                    ON "Instances"."InstanceID"="Mappings"."InstanceID"
+
+                    -- Join the Mappings to get their ScenarioMappings
+                    LEFT JOIN "ScenarioMappings"
+                    ON "ScenarioMappings"."MappingID"="Mappings"."MappingID"
+
+                    -- Join the ScenarioMappings to get their Scenarios
+                    LEFT JOIN "Scenarios"
+                    ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID"
+
+
+                    -- Join the Scenarios to get their MasterNetworks
+                    LEFT JOIN "MasterNetworks"
+                    ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID"
+
+                    -- Join the Mappings to get their Methods
+                    LEFT JOIN "Methods"
+                    ON "Methods"."MethodID"="Mappings"."MethodID"
+
+                    -- Join the Mappings to get their Sources
+                    LEFT JOIN "Sources"
+                    ON "Sources"."SourceID"="Mappings"."SourceID"
+
+                    -- Join the Mappings to get their DataValuesMappers
+                    LEFT JOIN "ValuesMapper"
+                    ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID"
+
+                    -- Join the DataValuesMapper to get their MultiAttributeSeries
+                    LEFT JOIN "MultiAttributeSeries"
+                    ON "MultiAttributeSeries" ."ValuesMapperID"="ValuesMapper"."ValuesMapperID"
+
+
+                    /*This is an extra join to get to each column name within the MultiColumn Array */
+
+                    -- Join the MultiAttributeSeries to get to their specific DataValuesMapper, now called DataValuesMapperColumn
+                    LEFT JOIN "ValuesMapper" As "ValuesMapperColumn"
+                    ON "ValuesMapperColumn"."ValuesMapperID"="MultiAttributeSeries"."MappingID_Attribute"
+
+                    -- Join the DataValuesMapperColumn to get back to their specific Mapping, now called MappingColumns
+                    LEFT JOIN "Mappings" As "MappingColumns"
+                    ON "MappingColumns"."ValuesMapperID"="ValuesMapperColumn"."ValuesMapperID"
+
+                    -- Join the MappingColumns to get back to their specific Attribute, now called AttributeColumns
+                    LEFT JOIN  "Attributes" AS "AttributesColumns"
+                    ON "AttributesColumns"."AttributeID"="MappingColumns"."AttributeID"
+                    /* Finishes here */
+
+                    -- Join the MultiAttributeSeries to get access to their MultiAttributeSeriesValues
+                    LEFT JOIN "MultiAttributeSeriesValues"
+                    ON "MultiAttributeSeriesValues"."MultiAttributeSeriesID"="MultiAttributeSeries"."MultiAttributeSeriesID"
+
+                    -- Select one InstanceName and restrict the query AttributeDataTypeCV that is MultiAttributeSeries
+                    WHERE
+                    "Attributes".AttributeDataTypeCV='MultiAttributeSeries'
+                    AND "ObjectTypeCV"="{}"
+                    AND "InstanceNameCV"= "{}"
+                    AND "Attributes"."AttributeNameCV" ="{}"
+
+
+                    Order By ScenarioName, AttributeName,ValueOrder asc
+
+                    """.format(selectedType, selectedInstance, selectedAttribute)
+
 
             result = self.session.execute(sql)
 
@@ -480,87 +749,159 @@ class GetDataValues(object):
             currentrow = 0
             setNumber = 0
             for row in result:
-                if row.ColumName == None or row.ColumName == "":
+                if row.MultiAttributeName == None or row.MultiAttributeName == "":
                     continue
-                if strAtrributName != row.AttributeName:
-                    strAtrributName = row.AttributeName
-                    tempColumn[row.AttributeName] = []
-                    tempColumn[row.AttributeName].append(row.ColumName)
-                    columnName = row.ColumName
+                if strAtrributName != row.MultiAttributeName:
+                    strAtrributName = row.MultiAttributeName
+                    tempColumn[row.MultiAttributeName] = []
+                    tempColumn[row.MultiAttributeName].append(row.MultiAttributeName)
+                    columnName = row.MultiAttributeName
                 if sourceName != row.ScenarioName:
                     sourceName = row.ScenarioName
                     setNumber = i
                     currentrow = 0
-                if columnName != row.ColumName:
-                    columnName = row.ColumName
+                if columnName != row.MultiAttributeName:
+                    columnName = row.MultiAttributeName
                     currentrow = 0
 
-                if row.ColumName in tempColumn[row.AttributeName]:
-                    index = tempColumn[row.AttributeName].index(row.ColumName)
+                if row.MultiAttributeName in tempColumn[row.MultiAttributeName]:
+                    index = tempColumn[row.MultiAttributeName].index(row.MultiAttributeName)
                     if index == 0:
-                        complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName, row.AttributeName, row.SourceName,
-                                        row.MethodName, row.Value])
+                        complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName, row.MultiAttributeName, row.SourceName,
+                                        row.MethodName, row.DataValue])
                         i += 1
                     else:
-                        complete_result[setNumber + currentrow].append(row.Value)
+                        complete_result[setNumber + currentrow].append(row.DataValue)
                         currentrow += 1
                 else:
                     currentrow = 0
-                    tempColumn[row.AttributeName].append(row.ColumName)
-                    index = tempColumn[row.AttributeName].index(row.ColumName)
+                    tempColumn[row.MultiAttributeName].append(row.MultiAttributeName)
+                    index = tempColumn[row.MultiAttributeName].index(row.MultiAttributeName)
                     if index == 0:
-                        complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName, row.AttributeName, row.SourceName,
-                                        row.MethodName, row.Value])
+                        complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName, row.MultiAttributeName, row.SourceName,
+                                        row.MethodName, row.DataValue])
                         i += 1
                     else:
-                        complete_result[setNumber + currentrow].append(row.Value)
+                        complete_result[setNumber + currentrow].append(row.DataValue)
                         currentrow += 1
-            if complete_result.__len__() > 0:
-                self.isMatching_query(complete_result, "MultiVariableSeries")
-                self.write2excel(complete_result, '4_MultiVariableSeries', 17, 15, excelPath)
+            if excelPath != '':
+                if complete_result.__len__() > 0:
+                    self.isMatching_query(complete_result, "MultiVariableSeries")
+                    self.write2excel(complete_result, '4_MultiVariableSeries', 17, 15, excelPath)
+            # return complete_result
 
-            '''Up Table(AttributeName_column Table) write'''
-            column_result = list()
+            bottom_table_result = complete_result
+
+            '''Up Table(MultiAttributeName_column Table) write'''
+            up_table_column_result = list()
             for key, columnItems in tempColumn.items():
                 temList = list()
                 temList.append(key)
                 for item in columnItems:
                     temList.append(item)
-                column_result.append(temList)
+                up_table_column_result.append(temList)
             if complete_result.__len__() > 0:
-                self.write2excel(column_result, '4_MultiAttributeSeries', 17, 5, excelPath, 5)
+                self.write2excel(up_table_column_result, '4_MultiAttributeSeries', 17, 5, excelPath, 5)
+            return up_table_column_result, bottom_table_result
 
         except Exception as  e:
             print e
             raise Exception('Erro occure in reading Data Structure.\n' + e.message)
 
-    def exportDualValuesSheet1(self, selectedDataset, selectedNetwork, selectedScenarior, excelPath):
+    # def exportDualValuesSheet1(self, selectedResourceType, selectedNetwork, selectedScenarior, excelPath):
+    #     '''
+    #     This method is used to get data making DualValues_table.
+    #     :param selectedResourceType: selected Model name
+    #     :param selectedNetwork: selected Master Network name
+    #     :param selectedScenarior: selected scenario Name
+    #     :param excelPath: full path of excel file to export data
+    #     :return: None
+    #     '''
+    #     try:
+    #
+    #         sql = 'SELECT AttributeName, SourceName, InstanceName,MasterNetworkName,ScenarioName,MethodName,dualvaluemeaningCV ' \
+    #             'FROM "ResourceTypes" '\
+    #             'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+    #             'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+    #             'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+    #             'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+    #             'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+    #             'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+    #             'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+    #             'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+    #             'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+    #             'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+    #             'LEFT JOIN "DualValues" ON "DualValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+    #             'LEFT JOIN "CV_DualValueMeaning" ON "CV_DualValueMeaning"."Name"= "DualValues"."dualvaluemeaningCV" '\
+    #             'WHERE "Attributes"."AttributeDataTypeCV"="DualValues" AND "ResourceTypes"."ResourceTypeAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
+    #             .format(selectedResourceType, selectedNetwork, selectedScenarior)
+    #
+    #         result = self.session.execute(sql)
+    #         # nameResult = list()
+    #         complete_result = list()
+    #         for row in result:
+    #             # isExisting = False
+    #             # for name in nameResult:
+    #             #     if name == row.InstanceName:
+    #             #         isExisting = True
+    #             #         break
+    #             # if not isExisting:
+    #             #     nameResult.append(row.InstanceName)
+    #             complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName,
+    #                                     row.AttributeName, row.SourceName, row.MethodName,
+    #                                     row.dualvaluemeaningCV])
+    #         if complete_result.__len__() > 0:
+    #             self.isMatching_query(complete_result, "DualValues")
+    #             self.write2excel(complete_result, '4_DualValues', 9, 10, excelPath)
+    #     except Exception as  e:
+    #         print e
+    #         raise Exception('Error occurred in reading Data Structure.\n' + e.message)
+
+    def exportTextConrolledSheet1(self, selectedResourceType='', selectedNetwork='', selectedScenarior='', excelPath=''):
         '''
-        This method is used to get data making DualValues_table.
-        :param selectedDataset: selected Model name
+        This method is used to get data making CategoricalValues_table.
+        :param selectedResourceType: selected Model name
         :param selectedNetwork: selected Master Network name
         :param selectedScenarior: selected scenario Name
         :param excelPath: full path of excel file to export data
         :return: None
         '''
         try:
-
-            sql = 'SELECT AttributeName, SourceName, InstanceName,MasterNetworkName,ScenarioName,MethodName,dualvaluemeaningCV ' \
-                'FROM "ResourceTypes" '\
-                'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
-                'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
-                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
-                'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
-                'LEFT JOIN "DualValues" ON "DualValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
-                'LEFT JOIN "CV_DualValueMeaning" ON "CV_DualValueMeaning"."Name"= "DualValues"."dualvaluemeaningCV" '\
-                'WHERE "Attributes"."AttributeDataTypeCV"="DualValues" AND "ResourceTypes"."DatasetAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
-                .format(selectedDataset, selectedNetwork, selectedScenarior)
+            if selectedResourceType == '' and selectedNetwork == '' and selectedScenarior == '':
+                sql = 'SELECT Attributes.AttributeName, ObjectType, SourceName, InstanceName,MasterNetworkName,' \
+                      'ScenarioName,MethodName,CategoricalValueCV ' \
+                    'FROM "ResourceTypes" '\
+                    'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+                    'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+                    'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                    'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+                    'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                    'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+                    'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+                    'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                    'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                    'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+                    'LEFT JOIN "CategoricalValues" ON "CategoricalValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                    'LEFT JOIN "CV_Categorical" ON "CV_Categorical"."Name"= "CategoricalValues"."CategoricalValueCV" '\
+                    'WHERE "Attributes"."AttributeDataTypeCV"="CategoricalValues"'
+            else:
+                sql = 'SELECT Attributes.AttributeName, ObjectType, SourceName, InstanceName,MasterNetworkName,' \
+                      'ScenarioName,MethodName,CategoricalValueCV ' \
+                    'FROM "ResourceTypes" '\
+                    'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+                    'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+                    'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                    'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+                    'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                    'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+                    'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+                    'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                    'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                    'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+                    'LEFT JOIN "CategoricalValues" ON "CategoricalValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                    'LEFT JOIN "CV_Categorical" ON "CV_Categorical"."Name"= "CategoricalValues"."CategoricalValueCV" '\
+                    'WHERE "Attributes"."AttributeDataTypeCV"="CategoricalValues" AND "ResourceTypes"."ResourceTypeAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
+                    .format(selectedResourceType, selectedNetwork, selectedScenarior)
 
             result = self.session.execute(sql)
             # nameResult = list()
@@ -575,88 +916,58 @@ class GetDataValues(object):
                 #     nameResult.append(row.InstanceName)
                 complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName,
                                         row.AttributeName, row.SourceName, row.MethodName,
-                                        row.dualvaluemeaningCV])
-            if complete_result.__len__() > 0:
-                self.isMatching_query(complete_result, "DualValues")
-                self.write2excel(complete_result, '4_DualValues', 9, 10, excelPath)
+                                        row.CategoricalValueCV])
+            if excelPath != '':
+                if complete_result.__len__() > 0:
+                    self.isMatching_query(complete_result, "CategoricalValues")
+                    self.write2excel(complete_result, '4_CategoricalValues', 13, 10, excelPath)
+            return complete_result
         except Exception as  e:
-            print e
-            raise Exception('Error occurred in reading Data Structure.\n' + e.message)
+            raise Exception('Error occured in reading Data Structure.\n' + e.message)
 
-    def exportTextConrolledSheet1(self, selectedDataset, selectedNetwork, selectedScenarior, excelPath):
-        '''
-        This method is used to get data making DescriptorValues_table.
-        :param selectedDataset: selected Model name
-        :param selectedNetwork: selected Master Network name
-        :param selectedScenarior: selected scenario Name
-        :param excelPath: full path of excel file to export data
-        :return: None
-        '''
-        try:
-            sql = 'SELECT Attributes.AttributeName, ObjectType, SourceName, InstanceName,MasterNetworkName,' \
-                  'ScenarioName,MethodName,descriptorvalueCV ' \
-                'FROM "ResourceTypes" '\
-                'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
-                'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
-                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
-                'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
-                'LEFT JOIN "DescriptorValues" ON "DescriptorValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
-                'LEFT JOIN "CV_DescriptorValues" ON "CV_DescriptorValues"."Name"= "DescriptorValues"."descriptorvalueCV" '\
-                'WHERE "Attributes"."AttributeDataTypeCV"="DescriptorValues" AND "ResourceTypes"."DatasetAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
-                .format(selectedDataset, selectedNetwork, selectedScenarior)
-
-            result = self.session.execute(sql)
-            # nameResult = list()
-            complete_result = list()
-            for row in result:
-                # isExisting = False
-                # for name in nameResult:
-                #     if name == row.InstanceName:
-                #         isExisting = True
-                #         break
-                # if not isExisting:
-                #     nameResult.append(row.InstanceName)
-                complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName,
-                                        row.AttributeName, row.SourceName, row.MethodName,
-                                        row.descriptorvalueCV])
-            if complete_result.__len__() > 0:
-                self.isMatching_query(complete_result, "DescriptorValues")
-                self.write2excel(complete_result, '4_DescriptorValues', 13, 10, excelPath)
-        except Exception as  e:
-            raise Exception('Erro occure in reading Data Structure.\n' + e.message)
-
-    def exportNumericValuesheet1(self, selectedDataset, selectedNetwork, selectedScenarior, excelPath):
+    def exportNumericValuesheet1(self, selectedResourceType='', selectedNetwork='', selectedScenarior='', excelPath=''):
         '''
         This method is used to get data making Parameter.
-        :param selectedDataset: selected Model name
+        :param selectedResourceType: selected Model name
         :param selectedNetwork: selected Master Network name
         :param selectedScenarior: selected scenario Name
         :param excelPath: full path of excel file to export data
         :return: None
         '''
         try:
-            sql = 'SELECT "ResourceTypes"."DatasetName", ObjectType,AttributeName, SourceName, InstanceName,MasterNetworkName,' \
-                  'ScenarioName,MethodName, NumericValue ' \
-                'FROM "ResourceTypes" '\
-                'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
-                'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
-                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID"'\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
-                'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
-                'LEFT JOIN "NumericValues" ON "NumericValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
-                'WHERE "Attributes"."AttributeDataTypeCV"="Parameter" AND "ResourceTypes"."DatasetAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
-                .format(selectedDataset, selectedNetwork, selectedScenarior)
+            if selectedResourceType == '' and selectedNetwork == '' and selectedScenarior == '':
+                sql = 'SELECT "ResourceTypes"."ResourceType", ObjectType,AttributeName, SourceName, InstanceName,MasterNetworkName,' \
+                      'ScenarioName,MethodName, NumericValue ' \
+                    'FROM "ResourceTypes" '\
+                    'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+                    'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+                    'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                    'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+                    'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID"'\
+                    'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+                    'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+                    'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                    'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                    'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+                    'LEFT JOIN "NumericValues" ON "NumericValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                    'WHERE "Attributes"."AttributeDataTypeCV"="Parameter"'
+            else:
+                sql = 'SELECT "ResourceTypes"."ResourceType", ObjectType,AttributeName, SourceName, InstanceName,MasterNetworkName,' \
+                      'ScenarioName,MethodName, NumericValue ' \
+                    'FROM "ResourceTypes" '\
+                    'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+                    'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+                    'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                    'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+                    'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID"'\
+                    'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+                    'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+                    'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                    'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                    'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+                    'LEFT JOIN "NumericValues" ON "NumericValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                    'WHERE "Attributes"."AttributeDataTypeCV"="Parameter" AND "ResourceTypes"."ResourceTypeAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
+                    .format(selectedResourceType, selectedNetwork, selectedScenarior)
 
             result = self.session.execute(sql)
             # nameResult = list()
@@ -672,86 +983,124 @@ class GetDataValues(object):
                 complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName,
                                         row.AttributeName, row.SourceName, row.MethodName,
                                         row.NumericValue])
-            if complete_result.__len__() > 0:
-                self.isMatching_query(complete_result, "Parameter")
-                self.write2excel(complete_result, '4_Parameter', 10, 10, excelPath)
+            if excelPath != '':
+                if complete_result.__len__() > 0:
+                    self.isMatching_query(complete_result, "Parameter")
+                    self.write2excel(complete_result, '4_Parameter', 10, 10, excelPath)
+            return complete_result
         except Exception as  e:
             print e
-            raise Exception('Erro occure in reading Data Structure.\n' + e.message)
-    def exportElectronicFilesSheet1(self, selectedDataset, selectedNetwork, selectedScenarior, excelPath):
-        '''
-        This method is used to get data making ElectronicFiles.
-        :param selectedDataset: selected Model name
-        :param selectedNetwork: selected Master Network name
-        :param selectedScenarior: selected scenario Name
-        :param excelPath: full path of excel file to export data
-        :return: None
-        '''
-        try:
-            sql = 'SELECT ObjectType, AttributeName, SourceName, InstanceName,MasterNetworkName,' \
-                  'ScenarioName,MethodName,FileName, ElectronicFileFormatCV, "File"."Description" ' \
-                'FROM "ResourceTypes" '\
-                'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
-                'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
-                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
-                'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
-                'LEFT JOIN "Files" ON "File"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
-                'Left JOIN "CV_ElectronicFormat" ON "CV_ElectronicFormat"."Name"="File"."ElectronicFileFormatCV" '\
-                'WHERE "Attributes"."AttributeDataTypeCV"="File" AND "ResourceTypes"."DatasetAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
-                .format(selectedDataset, selectedNetwork, selectedScenarior)
-
-            result = self.session.execute(sql)
-            # nameResult = list()
-            complete_result = list()
-            for row in result:
-                # isExisting = False
-                # for name in nameResult:
-                #     if name == row.InstanceName:
-                #         isExisting = True
-                #         break
-                # if not isExisting:
-                #     nameResult.append(row.InstanceName)
-                complete_result.append([row.InstanceName, row.ScenarioName,
-                                        row.AttributeName, row.SourceName, row.MethodName,
-                                        row.FileName, row.ElectronicFileFormatCV, excelPath, row.Description])
-            if complete_result.__len__() > 0:
-                self.isMatching_query(complete_result, "ElectronicFiles")
-                self.write2excel(complete_result, '4_ElectronicFiles', 14, 10, excelPath)
-        except Exception as  e:
-            pass
-            # print e
-            # raise Exception('Erro occure in reading Data Structure.\n' + e.message)
-    def exportSeasonalSheet1(self, selectedDataset, selectedNetwork, selectedScenarior, excelPath):
+            raise Exception('Error occurer in reading Data Structure.\n' + e.message)
+    # def exportElectronicFilesSheet1(self, selectedResourceType='', selectedNetwork='', selectedScenarior='', excelPath=''):
+    #     '''
+    #     This method is used to get data making ElectronicFiles.
+    #     :param selectedResourceType: selected Model name
+    #     :param selectedNetwork: selected Master Network name
+    #     :param selectedScenarior: selected scenario Name
+    #     :param excelPath: full path of excel file to export data
+    #     :return: None
+    #     '''
+    #     try:
+    #         if selectedResourceType =='' and selectedNetwork == '' and selectedScenarior == '':
+    #             sql = 'SELECT ObjectType, AttributeName, SourceName, InstanceName,MasterNetworkName,' \
+    #                   'ScenarioName,MethodName,FileName, ElectronicFileFormatCV, "File"."Description" ' \
+    #                 'FROM "ResourceTypes" '\
+    #                 'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+    #                 'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+    #                 'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+    #                 'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+    #                 'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+    #                 'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+    #                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+    #                 'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+    #                 'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+    #                 'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+    #                 'LEFT JOIN "Files" ON "File"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+    #                 'Left JOIN "CV_ElectronicFormat" ON "CV_ElectronicFormat"."Name"="File"."ElectronicFileFormatCV" '\
+    #                 'WHERE "Attributes"."AttributeDataTypeCV"="File"'
+    #         else:
+    #             sql = 'SELECT ObjectType, AttributeName, SourceName, InstanceName,MasterNetworkName,' \
+    #                   'ScenarioName,MethodName,FileName, ElectronicFileFormatCV, "File"."Description" ' \
+    #                 'FROM "ResourceTypes" '\
+    #                 'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+    #                 'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+    #                 'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+    #                 'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+    #                 'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+    #                 'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+    #                 'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+    #                 'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+    #                 'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+    #                 'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+    #                 'LEFT JOIN "Files" ON "File"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+    #                 'Left JOIN "CV_ElectronicFormat" ON "CV_ElectronicFormat"."Name"="File"."ElectronicFileFormatCV" '\
+    #                 'WHERE "Attributes"."AttributeDataTypeCV"="File" AND "ResourceTypes"."ResourceTypeAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
+    #                 .format(selectedResourceType, selectedNetwork, selectedScenarior)
+    #
+    #         result = self.session.execute(sql)
+    #         # nameResult = list()
+    #         complete_result = list()
+    #         for row in result:
+    #             # isExisting = False
+    #             # for name in nameResult:
+    #             #     if name == row.InstanceName:
+    #             #         isExisting = True
+    #             #         break
+    #             # if not isExisting:
+    #             #     nameResult.append(row.InstanceName)
+    #             complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName,
+    #                                     row.AttributeName, row.SourceName, row.MethodName,
+    #                                     row.FileName, row.ElectronicFileFormatCV, excelPath, row.Description])
+    #         if excelPath != '':
+    #             if complete_result.__len__() > 0:
+    #                 self.isMatching_query(complete_result, "ElectronicFiles")
+    #                 self.write2excel(complete_result, '4_ElectronicFiles', 14, 10, excelPath)
+    #         return complete_result
+    #     except Exception as  e:
+    #         pass
+    #         # print e
+    #         # raise Exception('Erro occure in reading Data Structure.\n' + e.message)
+    def exportSeasonalSheet1(self, selectedResourceType='', selectedNetwork='', selectedScenarior='', excelPath=''):
         '''
         This method is used to get data making SeasonalParameter.
-        :param selectedDataset: selected Model name
+        :param selectedResourceType: selected Model name
         :param selectedNetwork: selected Master Network name
         :param selectedScenarior: selected scenario Name
         :param excelPath: full path of excel file to export data
         :return: None
         '''
         try:
-            sql = 'SELECT ObjectType, AttributeName, SourceName, InstanceName,MasterNetworkName,' \
-                  'ScenarioName,MethodName,SeasonName, SeasonValue, SeasonNameCV ' \
-                'FROM "Attributes" '\
-                'Left JOIN "ObjectTypes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
-                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
-                'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
-                'LEFT JOIN "SeasonalParameters" ON "SeasonalParameters"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
-                'WHERE "AttributeDataTypeCV"="SeasonalParameter" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
-                .format(selectedNetwork, selectedScenarior)
+            if selectedResourceType == '' and selectedNetwork == '' and selectedScenarior == '':
+                sql = 'SELECT ObjectType, AttributeName, SourceName, InstanceName,MasterNetworkName,' \
+                      'ScenarioName,MethodName,SeasonName, SeasonNumericValue, SeasonNameCV ' \
+                    'FROM "Attributes" '\
+                    'Left JOIN "ObjectTypes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+                    'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                    'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+                    'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                    'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+                    'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+                    'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                    'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                    'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+                    'LEFT JOIN "SeasonalNumericValues" ON "SeasonalNumericValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                    'WHERE "AttributeDataTypeCV"="SeasonaNumericValues"'
+            else:
+                sql = 'SELECT ObjectType, AttributeName, SourceName, InstanceName,MasterNetworkName,' \
+                      'ScenarioName,MethodName,SeasonName, SeasonNumericValue, SeasonNameCV ' \
+                    'FROM "Attributes" '\
+                    'Left JOIN "ObjectTypes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+                    'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                    'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+                    'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                    'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+                    'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+                    'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                    'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                    'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+                    'LEFT JOIN "SeasonalNumericValues" ON "SeasonalNumericValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                    'WHERE "AttributeDataTypeCV"="SeasonaNumericValues" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
+                    .format(selectedNetwork, selectedScenarior)
 
             result = self.session.execute(sql)
             # nameResult = list()
@@ -766,41 +1115,61 @@ class GetDataValues(object):
                 #     nameResult.append(row.InstanceName)
                 complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName,
                                         row.AttributeName, row.SourceName, row.MethodName,
-                                        row.SeasonName, row.SeasonNameCV, row.SeasonValue])
-            if complete_result.__len__() > 0:
-                self.isMatching_query(complete_result, "SeasonalParameter")
-                self.write2excel(complete_result, '4_SeasonaNumericValues', 11, 10, excelPath)
+                                        row.SeasonName, row.SeasonNameCV, row.SeasonNumericValue])
+            if excelPath != '':
+                if complete_result.__len__() > 0:
+                    self.isMatching_query(complete_result, "SeasonaNumericValues")
+                    self.write2excel(complete_result, '4_SeasonaNumericValues', 11, 10, excelPath)
+            return complete_result
         except Exception as  e:
             print e
             raise Exception('Erro occure in reading Data Structure.\n' + e.message)
-    def exportTimeSeriesSheet1(self, selectedDataset, selectedNetwork, selectedScenarior, excelPath):
+    def exportTimeSeriesSheet1(self, selectedResourceType='', selectedNetwork='', selectedScenarior='', excelPath=''):
         '''
         This method is used to get data making TimeSeries.
-        :param selectedDataset: selected Model name
+        :param selectedResourceType: selected Model name
         :param selectedNetwork: selected Master Network name
         :param selectedScenarior: selected scenario Name
         :param excelPath: full path of excel file to export data
         :return: None
         '''
         try:
-            sql = 'SELECT DatasetName ObjectType, AttributeName, SourceName, InstanceName,WaterOrCalendarYear,' \
-                  'ScenarioName,MethodName,AggregationStatisticCV, AggregationInterval, IntervalTimeUnitCV,' \
-                  'IsRegular, NoDataValue, "TimeSeries"."Description" ' \
-                'FROM "ResourceTypes" '\
-                'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
-                'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
-                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
-                'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
-                'LEFT JOIN "TimeSeries" ON "TimeSeries"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
-                'WHERE AttributeName!="ObjectInstances"  AND AttributeDataTypeCV="TimeSeries" ' \
-                   'AND "DatasetAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
-                .format(selectedDataset, selectedNetwork, selectedScenarior)
+            if selectedResourceType == '' and selectedNetwork == '' and selectedScenarior == '':
+                sql = 'SELECT ResourceType ObjectType, AttributeName, SourceName, InstanceName,YearType,' \
+                      'ScenarioName,MethodName,AggregationStatisticCV, AggregationInterval, IntervalTimeUnitCV,' \
+                      'IsRegular, NoDataValue, "TimeSeries"."Description" ' \
+                    'FROM "ResourceTypes" '\
+                    'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+                    'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+                    'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                    'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+                    'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                    'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+                    'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+                    'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                    'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                    'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+                    'LEFT JOIN "TimeSeries" ON "TimeSeries"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                    'WHERE AttributeName!="ObjectInstances"  AND AttributeDataTypeCV="TimeSeries" '
+            else:
+                sql = 'SELECT ResourceType ObjectType, AttributeName, SourceName, InstanceName,YearType,' \
+                      'ScenarioName,MethodName,AggregationStatisticCV, AggregationInterval, IntervalTimeUnitCV,' \
+                      'IsRegular, NoDataValue, "TimeSeries"."Description" ' \
+                    'FROM "ResourceTypes" '\
+                    'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
+                    'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
+                    'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
+                    'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
+                    'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
+                    'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
+                    'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
+                    'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
+                    'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
+                    'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
+                    'LEFT JOIN "TimeSeries" ON "TimeSeries"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" '\
+                    'WHERE AttributeName!="ObjectInstances"  AND AttributeDataTypeCV="TimeSeries" ' \
+                       'AND "ResourceTypeAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
+                    .format(selectedResourceType, selectedNetwork, selectedScenarior)
 
             result = self.session.execute(sql)
             # nameResult = list()
@@ -815,47 +1184,197 @@ class GetDataValues(object):
                 #     nameResult.append(row.InstanceName)
                 complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName,
                                         row.AttributeName, row.SourceName, row.MethodName,
-                                        row.WaterOrCalendarYear, row.AggregationStatisticCV, row.AggregationInterval,
-                                        row.IntervalTimeUnit, row.IsRegular, row.NoDataValue, row.Description])
-            if complete_result.__len__() > 0:
-                self.isMatching_query(complete_result, "TimeSeries")
-                self.write2excel(complete_result, '4_TimeSeries', 15, 10, excelPath)
+                                        row.YearType, row.AggregationStatisticCV, row.AggregationInterval,
+                                        row.IntervalTimeUnitCV, row.IsRegular, row.NoDataValue, row.Description])
+            if excelPath != '':
+                if complete_result.__len__() > 0:
+                    self.isMatching_query(complete_result, "TimeSeries")
+                    self.write2excel(complete_result, '4_TimeSeries', 15, 10, excelPath)
+            return complete_result
         except Exception as  e:
             print e
             raise Exception('Erro occure in reading Data Structure.\n' + e.message)
 
-    def exportMultiSheet1(self, selectedDataset, selectedNetwork, selectedScenarior, excelPath):
+    def exportMultiSheet1(self, selectedResourceType='', selectedNetwork='', selectedScenarior='', excelPath=''):
         '''
         This method is used to get data making MultiVariableSeries.
-        :param selectedDataset: selected Model name
+        :param selectedResourceType: selected Model name
         :param selectedNetwork: selected Master Network name
         :param selectedScenarior: selected scenario Name
         :param excelPath: full path of excel file to export data
         :return: None
         '''
         try:
-            sql = 'SELECT "ObjectTypes"."ObjectType", "Attributes"."AttributeName", SourceName, InstanceName,' \
-                  'ScenarioName,MethodName, "AttributesColumns"."AttributeName" AS "ColumName", "AttributesColumns"."UnitNameCV" AS "ColUnitName", "Value","ValueOrder" '\
-                'FROM "ResourceTypes" '\
-                'Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" '\
-                'Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" '\
-                'Left JOIN "Mappings" ON "Mappings"."AttributeID"= "Attributes"."AttributeID" '\
-                'Left JOIN "ValuesMapper" ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID" '\
-                'Left JOIN "ScenarioMappings" ON "ScenarioMappings"."MappingID"="Mappings"."MappingID" '\
-                'Left JOIN "Scenarios" ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID" '\
-                'Left JOIN "MasterNetworks" ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID" '\
-                'Left JOIN "Methods" ON "Methods"."MethodID"="Mappings"."MethodID" '\
-                'Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" '\
-                'Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" '\
-                'Left JOIN "MultiAttributeSeries" ON "MultiAttributeSeries"."ValuesMapperID"="ValuesMapper"."ValuesMapperID" '\
-                'Left JOIN "ValuesMapper" As "ValuesMapperColumn" ON "ValuesMapperColumn"."ValuesMapperID"="MultiAttributeSeries"."AttriNameID" '\
-                'Left JOIN "Mappings" As "MappingColumns" ON "MappingColumns"."ValuesMapperID"="ValuesMapperColumn"."ValuesMapperID" '\
-                'Left JOIN "Attributes" AS "AttributesColumns" ON "AttributesColumns"."AttributeID"="MappingColumns"."AttributeID" '\
-                'Left JOIN "MultiAttributeSeriesValues" ON "MultiAttributeSeriesValues"."MultiAttributeSeriesID"="MultiAttributeSeries"."MultiAttributeSeriesID" '\
-                'WHERE Attributes.AttributeDataTypeCV="MultiAttributeSeries" '\
-                'AND "DatasetAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"'\
-                'Order By ScenarioName, AttributeName,ValueOrder asc '\
-                .format(selectedDataset, selectedNetwork, selectedScenarior)
+            if selectedResourceType == '' and selectedNetwork == '' and selectedScenarior == '':
+                sql = """
+                        SELECT "ObjectTypes"."ObjectType",
+                        "Instances"."InstanceName",ScenarioName,"Attributes"."AttributeName" AS MultiAttributeName,"Attributes".AttributeDataTypeCV,
+                        SourceName,MethodName,
+                        "AttributesColumns"."AttributeName" AS "AttributeName",
+                        "AttributesColumns"."AttributeNameCV",
+                        "AttributesColumns"."UnitNameCV" AS "AttributeNameUnitName",
+                        "ValueOrder","DataValue"
+
+                        FROM ResourceTypes
+
+                        Left JOIN "ObjectTypes"
+                        ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID"
+
+                        -- Join the Object types to get their attributes
+                        LEFT JOIN  "Attributes"
+                        ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID"
+
+                        -- Join the Attributes to get their Mappings
+                        LEFT JOIN "Mappings"
+                        ON Mappings.AttributeID= Attributes.AttributeID
+
+                        -- Join the Mappings to get their Instances
+                        LEFT JOIN "Instances"
+                        ON "Instances"."InstanceID"="Mappings"."InstanceID"
+
+                        -- Join the Mappings to get their ScenarioMappings
+                        LEFT JOIN "ScenarioMappings"
+                        ON "ScenarioMappings"."MappingID"="Mappings"."MappingID"
+
+                        -- Join the ScenarioMappings to get their Scenarios
+                        LEFT JOIN "Scenarios"
+                        ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID"
+
+
+                        -- Join the Scenarios to get their MasterNetworks
+                        LEFT JOIN "MasterNetworks"
+                        ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID"
+
+                        -- Join the Mappings to get their Methods
+                        LEFT JOIN "Methods"
+                        ON "Methods"."MethodID"="Mappings"."MethodID"
+
+                        -- Join the Mappings to get their Sources
+                        LEFT JOIN "Sources"
+                        ON "Sources"."SourceID"="Mappings"."SourceID"
+
+                        -- Join the Mappings to get their DataValuesMappers
+                        LEFT JOIN "ValuesMapper"
+                        ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID"
+
+                        -- Join the DataValuesMapper to get their MultiAttributeSeries
+                        LEFT JOIN "MultiAttributeSeries"
+                        ON "MultiAttributeSeries" ."ValuesMapperID"="ValuesMapper"."ValuesMapperID"
+
+
+                        /*This is an extra join to get to each column name within the MultiColumn Array */
+
+                        -- Join the MultiAttributeSeries to get to their specific DataValuesMapper, now called DataValuesMapperColumn
+                        LEFT JOIN "ValuesMapper" As "ValuesMapperColumn"
+                        ON "ValuesMapperColumn"."ValuesMapperID"="MultiAttributeSeries"."MappingID_Attribute"
+
+                        -- Join the DataValuesMapperColumn to get back to their specific Mapping, now called MappingColumns
+                        LEFT JOIN "Mappings" As "MappingColumns"
+                        ON "MappingColumns"."ValuesMapperID"="ValuesMapperColumn"."ValuesMapperID"
+
+                        -- Join the MappingColumns to get back to their specific Attribute, now called AttributeColumns
+                        LEFT JOIN  "Attributes" AS "AttributesColumns"
+                        ON "AttributesColumns"."AttributeID"="MappingColumns"."AttributeID"
+                        /* Finishes here */
+
+                        -- Join the MultiAttributeSeries to get access to their MultiAttributeSeriesValues
+                        LEFT JOIN "MultiAttributeSeriesValues"
+                        ON "MultiAttributeSeriesValues"."MultiAttributeSeriesID"="MultiAttributeSeries"."MultiAttributeSeriesID"
+
+                        -- Select one InstanceName and restrict the query AttributeDataTypeCV that is MultiAttributeSeries
+                        WHERE
+                        "Attributes".AttributeDataTypeCV='MultiAttributeSeries'
+
+                         Order By ScenarioName, AttributeName,ValueOrder asc
+
+                        """
+            else:
+                sql = """
+                        SELECT "ObjectTypes"."ObjectType",
+                        "Instances"."InstanceName",ScenarioName,"Attributes"."AttributeName" AS MultiAttributeName,"Attributes".AttributeDataTypeCV,
+                        SourceName,MethodName,
+                        "AttributesColumns"."AttributeName" AS "AttributeName",
+                        "AttributesColumns"."AttributeNameCV",
+                        "AttributesColumns"."UnitNameCV" AS "AttributeNameUnitName",
+                        "ValueOrder","DataValue"
+
+                        FROM ResourceTypes
+
+                        Left JOIN "ObjectTypes"
+                        ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID"
+
+                        -- Join the Object types to get their attributes
+                        LEFT JOIN  "Attributes"
+                        ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID"
+
+                        -- Join the Attributes to get their Mappings
+                        LEFT JOIN "Mappings"
+                        ON Mappings.AttributeID= Attributes.AttributeID
+
+                        -- Join the Mappings to get their Instances
+                        LEFT JOIN "Instances"
+                        ON "Instances"."InstanceID"="Mappings"."InstanceID"
+
+                        -- Join the Mappings to get their ScenarioMappings
+                        LEFT JOIN "ScenarioMappings"
+                        ON "ScenarioMappings"."MappingID"="Mappings"."MappingID"
+
+                        -- Join the ScenarioMappings to get their Scenarios
+                        LEFT JOIN "Scenarios"
+                        ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID"
+
+
+                        -- Join the Scenarios to get their MasterNetworks
+                        LEFT JOIN "MasterNetworks"
+                        ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID"
+
+                        -- Join the Mappings to get their Methods
+                        LEFT JOIN "Methods"
+                        ON "Methods"."MethodID"="Mappings"."MethodID"
+
+                        -- Join the Mappings to get their Sources
+                        LEFT JOIN "Sources"
+                        ON "Sources"."SourceID"="Mappings"."SourceID"
+
+                        -- Join the Mappings to get their DataValuesMappers
+                        LEFT JOIN "ValuesMapper"
+                        ON "ValuesMapper"."ValuesMapperID"="Mappings"."ValuesMapperID"
+
+                        -- Join the DataValuesMapper to get their MultiAttributeSeries
+                        LEFT JOIN "MultiAttributeSeries"
+                        ON "MultiAttributeSeries" ."ValuesMapperID"="ValuesMapper"."ValuesMapperID"
+
+
+                        /*This is an extra join to get to each column name within the MultiColumn Array */
+
+                        -- Join the MultiAttributeSeries to get to their specific DataValuesMapper, now called DataValuesMapperColumn
+                        LEFT JOIN "ValuesMapper" As "ValuesMapperColumn"
+                        ON "ValuesMapperColumn"."ValuesMapperID"="MultiAttributeSeries"."MappingID_Attribute"
+
+                        -- Join the DataValuesMapperColumn to get back to their specific Mapping, now called MappingColumns
+                        LEFT JOIN "Mappings" As "MappingColumns"
+                        ON "MappingColumns"."ValuesMapperID"="ValuesMapperColumn"."ValuesMapperID"
+
+                        -- Join the MappingColumns to get back to their specific Attribute, now called AttributeColumns
+                        LEFT JOIN  "Attributes" AS "AttributesColumns"
+                        ON "AttributesColumns"."AttributeID"="MappingColumns"."AttributeID"
+                        /* Finishes here */
+
+                        -- Join the MultiAttributeSeries to get access to their MultiAttributeSeriesValues
+                        LEFT JOIN "MultiAttributeSeriesValues"
+                        ON "MultiAttributeSeriesValues"."MultiAttributeSeriesID"="MultiAttributeSeries"."MultiAttributeSeriesID"
+
+                        -- Select one InstanceName and restrict the query AttributeDataTypeCV that is MultiAttributeSeries
+                        WHERE
+                        "Attributes".AttributeDataTypeCV='MultiAttributeSeries'
+                        AND "ResourceTypeAcronym"="{}"
+                        AND "MasterNetworkName"= "{}"
+                        AND "ScenarioName" ="{}"
+
+
+                         Order By ScenarioName, AttributeName,ValueOrder asc
+
+                        """.format(selectedResourceType, selectedNetwork, selectedScenarior)
 
             result = self.session.execute(sql)
 
@@ -863,51 +1382,53 @@ class GetDataValues(object):
             complete_result = list()
             strAtrributName = ''
             valueOrder = None
-            columnName = ''
+            AttributeName = ''
             tempColumn = {}
             sourceName = ''
             i = 0
             currentrow = 0
             setNumber = 0
             for row in result:
-                if row.ColumName == None or row.ColumName == "":
+                if row.AttributeName == None or row.AttributeName == "":
                     continue
                 if strAtrributName != row.AttributeName:
                     strAtrributName = row.AttributeName
                     tempColumn[row.AttributeName] = []
-                    tempColumn[row.AttributeName].append(row.ColumName)
-                    columnName = row.ColumName
+                    tempColumn[row.AttributeName].append(row.AttributeName)
+                    AttributeName = row.AttributeName
                 if sourceName != row.ScenarioName:
                     sourceName = row.ScenarioName
                     setNumber = i
                     currentrow = 0
-                if columnName != row.ColumName:
-                    columnName = row.ColumName
+                if AttributeName != row.AttributeName:
+                    AttributeName = row.AttributeName
                     currentrow = 0
 
-                if row.ColumName in tempColumn[row.AttributeName]:
-                    index = tempColumn[row.AttributeName].index(row.ColumName)
+                if row.AttributeName in tempColumn[row.AttributeName]:
+                    index = tempColumn[row.AttributeName].index(row.AttributeName)
                     if index == 0:
                         complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName, row.AttributeName, row.SourceName,
-                                        row.MethodName, row.Value])
+                                        row.MethodName, row.DataValue])
                         i += 1
                     else:
-                        complete_result[setNumber + currentrow].append(row.Value)
+                        complete_result[setNumber + currentrow].append(row.DataValue)
                         currentrow += 1
                 else:
                     currentrow = 0
-                    tempColumn[row.AttributeName].append(row.ColumName)
-                    index = tempColumn[row.AttributeName].index(row.ColumName)
+                    tempColumn[row.AttributeName].append(row.AttributeName)
+                    index = tempColumn[row.AttributeName].index(row.AttributeName)
                     if index == 0:
                         complete_result.append([row.ObjectType, row.InstanceName, row.ScenarioName, row.AttributeName, row.SourceName,
-                                        row.MethodName, row.Value])
+                                        row.MethodName, row.DataValue])
                         i += 1
                     else:
-                        complete_result[setNumber + currentrow].append(row.Value)
+                        complete_result[setNumber + currentrow].append(row.DataValue)
                         currentrow += 1
-            if complete_result.__len__() > 0:
-                self.isMatching_query(complete_result, "MultiVariableSeries")
-                self.write2excel(complete_result, '4_MultiVariableSeries', 17, 15, excelPath)
+            if excelPath != '':
+                if complete_result.__len__() > 0:
+                    self.isMatching_query(complete_result, "MultiAttributeSeries")
+                    self.write2excel(complete_result, '4_MultiAttributeSeries', 17, 15, excelPath)
+            return complete_result
 
             '''Up Table(AttributeName_column Table) write'''
             column_result = list()
@@ -922,7 +1443,7 @@ class GetDataValues(object):
 
         except Exception as  e:
             print e
-            raise Exception('Erro occure in reading Data Structure.\n' + e.message)
+            raise Exception('Error occured in reading Data Structure.\n' + e.message)
 
 
     def write2excel(self, complete_result, xlsx_sheet_name, xls_sheet_num, startRowNum, excelPath, columnNum = 0):

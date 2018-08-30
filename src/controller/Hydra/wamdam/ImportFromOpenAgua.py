@@ -21,7 +21,7 @@
     A Hydra plug-in for exporting a hydra network to CSV files.
 """
 
-import os, sys
+import os, sys, csv
 import json
 import time
 import argparse as ap
@@ -29,6 +29,8 @@ import logging
 
 import pytz
 from numpy import array
+
+from controller.wamdamAPI.ExportTemplate import ExportTemplate
 
 # from hydra_client.plugin import JsonConnection
 # from hydra_client.output import write_progress, \
@@ -68,7 +70,7 @@ class ExportCSV(object):
     # More info: http://umwrg.github.io/HydraPlatform/tutorials/plug-in/tutorial_json.html#creating-a-client
     ur = "https://data.openagua.org"
     conn = JsonConnection(ur)
-    login_response = conn.login('amabdallah@aggiemail.usu.edu', 'TestOpenAgua!')
+    login_response = conn.login('amabdallah@aggiemail.usu.edu', 'xxxxxx!')
 
     Network = None
     Scenario = None
@@ -286,9 +288,11 @@ class ExportCSV(object):
         network_file.write(network_units_heading)
         network_file.write(network_entry)
 
+
         log.info("Network export complete")
 
         log.info("networks written to file: %s", network_file.name)
+        network_file.close()
 
 
     def export_nodes(self, scenario, nodes):
@@ -360,8 +364,9 @@ class ExportCSV(object):
         node_file.write(node_units_heading)
         node_file.writelines(node_entries)
 
-        log.info("Nodes written to file: %s", node_file.name)
 
+        log.info("Nodes written to file: %s", node_file.name)
+        node_file.close()
         return id_name_map
 
 
@@ -435,6 +440,7 @@ class ExportCSV(object):
         link_file.write(link_units_heading)
         link_file.writelines(link_entries)
         log.info("Links written to file: %s", link_file.name)
+        link_file.close()
         return id_name_map
 
 
@@ -503,6 +509,7 @@ class ExportCSV(object):
         group_file.write(group_units_heading)
         group_file.writelines(group_entries)
         log.info("groups written to file: %s", group_file.name)
+        group_file.close()
 
         self.export_resourcegroupitems(scenario, id_name_map, node_map, link_map)
 
@@ -555,6 +562,7 @@ class ExportCSV(object):
         rule_file.writelines(rule_entries)
 
         log.info("Rules written to file: %s", rule_file.name)
+        rule_file.close()
 
         return rule_entries
 
@@ -592,6 +600,7 @@ class ExportCSV(object):
             metadata_file = open(target_file, 'w')
             metadata_file.write(header)
             metadata_file.writelines(metadata_entries)
+            metadata_file.close()
 
         return warnings
 
@@ -625,6 +634,7 @@ class ExportCSV(object):
 
         group_member_file.write(group_member_heading)
         group_member_file.writelines(group_member_entries)
+        group_member_file.close()
 
 
     def get_resource_attributes(self, resources):
@@ -807,16 +817,16 @@ Written by Stephen Knox <s.knox@ucl.ac.uk>
 if __name__ == '__main__':
     parser = commandline_parser()
     args = parser.parse_args()
-    csv = ExportCSV(url=args.server_url, session_id=args.session_id)
+    exportCSV = ExportCSV(url=args.server_url, session_id=args.session_id)
     try:
-        write_progress(1, csv.num_steps)
+        write_progress(1, exportCSV.num_steps)
         # validate_plugin_xml(os.path.join(__location__, 'plugin.xml'))
 
 
         if args.timezone is not None:
-            csv.timezone = pytz.timezone(args.timezone)
+            exportCSV.timezone = pytz.timezone(args.timezone)
 
-        csv.export(args.network_id, args.scenario_id, args.output_folder)
+        exportCSV.export(args.network_id, args.scenario_id, args.output_folder)
         message = "Export complete"
     except HydraPluginError as e:
         message="An error has occurred"
@@ -830,8 +840,48 @@ if __name__ == '__main__':
     xml_response = create_xml_response('ExportCSV',
                                        args.network_id,
                                        [],
-                                       csv.errors,
-                                       csv.warnings,
+                                       exportCSV.errors,
+                                       exportCSV.warnings,
                                        message,
-                                       csv.files)
+                                       exportCSV.files)
+
+    for main_dir in exportCSV.files:
+        n = 0
+        for x in os.walk(main_dir):
+            if n == 0:
+                for sub_dir in x[1]:
+                    file_dir = '{}/{}'.format(main_dir, sub_dir)
+                    exportTemplate = ExportTemplate('{}/{}.xlsx'.format(file_dir, sub_dir.replace(' ', '_')))
+
+                    nodes_data_result = []
+                    full_path = "{}/{}".format(file_dir, "nodes.csv")
+                    if os.path.exists(full_path):
+                        f = open(full_path)
+                        csv_items = csv.DictReader(f)
+                        for i, row in enumerate(csv_items):
+                            row_data = ['', '', '', '', '', '', '', '', '', '']
+                            row_data.insert(0, row[" Type"])
+                            row_data.insert(1, row["Name"])
+                            row_data.insert(7, row[" x"])
+                            row_data.insert(8, row[" y"])
+                            nodes_data_result.append(row_data)
+                        exportTemplate.exportNodes(nodes_data_result)
+
+                    links_data_result = []
+                    full_path = "{}/{}".format(file_dir, "links.csv")
+                    if os.path.exists(full_path):
+                        f = open(full_path)
+                        csv_items = csv.DictReader(f)
+                        for i, row in enumerate(csv_items):
+                            row_data = ['', '', '', '', '', '', '', '', '', '']
+                            row_data.insert(0, row[" Type"])
+                            row_data.insert(1, row["Name"])
+                            row_data.insert(6, row[" from"])
+                            row_data.insert(7, row[" to"])
+                            links_data_result.append(row_data)
+                        exportTemplate.exportLinkes(links_data_result)
+
+                n += 1
+
+
     print xml_response

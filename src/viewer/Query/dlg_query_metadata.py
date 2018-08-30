@@ -7,6 +7,7 @@ from controller.wamdamAPI.GetMetadata import GetMetadata
 from xlrd import open_workbook
 # from xlutils.copy import copy
 from openpyxl import load_workbook
+from controller.ConnectDB_ParseExcel import DB_Setup
 
 # Implementing dlg_query_metadata
 class dlg_query_metadata(viewer.WaMDaMWizard.dlg_query_metadata):
@@ -14,11 +15,15 @@ class dlg_query_metadata(viewer.WaMDaMWizard.dlg_query_metadata):
 		viewer.WaMDaMWizard.dlg_query_metadata.__init__(self, parent)
 
 		try:
+			if not DB_Setup().get_session():
+				msg = "\n\nWarning: Please connect to sqlite first."
+				raise Exception(msg)
+
 			''' get metadata qurey object'''
 			self.getMetadata = GetMetadata()
 		except Exception as e:
 			message = msg_somethigWrong(None, msg=e.message)
-			message.Show()
+			message.ShowModal()
 			self.Destroy()
 	# Handlers for dlg_query_metadata events.
 	def FilePicker_queryModelOnFileChanged( self, event ):

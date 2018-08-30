@@ -8,6 +8,7 @@ from xlrd import open_workbook
 from viewer.Messages_forms.msg_somethigWrong import msg_somethigWrong
 # This library is used here to write data to an excel file
 from openpyxl import load_workbook
+from controller.ConnectDB_ParseExcel import DB_Setup
 
 # Implementing dlg_SearchNodesLinks
 class dlg_SearchNodesLinks(viewer.WaMDaMWizard.dlg_SearchNodesLinks):
@@ -19,6 +20,9 @@ class dlg_SearchNodesLinks(viewer.WaMDaMWizard.dlg_SearchNodesLinks):
 		# self.textCtrl_y_min.Value = u'41.00'
 		# self.textCtrl_y_max.Value = u'42.700'
 		try:
+			if not DB_Setup().get_session():
+				msg = "\n\nWarning: Please connect to sqlite first."
+				raise Exception(msg)
 			''' Get Controlled object type'''
 			self.getNodeLinks = GetNodeLinks()
 			list_acromy = self.getNodeLinks.GetCV_ObjectType()
@@ -26,7 +30,7 @@ class dlg_SearchNodesLinks(viewer.WaMDaMWizard.dlg_SearchNodesLinks):
 				self.comboBox_selectObjectType.SetItems(list_acromy)
 		except Exception as e:
 			message = msg_somethigWrong(None, msg=e.message)
-			message.Show()
+			message.ShowModal()
 			self.Destroy()
 	# Handlers for dlg_SearchNodesLinks events.
 	def checkBox_NodesOnCheckBox( self, event ):

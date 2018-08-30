@@ -7,6 +7,7 @@ import WaMDaMWizard
 from controller.ConnectDB_ParseExcel import DB_Setup
 from Messages_forms.msg_somethigWrong import msg_somethigWrong
 from controller.wamdamAPI.GetComapreScenarios import GetComapreScenarios
+from controller.HydroShare.PublishWaMDaM import publishOnHydraShare
 import model.SqlAlchemy as SAlchemy
 # Implementing dlg_ConnectDatabaseSQLite
 class dlg_ConnectExistingDatabaseSQLite(WaMDaMWizard.dlg_ConnectExistingDatabaseSQLite):
@@ -14,6 +15,7 @@ class dlg_ConnectExistingDatabaseSQLite(WaMDaMWizard.dlg_ConnectExistingDatabase
         WaMDaMWizard.dlg_ConnectExistingDatabaseSQLite.__init__(self, parent)
         self.path = None
         self._session = None
+        self.isCheckedSqlite = False
 
     # Handlers for dlg_ConnectDatabaseSQLite events.
     def FilePicker_ConnectSQLiteOnFileChanged(self, event):
@@ -42,6 +44,7 @@ class dlg_ConnectExistingDatabaseSQLite(WaMDaMWizard.dlg_ConnectExistingDatabase
         if setup.get_session():
             define.logger.error('Failed database connection.\n\nError: You are already connected to a database. \n\n to use another '
 										'database, you need to disconnect from the current one')
+
             msg_somethigWrong(topframe, msg='\n\nError: You are already connected to a database. \n\n to use another '
 										'database, you need to disconnect from the current one').Show()
 
@@ -68,6 +71,8 @@ class dlg_ConnectExistingDatabaseSQLite(WaMDaMWizard.dlg_ConnectExistingDatabase
         self.Close()
 
     #Validate that the selected "existing SQLite file" conforms to WaMDaM structure and schema version
+    # if the connection is sucecessful, return two parameters: sqlite file name and its local path on pc
+    # we use thse parameters in the HydroShare script to uplaod the file and publish it
     def check_database(self, db_name):
         '''
         :param database name:
@@ -81,9 +86,9 @@ class dlg_ConnectExistingDatabaseSQLite(WaMDaMWizard.dlg_ConnectExistingDatabase
             sql = 'SELECT  DISTINCT  VersionNumber FROM "WaMDaMVersion"'
             result = temp_session.execute(sql)
             for row in result:
-                if row.VersionNumber != 1.02:
-                    define.logger.error('Failed database connection.\n\nError: The database you are trying to connect to does not matched WaMDaM 1.02 schema version.')
-                    raise Exception('\n\nError: The database you are trying to connect to does not matched WaMDaM 1.02 schema version')
+                if row.VersionNumber != 1.03:
+                    define.logger.error('Failed database connection.\n\nError: The database you are trying to connect to does not matched WaMDaM 1.03 schema version.')
+                    raise Exception('\n\nError: The database you are trying to connect to does not matched WaMDaM 1.03 schema version')
 
             ''' get wandam classes'''
             from inspect import isclass
@@ -104,9 +109,9 @@ class dlg_ConnectExistingDatabaseSQLite(WaMDaMWizard.dlg_ConnectExistingDatabase
                 if extra_class_names.__contains__(class_name):
                     continue
                 if not table_names.__contains__(class_name):  # and not extra_class_names.__contains__(table_name):
-                    define.logger.error('Failed database connection.\n\nError: {} table does not exist in database of WaMDaM 1.02 version.\n'
+                    define.logger.error('Failed database connection.\n\nError: {} table does not exist in database of WaMDaM 1.03 version.\n'
                                         'Therefore you can not connect with {}.'.format(class_name, db_name))
-                    msg = '\n\nError: {} does not exist in the current WaMDaM 1.02 version.\n Therefore you can not connect with {}.'.format(class_name, db_name)
+                    msg = '\n\nError: {} does not exist in the current WaMDaM 1.03 version.\n Therefore you can not connect with {}.'.format(class_name, db_name)
                     raise Exception(msg)
 
                 # if not extra_class_names.__contains__(table_name):
@@ -121,11 +126,12 @@ class dlg_ConnectExistingDatabaseSQLite(WaMDaMWizard.dlg_ConnectExistingDatabase
 
                 for member in members:
                     if not field_names.__contains__(member):
-                        define.logger.error('Failed database connect.\n\nError: {} field does not exist in "{}" table.\n'
+                        define.logger.error('Failed database connection.\n\nError: {} field does not exist in "{}" table.\n'
                                             'Therefore You can not connect with {}.'.format(member, class_name, db_name))
                         msg='\n\nError: {} field does not exist in "{}" table.\n Therefore You can not connect with {}.'.format(member, class_name, db_name)
                         raise Exception(msg)
                 pass
+            self.isCheckedSqlite = True
             return True
         except Exception as e:
             msg = e.message.replace("(sqlite3.OperationalError)", "")
@@ -137,3 +143,11 @@ class dlg_ConnectExistingDatabaseSQLite(WaMDaMWizard.dlg_ConnectExistingDatabase
 
     def btn_cancelOnButtonClick(self, event):
         self.Close()
+
+    def btn_publishOnButtonClick(self, event):
+        if not self.isCheckedSqlite:
+            msg = "Please check if the selected sqlite file is a correct file."
+            msg_somethigWrong(None, msg=msg).Show()
+            return
+
+        publishOnHydraShare((self.path))

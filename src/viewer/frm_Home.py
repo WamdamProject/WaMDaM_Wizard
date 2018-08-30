@@ -120,18 +120,18 @@ class frm_Home( WaMDaMWizard.frm_Home ):
     def rtbn_WEAPOnRibbonButtonClicked( self, event ):
         import Exporter.dlg_SelectModel as fServ
         Serv=fServ.dlg_SelectModel(None)
-        Serv.ShowModal()
+        # Serv.ShowModal()
 
     def rtbn_WASHOnRibbonButtonClicked( self, event ):
         import Exporter.dlg_re_run_export as frerun
         rRun = frerun.dlg_re_run_export(None)
-        rRun.ShowModal()
+        # rRun.ShowModal()
 
 
     def rtbn_ExportToRwiseOnRibbonButtonClicked( self, event ):
         import dlg_ExportScenarioDataToHydra as fhExpHyd
         ExpRwise=fhExpHyd.dlg_ExportScenarioDataToHydra(None)
-        ExpRwise.ShowModal()
+        # ExpRwise.ShowModal()
 
     def btnAboutWaMDaMOnRibbonButtonClicked( self, event ):
         import dlg_About as fAB
@@ -147,6 +147,16 @@ class frm_Home( WaMDaMWizard.frm_Home ):
         import dlg_Help as fHE
         HE=fHE.dlg_Help(None)
         HE.ShowModal()
+
+    def rtbn_HydroShareOnRibbonButtonClicked( self, event ):
+        from Publish.dlg_Publish import dlg_Publish
+        PublishDlg =dlg_Publish(None)
+        # PublishDlg.ShowModal()
+
+    def rtbn_OpenAguaOnRibbonButtonClicked( self, event ):
+        from Publish.dlg_VisulaizeWaMDaM import dlg_VisulaizeWaMDaM
+        VisulaizeWaMDaMDlg =dlg_VisulaizeWaMDaM(None)
+        # VisulaizeWaMDaMDlg.ShowModal()
     # def OnCloseWindow(self, event):
     #     import dlg_exit_DB as edb
     #     exit = edb.ExitDB(None)
