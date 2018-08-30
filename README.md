@@ -1,16 +1,17 @@
-# WaMDaM_Wizard V 1.02
+# WaMDaM_Wizard V 1.03
 WaMDaM Wizard is a desktop data loader from a spreadsheet template to a SQLite database. The SQLite database is built based on a data model called WaMDaM. The data model is designed to organize and integrate different water management datasets.
 Here is the schema that the Wizard works within: [WaMDaM Schema](https://wamdamproject.github.io/WaMDaM_Information_Model/diagrams/01_WaMDaM.html)  
 
 The Wizard is built using Python 2.7 and the [wxPython](https://www.wxpython.org/) GUI library with the help of [wxFormBuilder](https://github.com/wxFormBuilder/wxFormBuilder).  
 
-## [Download the WaMDaM Excel Workbook Templates for Input Data][5]  
+## [Download the WaMDaM Excel Workbook Templates for Input Data]
 1. Excel Workbook template to prepare your data into it. Each dataset into one workbook
 
-[5]:https://github.com/WamdamProject/WaMDaM_UseCases/blob/master/UseCases_files/0WorkbookTemplates/InputData_Template/WaMDaM_InputData_template_June_2018.xlsm
 
-## [Download the Wizard GUI for Windows [7 and 10] 64 bit operating systems][1]
+## [Download the Wizard GUI for Windows [7 and 10] 64 bit operating systems]
 Download and install the latest release. Choose one of these two options. 
+https://github.com/WamdamProject/WaMDaM_Wizard/releases/
+
 
 * **Windows executable .exe (No-Installer)**
 Allows the user to run WaMDaM_Wizard without installing it on your local machine.   
@@ -19,7 +20,6 @@ Allows the user to run WaMDaM_Wizard without installing it on your local machine
 Install on your pc, get an icon shortcut on your desktop and run WaMDaM Wizard As **Admin**  
 
 
-[1]:https://github.com/WamdamProject/WaMDaM_Wizard/releases/
 
 
 
@@ -88,4 +88,4 @@ For alternative licensing arrangements, contact Adel M. Abdallah or David E. Ros
 WaMDaM and related software development have been developed under funding from several different sources. It was primarily supported by the National Science Foundation <a href="http://www.nsf.gov/awardsearch/showAward?AWD_ID=1135482" target="_blank">CI-Water Project</a> and later from the <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1208732" target="_blank">iUtah Project</a>. 
 Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.    
 
-WaMDaM has been developed at and also additionally funded by the Utah Water Research Lab at Utah State University, Logan Utah during the period of August, 2012-2017. Thanks Stephanie Reeder, Larry Kevin, and Kwang Yingjien for their help to design this Wizard and intensively test it. Thanks to Dr. Steven Burian at the University of Utah, Salt Lake City Utah for hosting Adel Abdallah as a visiting scholar 2014-2017 during WaMDaM's development.  
+WaMDaM has been developed at and also additionally funded by the Utah Water Research Lab at Utah State University, Logan Utah during the period of August, 2012-2018. Thanks Stephanie Reeder, Larry Kevin, and Kwang Yingjien for their help to design this Wizard and intensively test it. Thanks to Dr. Steven Burian at the University of Utah, Salt Lake City Utah for hosting Adel Abdallah as a visiting scholar 2014-2017 during WaMDaM's development.  
