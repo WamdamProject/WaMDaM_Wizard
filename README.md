@@ -1,8 +1,13 @@
-# WaMDaM_Wizard V 1.03
-WaMDaM Wizard is a desktop data loader from a spreadsheet template to a SQLite database. The SQLite database is built based on a data model called WaMDaM. The data model is designed to organize and integrate different water management datasets.
+# WaMDaM_Wizard V 1.04
+WaMDaM Wizard is a desktop data loader from a spreadsheet template to a SQLite database. The SQLite database is built based on a data model called WaMDaM. The data model is designed to organize and integrate different water management datasets. The Wizard also provides modelers with automated detailed and summary comparisons of network topology, metadata, and data between Scenarios in the same master network. 
+
 Here is the schema that the Wizard works within: [WaMDaM Schema](https://wamdamproject.github.io/WaMDaM_Information_Model/diagrams/01_WaMDaM.html)  
 
 The Wizard is built using Python 2.7 and the [wxPython](https://www.wxpython.org/) GUI library with the help of [wxFormBuilder](https://github.com/wxFormBuilder/wxFormBuilder).  
+
+# Instructions to use WaMDaM software  
+https://github.com/WamdamProject/WaMDaM_JupyterNotebooks/blob/master/1_QuerySelect/01_Step1.1_Install_WaMDaM_Wizard.ipynb
+
 
 ## [Download the WaMDaM Excel Workbook Templates for Input Data]
 1. Excel Workbook template to prepare your data into it. Each dataset into one workbook
