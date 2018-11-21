@@ -4,7 +4,7 @@
 (below line 15 depicts which row is attributed to the main attribute of the small table
 """
 
-# Provides helper functions for datavalues loading
+# Provides helper functions for loading
 from .helper import LoadingUtils
 
 # Import the classes from ConnectDB_ParseExcel.py. These classes are inherited by LoadMetaData
@@ -57,7 +57,7 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
         For each attribute code in the multicolumn sheet, the properties
         (Instance name, attribute name, etc ...) are loaded with the
         appropriate value. [[DataValue sharing is observed if a value exist with
-        same properties.]] Is this still true? if yes explain more what is meant by "same properties"
+        same proper ties.]] Is this still true? if yes explain more what is meant by "same properties"
         :return: None
         """
         for sheet_name, sheet_rows in self.work_sheet.items():
@@ -90,7 +90,7 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
             '''
                 The Idea from here is to iterate over each subattribute,
                 if sub_attribs are not mapped to a main attribs, that entry is
-                escaped.[[explain further, give an exmaple? what does escape mean here?]]
+                escaped.
             '''
             for main_col, sub_attrib_array in sub_attrib_array_dict.items():
                 if all('' == cell for cell in sub_attrib_array) or not main_col.value:
@@ -98,7 +98,7 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                 # if not main_col.value:
                 #     continue
 
-                # sets initial values for testing latter in the code. [[Note sure what this mean here, explain more]]
+                # sets initial values for testing later in the code.
                 temp = rows_of_interest[:]
                 if len(temp) < 1:
                     lenght = 0
@@ -167,7 +167,7 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                         break
 
                     if any('' == cell.value for cell in row[:8]):
-                        raise Exception("Some Empty Fields where found.\n All Columns in MultiAttributeSeries "
+                        raise Exception("Some empty fields were found.\n All Columns in MultiAttributeSeries "
                                         "are Required in " + sheet_name)
 
                     # Test if data type from the provided AttributeDataType is the same as defined in the attribute Table
@@ -184,7 +184,7 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                         This portion of code tests if the current row to be loaded
                         is the same or not to a row already loaded into the db. if
                         yes then its set to similar else to different and sent to the
-                        appropriate code.[[where is this code?]]
+                        appropriate code.
                     '''
                     diff_scene = False
                     temp_row = [cell.value for cell in row[:]]
@@ -302,7 +302,7 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                                 ).all()
 
                                 if len(main_var_map) > 1:
-                                    print 'lenght is greater than one'
+                                    print 'length is greater than one'
                                     exit(1)
 
                                 if len(main_var_map) == 1:
@@ -546,10 +546,12 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                             except:
                                 self.setup.push_data(scenariomap)
 
+                        '''
                         # This is to load sub_attributes into mapping table and multicolumn arrays.
                         # This functions same as the main_column functions but uses sub attribs to load
                         # mappings into the mapping table. and when each mapping is loaded, a MultiAttributeSeries
                         # entry is also loaded.
+                        '''
                         for sub_attrib in sub_attrib_array[:]:
                             if not sub_attrib.value:
                                 continue

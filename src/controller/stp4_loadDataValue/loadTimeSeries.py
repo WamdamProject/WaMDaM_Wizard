@@ -434,8 +434,9 @@ class LoadTimeSeriesValue(Parse_Excel_File, LoadingUtils):
                     raise Exception('Error in {} row of "TimeSeriesValues_table" of  sheet "{}"\nField named "DateTimeStamp" is empty.\nThis field should not be empty.\nPlease fill this field to a value.'
                                     .format(row_id, sheet_name))
                 if row[5].value == "":
-                    raise Exception('Error in {} row of "TimeSeriesValues_table" of  sheet "{}"\nField named "Value" is empty.\nThis field should not be empty.\nPlease fill this field to a value.'
-                                    .format(row_id, sheet_name))
+                    row[5].value = "-9999"
+                    # raise Exception('Error in {} row of "TimeSeriesValues_table" of  sheet "{}"\nField named "Value" is empty.\nThis field should not be empty.\nPlease fill this field to a value.'
+                    #                 .format(row_id, sheet_name))
 
                 timeserieval = SqlAlchemy.TimeSeriesValues()
 

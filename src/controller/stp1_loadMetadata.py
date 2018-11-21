@@ -260,7 +260,8 @@ class LoadMetaData(Parse_Excel_File):
                                 except Exception as e:
                                     raise Exception('Error with sheet "{}"\ncould not fine "{}" in People'
                                                     .format(metadata_sheets_ordered[1], row[4]))
-                                method.Description = row[5]
+                                method.DataQuality = row[5]
+                                method.Description = row[6]
                                 self.setup.push_data(method)
                         break
 

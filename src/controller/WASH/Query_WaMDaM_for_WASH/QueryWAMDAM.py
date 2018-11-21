@@ -5,7 +5,7 @@ from QueryTimeSeries import *
 from QueryDescriptor import *
 from QuerySeasonal import *
 from QueryNumeric import *
-from controller.WEAP_exporter.ExtractWeapArea import WEAP_export
+# from controller.WEAP_exporter.ExtractWeapArea import WEAP_export
 
 
 from controller.ConnectDB_ParseExcel import DB_Setup

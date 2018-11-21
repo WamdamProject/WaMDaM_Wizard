@@ -32,7 +32,7 @@ def TimeSeries_query(conn,multi_timeseries):
         "Instances"."InstanceName" As NodeORLinkInstanceName,
 
 
-AttributeName, AggregationStatisticCV,IntervalTimeUnitCV,UnitName,SourceName,
+        AttributeName, AggregationStatisticCV,IntervalTimeUnitCV,UnitName,SourceName,
             MethodName,PeopleSources.PersonName As SourcePerson,OrganizationsSources.OrganizationName As SoureOrganization,DateTimeStamp,DataValue,
         "StartNodeInstance"."InstanceName" As StartEndNode,
         "EndNodeInstance"."InstanceName" As EndNodeInstance

@@ -2,8 +2,8 @@
 
 import wx
 import WaMDaMWizard
-from controller.wamdamAPI.GetDataStructure import GetDataStructure
-from controller.wamdamAPI.GetInstances import GetInstances
+from controller.wamdamAPI.GetResourceStructure import GetResourceStructure
+from controller.wamdamAPI.GetInstancesByScenario import *
 from controller.ConnectDB_ParseExcel import DB_Setup
 from Messages_forms.msg_loading import msg_loading
 
@@ -26,14 +26,14 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 				raise Exception(msg)
 
 			''' init model combobox'''
-			self.dataStructure = GetDataStructure()
-			self.instances = GetInstances()
-			self.datasets = self.dataStructure.getResourceTypes()
+			self.dataStructure = GetResourceStructure()
+			self.instances = GetInstancesBySenario()
+			self.datasets = self.dataStructure.GetResourceType()
 			self.compareScenarios = GetComapreScenarios()
 			
 			list_acromy = list()
-			for row in self.datasets:
-				list_acromy.append(row.ResourceTypeAcronym)
+			for index, row in self.datasets.iterrows():
+				list_acromy.append(row["ResourceTypeAcronym"])
 			if list_acromy.__len__() > 0:
 				self.comboBox_selectModel.SetItems(list_acromy)
 		except Exception as e:
@@ -45,36 +45,48 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 	def comboBox_selectModelOnCombobox( self, event ):
 		''' init network combobox once model combobox change'''
 		selectedDataset = self.comboBox_selectModel.Value
-		result = GetInstances()
-		gettedMasterNetworkNames, data = result.getMasterNetwork(selectedDataset)
-		if gettedMasterNetworkNames.__len__() <= 0:
-			return
-		self.comboBox_selectNetwork.SetItems(gettedMasterNetworkNames)
+		result = GetInstancesBySenario()
+		gotMasterNetwork =result.GetMasterNetworks(selectedDataset)
+		list_Networks = list()
+		for index, row in gotMasterNetwork.iterrows():
+			list_Networks.append(row["MasterNetworkName"])
+		if list_Networks.__len__() > 0:
+			self.comboBox_selectNetwork.SetItems(list_Networks)
+
 
 	def comboBox_selectNetworkOnCombobox( self, event ):
 		''' init first scenario combobox once network combobox change'''
 		selectedMasterNetworkName = self.comboBox_selectNetwork.Value
 		selectedDataset = self.comboBox_selectModel.Value
-		result = GetInstances()
-		gettedScenarioNames, data = result.getScenario(selectedDataset, selectedMasterNetworkName)
-		if gettedScenarioNames.__len__() <= 0:
+		result = GetInstancesBySenario()
+		gotScenarioNames = result.GetScenarios(selectedDataset, selectedMasterNetworkName)
+
+		list_Scenarios = list()
+		for index, row in gotScenarioNames.iterrows():
+			list_Scenarios.append(row["ScenarioName"])
+
+		if gotScenarioNames.__len__() <= 0:
 			return
-		self.comboBox_selectScenario1.SetItems(gettedScenarioNames)
-		# self.comboBox_selectScenario2.SetItems(gettedScenarioNames)
+		self.comboBox_selectScenario1.SetItems(list_Scenarios)
 
 
 	def comboBox_selectScenario1OnCombobox( self, event ):
 		''' init second scenario combobox once first scenario change'''
 		selectedMasterNetworkName = self.comboBox_selectNetwork.Value
 		selectedDataset = self.comboBox_selectModel.Value
-		result = GetInstances()
-		gettedScenarioNames, data = result.getScenario(selectedDataset, selectedMasterNetworkName)
-		if gettedScenarioNames.__len__() <= 0:
+		result = GetInstancesBySenario()
+		gotScenarios = result.GetScenarios(selectedDataset, selectedMasterNetworkName)
+
+		list_Scenarios = list()
+		for index, row in gotScenarios.iterrows():
+			list_Scenarios.append(row["ScenarioName"])
+
+		if list_Scenarios.__len__() <= 0:
 			return
 		selected_scenario1 = self.comboBox_selectScenario1.Value
-		selected_index = gettedScenarioNames.index(selected_scenario1)
-		gettedScenarioNames.pop(selected_index)
-		self.comboBox_selectScenario2.SetItems(gettedScenarioNames)
+		selected_index = list_Scenarios.index(selected_scenario1)
+		list_Scenarios.pop(selected_index)
+		self.comboBox_selectScenario2.SetItems(list_Scenarios)
 		pass
 
 	def comboBox_selectScenario2OnCombobox( self, event ):

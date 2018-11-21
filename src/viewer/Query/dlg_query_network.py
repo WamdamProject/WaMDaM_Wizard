@@ -3,7 +3,8 @@
 import wx
 import viewer.WaMDaMWizard
 
-from controller.wamdamAPI.GetDataStructure import GetDataStructure
+from controller.wamdamAPI.GetResourceStructure import GetResourceStructure
+from controller.wamdamAPI.GetInstancesByScenario import GetInstancesBySenario
 from xlrd import open_workbook
 # from xlutils.copy import copy
 from viewer.Messages_forms.msg_somethigWrong import msg_somethigWrong
@@ -22,11 +23,11 @@ class dlg_query_network(viewer.WaMDaMWizard.dlg_query_network):
 				msg = "\n\nWarning: Please connect to sqlite first."
 				raise Exception(msg)
 
-			self.dataStructure = GetDataStructure()
-			self.datasets = self.dataStructure.getResourceTypes()
+			self.dataStructure = GetResourceStructure()
+			self.datasets = self.dataStructure.GetResourceType()
 			list_acromy = list()
-			for row in self.datasets:
-				list_acromy.append(row.ResourceTypeAcronym)
+			for row in self.datasets.values:
+				list_acromy.append(row[0])
 			if list_acromy.__len__() > 0:
 				self.comboBox_selectModel.SetItems(list_acromy)
 		except Exception as e:
@@ -38,21 +39,27 @@ class dlg_query_network(viewer.WaMDaMWizard.dlg_query_network):
 	def comboBox_selectModelOnCombobox( self, event ):
 		# TODO: Implement comboBox_selectModelOnCombobox
 		selectedDataset = self.comboBox_selectModel.Value
-		result = GetDataStructure()
-		gettedMasterNetworkNames, data = result.getMasterNetwork(selectedDataset)
-		if gettedMasterNetworkNames.__len__() <= 0:
-			return
-		self.comboBox_selectNetwork.SetItems(gettedMasterNetworkNames)
+		result = GetInstancesBySenario()
+		gotMasterNetwork = result.GetMasterNetworks(selectedDataset)
+		list_Networks = list()
+		for index, row in gotMasterNetwork.iterrows():
+			list_Networks.append(row["MasterNetworkName"])
+		if list_Networks.__len__() > 0:
+			self.comboBox_selectNetwork.SetItems(list_Networks)
 	
 	def comboBox_selectNetworkOnCombobox( self, event ):
-		# TODO: Implement comboBox_selectNetworkOnCombobox
 		selectedMasterNetworkName = self.comboBox_selectNetwork.Value
-		result = GetDataStructure()
-		gettedScenarioNames, data = result.getScenario(self.comboBox_selectModel.Value, selectedMasterNetworkName)
-		if gettedScenarioNames.__len__() <= 0:
+		selectedDataset = self.comboBox_selectModel.Value
+		result = GetInstancesBySenario()
+		gotScenarioNames = result.GetScenarios(selectedDataset, selectedMasterNetworkName)
+
+		list_Scenarios = list()
+		for index, row in gotScenarioNames.iterrows():
+			list_Scenarios.append(row["ScenarioName"])
+
+		if gotScenarioNames.__len__() <= 0:
 			return
-		self.comboBox_selectScenario.SetItems(gettedScenarioNames)
-		pass
+		self.comboBox_selectScenario.SetItems(list_Scenarios)
 
 	def comboBox_selectScenarioOnCombobox( self, event ):
 		# TODO: Implement comboBox_selectScenarioOnCombobox
@@ -92,11 +99,11 @@ class dlg_query_network(viewer.WaMDaMWizard.dlg_query_network):
 			raise Exception(message)
 
 		''' get nework, scenario, nodes, links'''
-		result = GetDataStructure()
-		names, network_data_result = result.getMasterNetwork(selectedDataset)
-		names, scenarios_data_result = result.getScenario(selectedDataset, selectedMasterNetworkName)
-		names, nodes_data_result = result.getNodes(selectedDataset, selectedMasterNetworkName,selectedScenarioName)
-		links_data_result = result.getLinkes(selectedDataset, selectedMasterNetworkName,selectedScenarioName)
+		result = GetResourceStructure()
+		names, network_data_result = result.GetMasterNetworks(selectedDataset)
+		names, scenarios_data_result = result.GotScenario(selectedDataset, selectedMasterNetworkName)
+		names, nodes_data_result = result.GotNodes(selectedDataset, selectedMasterNetworkName,selectedScenarioName)
+		links_data_result = result.GotLinks(selectedDataset, selectedMasterNetworkName,selectedScenarioName)
 		print '************8**'
 		try:
 			if self.path.split('.')[-1] == 'xls':
@@ -158,7 +165,7 @@ class dlg_query_network(viewer.WaMDaMWizard.dlg_query_network):
 					for col_id, cell in enumerate(row):
 						links_sheet.cell(row=row_id + 11, column=col_id + 1, value=cell)
 				book2.save(self.path)
-			from Messages_forms.msg_successLoadDatabase import msg_successLoadDatabase
+			from viewer.Messages_forms.msg_successLoadDatabase import msg_successLoadDatabase
 			instance = msg_successLoadDatabase(None)
 			instance.m_staticText1.SetLabel("Success: exported excel file")
 			instance.ShowModal()

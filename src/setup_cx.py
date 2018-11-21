@@ -44,8 +44,8 @@ base = None
 if sys.platform == 'win32':
     base = 'Win32GUI'
 setup(
-    name="WaMDaM_v1.03_UtahStateUniversity",
-    version="1.03",
+    name="WaMDaM_v1.04_UtahStateUniversity",
+    version="1.04",
     description="The Water Management Data Model (WaMDaM)",
     options={'build_exe': build_exe_options, 'bdist_msi': bdist_msi_options},
     executables=[Executable("WaMDaM.py", base=base, icon="WaMDaM_Wizard.ico")]

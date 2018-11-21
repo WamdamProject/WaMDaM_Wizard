@@ -58,7 +58,7 @@ class LoadingUtils():
             dummy_attrib.ObjectTypeID = dum_attrib[0]
 
         dummy_attrib.UnitNameCV = session.query(SqlAlchemy.CV_Units).filter(
-            SqlAlchemy.CV_Units.Name == 'Dimensionless'
+            SqlAlchemy.CV_Units.Name == 'No unit'
         ).first().Name
 
         dummy_attrib.AttributeDataTypeCV = session.query(SqlAlchemy.CV_AttributeDataType).filter(

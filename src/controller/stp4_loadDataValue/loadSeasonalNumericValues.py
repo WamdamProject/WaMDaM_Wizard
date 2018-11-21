@@ -275,6 +275,16 @@ class LoadSeasonalNumericValues(Parse_Excel_File, LoadingUtils):
                         sparams.SeasonNumericValue = row[8].value
                         sparams.ValuesMapperID = datavalues_id
                         sparams.SeasonName = row[6].value
+
+
+                        # sparams.SeasonDateFormate=row[9].value
+
+
+
+                        """1999/12/1
+                                                YYYY/MM/DD""" \
+                        """  Year value must be 9999"""
+
                         self.setup.push_data(sparams)
 
                         # Adding order to the seasonalNumericValues according to blocks

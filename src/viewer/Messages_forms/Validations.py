@@ -444,7 +444,7 @@ class msg_registerCVs(wx.Dialog):
 class msg_somethigWrong(wx.Dialog):
 	def __init__(self, parent, msg):
 		wx.Dialog.__init__(self, parent, id=1019, title=u"Sorry: something went wrong ", pos=wx.DefaultPosition,
-						   size=wx.Size(458, 212), style=wx.DEFAULT_DIALOG_STYLE)
+						   size=wx.Size(658, 412), style=wx.DEFAULT_DIALOG_STYLE)
 
 		self.SetSizeHintsSz(wx.DefaultSize, wx.DefaultSize)
 

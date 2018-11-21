@@ -66,7 +66,7 @@ class Load_CV_To_DB(Parse_Excel_File):
             if len(row) > 1 and not row[1] in result:
                 if row[0] and row[1] is not None:
                     model.Term = row[0]
-                    model.Name = row[1]
+                    model.Name = unicodedata.normalize("NFKD", unicode(row[1], 'UTF-8'))
                 else:
                     raise Exception()
                 model.Definition = unicodedata.normalize("NFKD", unicode(row[2], 'UTF-8')) \
@@ -76,13 +76,25 @@ class Load_CV_To_DB(Parse_Excel_File):
                     model.Category = unicodedata.normalize("NFKD", unicode(row[3], 'UTF-8')) \
                         .replace(u"\u2018", "'").replace(u"\u2019", "'")
 
-                model.SourceVocabularyURI = row[5]
+                model.SourceVocabularyURI = row[5]  # 5 is column index in the source
+
                 if hasattr(model, "AttributeName"):
-                    model.AttributeName = row[7]
-                if hasattr(model, "BooleanValue"):
-                    model.BooleanValue = row[7]
+                    # model.AttributeName = row[7] #  7 is column index in the source
+                    model.AttributeName = unicodedata.normalize("NFKD", unicode(row[7], 'UTF-8'))
+
                 if hasattr(model, "UnitSystem"):
-                    model.UnitSystem = row[7]
+                    # model.UnitSystem = row[8]  #6 is column index in the source
+                    model.UnitSystem = unicodedata.normalize("NFKD", unicode(row[9], 'UTF-8'))
+
+                if hasattr(model, "UnitAbbreviation"):
+                    # model.UnitAbbreviation = row[9] #5 is column index in the source
+                    model.UnitAbbreviation =unicodedata.normalize("NFKD", unicode(row[10], 'UTF-8'))
+
+                if hasattr(model, "LinearFactor"):
+                    model.LinearFactor = row[7]  #7 is column index in the source
+
+                if hasattr(model, "ConstantFactor"):
+                    model.ConstantFactor = row[8]  # 7 is column index in the source
             else:
                 return None
         except Exception as e:

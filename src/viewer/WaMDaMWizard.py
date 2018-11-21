@@ -36,7 +36,7 @@ def scale_bitmap(bitmap, width, height):
 class frm_Home ( wx.Frame ):
 
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = 1, title = u"WaMDaM Wizard 1.03", pos = wx.DefaultPosition, size = wx.Size( 1000,800 ), style = wx.DEFAULT_FRAME_STYLE|wx.MAXIMIZE_BOX|wx.MINIMIZE_BOX|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = 1, title = u"WaMDaM Wizard 1.04", pos = wx.DefaultPosition, size = wx.Size( 1000,800 ), style = wx.DEFAULT_FRAME_STYLE|wx.MAXIMIZE_BOX|wx.MINIMIZE_BOX|wx.TAB_TRAVERSAL )
 
         self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
         # self.SetWindowStyle(wx.STAY_ON_TOP)
@@ -67,6 +67,8 @@ class frm_Home ( wx.Frame ):
         self.rbarImport.AddSimpleButton( 5001, u"From WaDE", Wade.GetBitmap(), wx.EmptyString)
         self.rbarImport.AddSimpleButton( 10, u"From Bureau of Reclamation", ImportRwise.GetBitmap(), wx.EmptyString)
         self.rbarImport.AddSimpleButton( 11, u"WEAP Model (Area)", WEAP.GetBitmap(), wx.EmptyString)
+        self.rbarImport.AddSimpleButton( 4357, u"Import From OpenAgua", OpenAgua.GetBitmap(), wx.EmptyString)
+
         self.rtab_Query = rb.RibbonPage( self.Main_ribbonBar, wx.ID_ANY, u"Query WaMDaM" , wx.NullBitmap , 0 )
         self.m_ribbonPanel7 = rb.RibbonPanel( self.rtab_Query, wx.ID_ANY, wx.EmptyString , wx.NullBitmap , wx.DefaultPosition, wx.DefaultSize, wx.lib.agw.ribbon.RIBBON_PANEL_DEFAULT_STYLE )
         self.m_ribbonButtonBar6 = rb.RibbonButtonBar( self.m_ribbonPanel7, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
@@ -82,7 +84,7 @@ class frm_Home ( wx.Frame ):
         self.rtab_Export = rb.RibbonPanel( self.rtab_Export, wx.ID_ANY, wx.EmptyString , wx.NullBitmap , wx.DefaultPosition, wx.DefaultSize, wx.lib.agw.ribbon.RIBBON_PANEL_DEFAULT_STYLE )
         self.m_ribbonButtonBar7 = rb.RibbonButtonBar( self.rtab_Export, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
         self.m_ribbonButtonBar7.AddSimpleButton( 17, u"First time", WEAP.GetBitmap(), wx.EmptyString)
-        # self.m_ribbonButtonBar7.AddSimpleButton( 18, u"Re-run a previous export", WASH.GetBitmap(), wx.EmptyString)
+
         self.m_ribbonButtonBar7.AddSimpleButton( 18, u"Re-run a previous export", rerun.GetBitmap(), wx.EmptyString)
         self.m_ribbonButtonBar7.AddSimpleButton( 19, u"Export WaMDaM to Excel Template", ImportExcel.GetBitmap(), wx.EmptyString)
 
@@ -108,7 +110,6 @@ class frm_Home ( wx.Frame ):
 
         bSizer1.Add( self.Main_ribbonBar, 0, wx.EXPAND|wx.ALL, 5 )
 
-        #corrected developer
     # Add logos on interface
         bSizer1.AddSpacer((0, 0), 1, wx.EXPAND, 5)
         # Add WaMDaM_Logo
@@ -175,6 +176,8 @@ class frm_Home ( wx.Frame ):
         self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.rtbnCrossTabSeasonalToWaMDaMOnRibbonButtonClicked, id = 7 )
         self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.rtbn_CrossTabTimeSeriesToWaMDaMOnRibbonButtonClicked, id = 8 )
         self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.rtbn_ImportExcelOnRibbonButtonClicked, id = 9 )
+        self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.rtbn_ImportOpenAguaOnRibbonButtonClicked, id = 4357 )
+
         self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.rtbn_ImportRwiseOnRibbonButtonClicked, id = 10 )
         self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.rtbn_AddNewSourceOnRibbonButtonClicked, id = 11 )
         self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.btn_query_metadataOnRibbonButtonClicked, id = 610 )
@@ -185,8 +188,8 @@ class frm_Home ( wx.Frame ):
         self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.btn_SearchDataValuesOnRibbonButtonClicked, id = 16 )
         self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.rtbn_WEAPOnRibbonButtonClicked, id = 17 )
         self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.rtbn_WASHOnRibbonButtonClicked, id = 18 )
-        self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.rtbn_ExportToRwiseOnRibbonButtonClicked, id = 19 )
-        # event EVT_COMMAND_RIBBONPANEL_EXTBUTTON_ACTIVATED isn't currently supported by wxPython
+        self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.rtbn_ExportToExcelOnRibbonButtonClicked, id = 19 )
+
         self.Bind(rb.EVT_RIBBONBUTTONBAR_CLICKED, self.rtbn_OpenAguaOnRibbonButtonClicked, id=4444)
         self.Bind(rb.EVT_RIBBONBUTTONBAR_CLICKED, self.rtbn_HydroShareOnRibbonButtonClicked, id=4443)
         self.Bind( rb.EVT_RIBBONBUTTONBAR_CLICKED, self.btnAboutWaMDaMOnRibbonButtonClicked, id = 20 )
@@ -1054,13 +1057,13 @@ class dlg_compare_scenarios ( wx.Dialog ):
 
 
 ###########################################################################
-## Class dlg_ExportScenarioDataToRwise
+## Class dlg_ExportScenarioDataToExcel
 ###########################################################################
 
-class dlg_ExportScenarioDataToHydra  ( wx.Dialog ):
+class dlg_ExportScenarioDataToExcel ( wx.Dialog ):
 
     def __init__( self, parent ):
-        wx.Dialog.__init__ ( self, parent, id = 7000, title = u"Export a Scenario Data to Hydra", pos = wx.DefaultPosition, size = wx.Size( 491,400 ), style = wx.DEFAULT_DIALOG_STYLE )
+        wx.Dialog.__init__ ( self, parent, id = 7000, title = u"Export a Scenario Data to Excel Template", pos = wx.DefaultPosition, size = wx.Size( 491,400 ), style = wx.DEFAULT_DIALOG_STYLE )
 
         self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
 
@@ -1107,8 +1110,8 @@ class dlg_ExportScenarioDataToHydra  ( wx.Dialog ):
         bSizer15.Add( self.m_staticText17111, 0, wx.ALL, 5 )
 
         # change this one to directory pickup
-        self.DirectoryPicker_ExportToRwise = wx.DirPickerCtrl( self, 7006, wx.EmptyString, u"Select a directory", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
-        bSizer15.Add( self.DirectoryPicker_ExportToRwise, 0, wx.ALL|wx.EXPAND, 5 )
+        self.DirectoryPicker_ExportToExcel = wx.DirPickerCtrl( self, 7006, wx.EmptyString, u"Select a directory", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+        bSizer15.Add( self.DirectoryPicker_ExportToExcel, 0, wx.ALL|wx.EXPAND, 5 )
 
         gSizer11 = wx.GridSizer( 1, 2, 1, 1 )
 
@@ -1131,7 +1134,7 @@ class dlg_ExportScenarioDataToHydra  ( wx.Dialog ):
         self.comboBox_selectModel.Bind( wx.EVT_COMBOBOX, self.comboBox_selectModelOnCombobox )
         self.comboBox_selectNetwork.Bind( wx.EVT_COMBOBOX, self.comboBox_selectNetworkOnCombobox )
         self.comboBox_selectScenario.Bind( wx.EVT_COMBOBOX, self.comboBox_selectScenarioOnCombobox )
-        self.DirectoryPicker_ExportToRwise.Bind( wx.EVT_DIRPICKER_CHANGED, self.DirectoryPicker_ExportToRwiseOnFileChanged )
+        self.DirectoryPicker_ExportToExcel.Bind( wx.EVT_DIRPICKER_CHANGED, self.DirectoryPicker_ExportToExcelOnFileChanged )
         self.btn_Export_ScenarioData.Bind( wx.EVT_BUTTON, self.btn_Export_ScenarioDataOnButtonClick )
         self.btn_cancel.Bind( wx.EVT_BUTTON, self.btn_cancelOnButtonClick )
 
@@ -1157,8 +1160,6 @@ class dlg_ExportScenarioDataToHydra  ( wx.Dialog ):
 
     def btn_cancelOnButtonClick( self, event ):
         event.Skip()
-
-
 
 
 
@@ -2274,7 +2275,7 @@ class dlg_About ( wx.Dialog ):
 
         bSizer10 = wx.BoxSizer( wx.VERTICAL )
 
-        self.m_staticText7 = wx.StaticText( self, wx.ID_ANY, u"The Water Management Data Model (WaMDaM) is a data model to consistency organize and synthesize disparate water management data for virtually any spatial boundary. These data are for node and link networks with attributes that have data types of, binary, parameters, seasonal parameters, text free, text controlled, file based, rules, time series, and multi column arrays.   \n  \nOrganizing data into WaMDaM helps users to systematically search for their data that has contextual metadata to correctly interpret it   \n  \nThis WaMDaM Data Loader helps users to load their data into WaMDaM database through a user-friendly interface.   \n  \nThe source code and documentation of WaMDaM and its Data Loader are provided @ https://github.com/WamdamProject/WaMDaM-software-ecosystem and disturbed under a BSD 3-Clause license. All Rights Reserved.  \n  \nWaMDaM was designed and tested at Utah Water Research Laboratory at Utah State University and was funded by the the National Science Foundation as part of the CI-Water Project @ http://ci-water.org \n  \nDevelopent Team: Adel M. Abdallah and David E. Rosenberg @ http://rosenberg.usu.edu \nFor any questions, email Adel @ amabdallah@aggiemail.usu.edu  or visit his site @ adelmabdallah.com \n \nDisclaimers:   \n*Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.  \n*This software has been tested but it comes without any warranty", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText7 = wx.StaticText( self, wx.ID_ANY, u"The Water Management Data Model (WaMDaM) is a data model to consistency organize and synthesize disparate water management data for virtually any spatial boundary. These data are for node and link networks with attributes that have data types of, parameters, seasonal parameters, text free, text controlled, file based, rules, time series, and multi column arrays.   \n  \nOrganizing data into WaMDaM helps users to systematically search for their data that has contextual metadata to correctly interpret it   \n  \nThis WaMDaM Data Loader helps users to load their data into WaMDaM database through a user-friendly interface.   \n  \nThe source code and documentation of WaMDaM and its Data Loader are provided @ https://github.com/WamdamProject/WaMDaM-software-ecosystem and disturbed under a BSD 3-Clause license. All Rights Reserved.  \n  \nWaMDaM was designed and tested at Utah Water Research Laboratory at Utah State University and was funded by the the National Science Foundation as part of the CI-Water Project @ http://ci-water.org \n  \nDevelopent Team: Adel M. Abdallah and David E. Rosenberg @ http://rosenberg.usu.edu \nFor any questions, email Adel @ amabdallah@aggiemail.usu.edu  or visit his site @ adelmabdallah.com \n \nDisclaimers:   \n*Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.  \n*This software has been tested but it comes without any warranty", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText7.Wrap( -1 )
         bSizer10.Add( self.m_staticText7, 1, wx.ALL|wx.EXPAND, 5 )
 

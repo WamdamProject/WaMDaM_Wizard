@@ -62,7 +62,7 @@ def ReadGdx():
 
     return df_all
 
-
+# to view the frames in Excel (for fun)
 def WriteToWaMDaM(df_all):
 
     # read the the j paramter and pass it to the function write_nodes that exist in this file Write_WaMDaM_Workbook

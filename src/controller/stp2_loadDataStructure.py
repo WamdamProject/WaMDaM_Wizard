@@ -75,7 +75,7 @@ class Load_Struct_To_DB(Parse_Excel_File):
             dummy_attrib.ObjectTypeID = self.__session.query(SqlAlchemy.ObjectTypes).order_by(
                 SqlAlchemy.ObjectTypes.ObjectTypeID.desc()).first().ObjectTypeID
 
-            dummy_attrib.UnitName = 'Dimensionless'
+            dummy_attrib.UnitName = 'No unit'
 
         else:
             dummy_attrib.AttributeName = 'ResourceTypeAcronym'
@@ -84,7 +84,7 @@ class Load_Struct_To_DB(Parse_Excel_File):
 
 
         dummy_attrib.UnitNameCV = self.__session.query(SqlAlchemy.CV_Units).filter(
-            SqlAlchemy.CV_Units.Name == 'Dimensionless'
+            SqlAlchemy.CV_Units.Name == 'No unit'
         ).first().Name
 
         dummy_attrib.AttributeDataTypeCV = self.__session.query(SqlAlchemy.CV_AttributeDataType).filter(
@@ -404,7 +404,10 @@ class Load_Struct_To_DB(Parse_Excel_File):
                             attrib.AttributeName_Abstract = row[2].value
                             attrib.ModelInputOrOutput = row[8].value
                             attrib.AttributeDescription = row[9].value
-                            attrib.UnitType = row[10].value
+                            if row[10].value=='':
+                                attrib.AttributeScale =1  # scale default value=1
+                            else:
+                                attrib.AttributeScale = row[10].value
 
                             self.setup.push_data(attrib)
                         break

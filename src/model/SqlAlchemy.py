@@ -193,8 +193,8 @@ class CV_Units(Base):
     Category = Column(String(255), nullable=False)
     UnitAbbreviation = Column(String(50))
     UnitSystem = Column(String(255))# Metric or English
-    ConversionFactor = Column(Float)
-    ConversionRelation = Column(String(255))
+    LinearFactor = Column(Float)
+    ConstantFactor = Column(Float)
     SourceVocabularyURI = Column(String(255))
 
 
@@ -238,7 +238,7 @@ class Attributes(Base):
     AttributeCategoryID = Column(ForeignKey('AttributeCategories.AttributeCategoryID'))
     ModelInputOrOutput = Column(String(50))
     Description = Column(Text)
-    UnitType = Column(String(50))
+    AttributeScale = Column(Integer)
 
     ObjectTypes = relationship('ObjectTypes')
     Units = relationship('CV_Units')
@@ -357,7 +357,7 @@ class SeasonalNumericValues(Base):
 
     SeasonalNumericValueID = Column(Integer, primary_key=True)
     SeasonName = Column(String(255))
-    SeasonDateFormate=Column(DateTime)
+    SeasonDateFormate=Column(Date)
     SeasonNameCV = Column(ForeignKey('CV_SeasonName.Name'))
     SeasonOrder = Column(Integer)
     SeasonNumericValue = Column(String(500), nullable=False)
@@ -442,6 +442,7 @@ class Methods(Base):
     MethodTypeCV = Column(ForeignKey('CV_MethodType.Name'))
     PersonID = Column(ForeignKey('People.PersonID'), nullable=False)
     Description = Column(Text)
+    DataQuality=Column(Text)
 
     MethodType = relationship('CV_MethodType')
     People = relationship('People')

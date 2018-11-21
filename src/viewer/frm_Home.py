@@ -81,6 +81,11 @@ class frm_Home( WaMDaMWizard.frm_Home ):
         HY=fHY.dlg_ImportRwise(None)
         HY.ShowModal()
 
+    def rtbn_ImportOpenAguaOnRibbonButtonClicked(self, event):
+        import Publish_Viz.dlg_ImportFromOpenAgua as fOA
+        HY_OA = fOA.dlg_ImportFromOpenAgua(None)
+        HY_OA.ShowModal()
+
     def rtbn_AddNewSourceOnRibbonButtonClicked( self, event ):
         import Exporter.dlg_ExtractWeapArea as fEx
         Ext=fEx.dlg_ExtractWeapArea(None)
@@ -120,7 +125,7 @@ class frm_Home( WaMDaMWizard.frm_Home ):
     def rtbn_WEAPOnRibbonButtonClicked( self, event ):
         import Exporter.dlg_SelectModel as fServ
         Serv=fServ.dlg_SelectModel(None)
-        # Serv.ShowModal()
+        Serv.ShowModal()
 
     def rtbn_WASHOnRibbonButtonClicked( self, event ):
         import Exporter.dlg_re_run_export as frerun
@@ -128,10 +133,10 @@ class frm_Home( WaMDaMWizard.frm_Home ):
         # rRun.ShowModal()
 
 
-    def rtbn_ExportToRwiseOnRibbonButtonClicked( self, event ):
-        import dlg_ExportScenarioDataToHydra as fhExpHyd
-        ExpRwise=fhExpHyd.dlg_ExportScenarioDataToHydra(None)
-        # ExpRwise.ShowModal()
+    def rtbn_ExportToExcelOnRibbonButtonClicked( self, event ):
+        import dlg_ExportScenarioDataToExcel as fhExpEx
+        ExpExcel=fhExpEx.dlg_ExportScenarioDataToExcel(None)
+        ExpExcel.ShowModal()
 
     def btnAboutWaMDaMOnRibbonButtonClicked( self, event ):
         import dlg_About as fAB
@@ -149,18 +154,23 @@ class frm_Home( WaMDaMWizard.frm_Home ):
         HE.ShowModal()
 
     def rtbn_HydroShareOnRibbonButtonClicked( self, event ):
-        from Publish.dlg_Publish import dlg_Publish
+        from Publish_Viz.dlg_Publish_HydroShare import dlg_Publish
         PublishDlg =dlg_Publish(None)
-        # PublishDlg.ShowModal()
+        PublishDlg.ShowModal()
 
     def rtbn_OpenAguaOnRibbonButtonClicked( self, event ):
-        from Publish.dlg_VisulaizeWaMDaM import dlg_VisulaizeWaMDaM
+        from Publish_Viz.dlg_VisualizeInOpenAgua import dlg_VisulaizeWaMDaM
         VisulaizeWaMDaMDlg =dlg_VisulaizeWaMDaM(None)
-        # VisulaizeWaMDaMDlg.ShowModal()
+        VisulaizeWaMDaMDlg.ShowModal()
     # def OnCloseWindow(self, event):
     #     import dlg_exit_DB as edb
     #     exit = edb.ExitDB(None)
     #     exit.ShowModal()
+
+
+
+
+
     def _when_closed(self, event):
         import dlg_exit_DB as edb
         exit = edb.ExitDB(None)

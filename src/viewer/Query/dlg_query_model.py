@@ -2,7 +2,7 @@
 
 import wx
 import viewer.WaMDaMWizard
-from controller.wamdamAPI.GetDataStructure import GetDataStructure
+from controller.wamdamAPI.GetResourceStructure import GetResourceStructure
 from xlrd import open_workbook
 # from xlutils.copy import copy
 from viewer.Messages_forms.msg_somethigWrong import msg_somethigWrong
@@ -20,11 +20,11 @@ class dlg_query_model(viewer.WaMDaMWizard.dlg_query_model):
 				msg = "\n\nWarning: Please connect to sqlite first."
 				raise Exception(msg)
 
-			self.dataStructure = GetDataStructure()
-			self.datasets = self.dataStructure.getResourceTypes()
+			self.dataStructure = GetResourceStructure()
+			self.datasets = self.dataStructure.GetResourceType()
 			list_acromy = list()
-			for row in self.datasets:
-				list_acromy.append(row.ResourceTypeAcronym)
+			for row in self.datasets.values:
+				list_acromy.append(row[0])
 			if list_acromy.__len__() > 0:
 				self.comboBox_selectModel.SetItems(list_acromy)
 		except Exception as e:
@@ -69,10 +69,10 @@ class dlg_query_model(viewer.WaMDaMWizard.dlg_query_model):
 			# raise Exception(message)
 
 		''' get objecttypes, attibutes, datasetType'''
-		result = GetDataStructure()
-		data_result = result.getObjecttypes(selectedDataset)
-		attributes_result = result.getAttributes(selectedDataset)
-		dataset_result = result.getDatasetType(selectedDataset)
+		result = GetResourceStructure()
+		data_result = result.GetObjectTypesByResource(selectedDataset)
+		attributes_result = result.GetAttributesByResource(selectedDataset)
+		dataset_result = result.GetResourceType(selectedDataset)
 		print '************8**'
 		try:
 			if self.path.split('.')[-1] == 'xls':
@@ -114,7 +114,7 @@ class dlg_query_model(viewer.WaMDaMWizard.dlg_query_model):
 						attribute_sheet.cell(row=row_id + 11, column=col_id + 1, value=cell)
 
 				book2.save(self.path)
-			from Messages_forms.msg_successLoadDatabase import msg_successLoadDatabase
+			from viewer.Messages_forms.msg_successLoadDatabase import msg_successLoadDatabase
 			instance = msg_successLoadDatabase(None)
 			instance.m_staticText1.SetLabel("Success export excel file")
 			instance.Show()

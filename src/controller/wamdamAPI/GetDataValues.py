@@ -552,7 +552,7 @@ class GetDataValues(object):
             return complete_result
         except Exception as  e:
             print e
-            raise Exception('Erro occure in reading Data Structure.\n' + e.message)
+            raise Exception('Error occured in reading Data Structure.\n' + e.message)
     def exportMultiSheet(self, selectedType='', selectedAttribute='', selectedInstance='', excelPath=''):
         '''
         This method is used to get data making MultiAttributeSeries_table.
@@ -806,7 +806,7 @@ class GetDataValues(object):
 
         except Exception as  e:
             print e
-            raise Exception('Erro occure in reading Data Structure.\n' + e.message)
+            raise Exception('Error occured in reading Data Structure.\n' + e.message)
 
     # def exportDualValuesSheet1(self, selectedResourceType, selectedNetwork, selectedScenarior, excelPath):
     #     '''

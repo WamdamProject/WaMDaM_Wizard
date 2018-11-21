@@ -62,11 +62,7 @@
     
     
     
-    
-    
-    
-    
-    
+
     
     
 '''
@@ -85,6 +81,7 @@ from .ReadWorkbook_SheetsNames import Network_sheets_ordered
 
 import define
 
+import pandas as pd
 # ****************************************************************************************************************** #
 #                                                                                                                    #
 #                                         Script Begins here                                                         #
@@ -92,7 +89,7 @@ import define
 # ****************************************************************************************************************** #
 
 
-class Load_Networks_Data(Parse_Excel_File):
+class Load_Networks_Data(Parse_Excel_File,object):
     """
         Class used to load Networks data to database tables.
         ::: Inherits From :::
@@ -343,9 +340,15 @@ class Load_Networks_Data(Parse_Excel_File):
                                                 .format(row_id, Network_sheets_ordered[1]))
                             Scenario.ScenarioName = row[0].value
                             if row[4].value:
-                                Scenario.ScenarioStartDate = datetime.date.fromordinal(int(row[4].value) + 693594)
+                                try:
+                                    Scenario.ScenarioStartDate = datetime.date.fromordinal(int(row[4].value) + 693594)
+                                except:
+                                    Scenario.ScenarioStartDate = datetime.datetime.strptime(row[4].value , '%m/%d/%Y')
                             if row[5].value:
-                                Scenario.ScenarioEndDate = datetime.date.fromordinal(int(row[5].value) + 693594)
+                                try:
+                                    Scenario.ScenarioEndDate = datetime.date.fromordinal(int(row[5].value) + 693594)
+                                except:
+                                    Scenario.ScenarioEndDate = datetime.datetime.strptime(row[5].value, '%m/%d/%Y')
                             if row[6].value:
                                     Scenario.TimeStepValue = row[6].value
                             # Foreign key constraint
@@ -460,15 +463,52 @@ class Load_Networks_Data(Parse_Excel_File):
                             except:
                                 pass
 
-                            # what type of error is this one (like a category)
-                            # explain the comment below more
                             # this is used to share nodes so that they are not duplicated.
                             try:
-                                # checking if node already exists if yes, the node is shared in the model
-                                node_test = self.__session.query(SqlAlchemy.Instances).filter(
-                                    SqlAlchemy.Instances.InstanceName == row[1].value
-                                ).first().InstanceID
-                                same_node = True
+                                # checking if node already exists within the same master network, if yes, the node is shared in the model
+                                # sharing is limited between scenarios of the same master network
+
+                                ScenarioName=row[3].value
+
+                                GetMasterNetworkName_SQL="""
+                                -- Use the scenario name provided in Excel with instances to look up the parent network Name
+                                    -- then use the network name to Select instances that belong to a master network  
+                                    --Select DISTINCT MasterNetworkName,ScenarioName,Instances.InstanceID,"InstanceName" 
+                                    Select DISTINCT MasterNetworkName
+                                    FROM Instances
+                                    LEFT JOIN "Mappings"
+                                    ON "Mappings"."InstanceID"=Instances.InstanceID
+                                    LEFT JOIN "ScenarioMappings"
+                                    ON "ScenarioMappings"."MappingID"="Mappings"."MappingID"
+                                    LEFT JOIN "Scenarios" 
+                                    ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID"
+                                    LEFT JOIN "MasterNetworks" 
+                                    ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID"
+                                    WHERE  ScenarioName ='{}' """.format(ScenarioName)
+
+                                MasterNetwork=pd.DataFrame(list(self.session.execute(GetMasterNetworkName_SQL)))
+
+                                GetInstancesInMasterNetwork_SQL="""
+                                    -- then use the network name to Select instances that belong to a master network  
+                                    Select DISTINCT InstanceName
+                                    FROM Instances
+                                    LEFT JOIN "Mappings"
+                                    ON "Mappings"."InstanceID"=Instances.InstanceID
+                                    LEFT JOIN "ScenarioMappings"
+                                    ON "ScenarioMappings"."MappingID"="Mappings"."MappingID"
+                                    LEFT JOIN "Scenarios" 
+                                    ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID"
+                                    LEFT JOIN "MasterNetworks" 
+                                    ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID"
+                                    WHERE  MasterNetworkName = '{}' """.format(MasterNetwork)
+
+                                InstancesInMasterNetwork =pd.DataFrame(list(self.session.execute(GetInstancesInMasterNetwork_SQL)))
+
+                                for node_instance in InstancesInMasterNetwork:
+                                    node_test = node_instance == row[1].value
+                                    same_node = True
+
+
                             except:
                                 nodes = SqlAlchemy.Instances()
                                 if row[1].value == "":
@@ -586,7 +626,7 @@ class Load_Networks_Data(Parse_Excel_File):
                                 self.setup.push_data(dummy_scen_map)
                         break
 
-                if sheet_name == Network_sheets_ordered[3]:
+                if sheet_name == Network_sheets_ordered[3]: # links sheet
                     if 'LinkInstances_table' in temp_row:
                         cur_table = sheet_rows[row_id + 5:]
                         for row_id, row in enumerate(cur_table):
@@ -631,11 +671,61 @@ class Load_Networks_Data(Parse_Excel_File):
                                 pass
 
                             try:
-                                # check if link already exists, if yes, link is shared
-                                link_test = self.__session.query(SqlAlchemy.Instances).filter(
-                                    SqlAlchemy.Instances.InstanceName == row[1].value
-                                ).first().InstanceID
-                                same_link = True
+
+                                ScenarioName = row[3].value
+
+                                GetMasterNetworkName_SQL = """
+                                                                -- Use the scenario name provided in Excel with instances to look up the parent network Name
+                                                                    -- then use the network name to Select instances that belong to a master network  
+                                                                    --Select DISTINCT MasterNetworkName,ScenarioName,Instances.InstanceID,"InstanceName" 
+                                                                    Select DISTINCT MasterNetworkName
+                                                                    FROM Instances
+                                                                    LEFT JOIN "Mappings"
+                                                                    ON "Mappings"."InstanceID"=Instances.InstanceID
+                                                                    LEFT JOIN "ScenarioMappings"
+                                                                    ON "ScenarioMappings"."MappingID"="Mappings"."MappingID"
+                                                                    LEFT JOIN "Scenarios" 
+                                                                    ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID"
+                                                                    LEFT JOIN "MasterNetworks" 
+                                                                    ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID"
+                                                                    WHERE  ScenarioName ='{}' """.format(ScenarioName)
+
+                                MasterNetwork = pd.DataFrame(list(self.session.execute(GetMasterNetworkName_SQL)))
+
+                                GetInstancesInMasterNetwork_SQL = """
+                                                    -- then use the network name to Select instances that belong to a master network  
+                                                    Select DISTINCT InstanceName
+                                                    FROM Instances
+                                                    LEFT JOIN "Mappings"
+                                                    ON "Mappings"."InstanceID"=Instances.InstanceID
+                                                    LEFT JOIN "ScenarioMappings"
+                                                    ON "ScenarioMappings"."MappingID"="Mappings"."MappingID"
+                                                    LEFT JOIN "Scenarios" 
+                                                    ON "Scenarios"."ScenarioID"="ScenarioMappings"."ScenarioID"
+                                                    LEFT JOIN "MasterNetworks" 
+                                                    ON "MasterNetworks"."MasterNetworkID"="Scenarios"."MasterNetworkID"
+                                                    WHERE  MasterNetworkName = '{}' """.format(MasterNetwork)
+
+                                InstancesInMasterNetwork = pd.DataFrame(
+                                    list(self.session.execute(GetInstancesInMasterNetwork_SQL)))
+
+                                for link_instance in InstancesInMasterNetwork:
+                                    link_test = link_instance == row[1].value
+
+
+                                    same_link = True
+
+                                # old stuff/idea to add the start and end node names for the check
+                                # the idea didnt work because start and end node names could still match
+                                # between two different networks though they are not the same geospatially
+                                # This issue is a WEAP issue. Becasue WEAP auto generats node and link names
+                                # and in some cases, they happen to have the same names but they are different geospatially
+                                # Meaninig, they are not the same thing but happen to have the same names! wierd case!!
+                                # Such wierd case is happening because the two WEAP networks are coming from two different WEAP areas
+                                # becasue WEAP does not support changing network topology as part of scenarios
+
+
+
                             except Exception:
                                 links = SqlAlchemy.Instances()
                                 if row[1].value == "":
@@ -654,6 +744,7 @@ class Load_Networks_Data(Parse_Excel_File):
                                         print e
                                         raise Exception('Error with {} sheet\nCannot Find {} in CV_InstanceName table'.
                                                         format(sheet_name, row[2].value))
+
                                 coord = self.__session.query(SqlAlchemy.Instances).filter(
                                     or_(
                                         SqlAlchemy.Instances.InstanceName == row[6].value,
@@ -685,7 +776,7 @@ class Load_Networks_Data(Parse_Excel_File):
                                         ).first().InstanceCategoryID
                                     except Exception as e:
                                         print e
-                                        raise Exception('Error with {} sheet\nCannot Find {} in InstanceCategory table'.
+                                        raise Exception('Error with {} sheet\n Cannot Find {} in InstanceCategory table'.
                                                         format(sheet_name, row[8].value))
                                 self.setup.push_data(links)
 
@@ -698,7 +789,7 @@ class Load_Networks_Data(Parse_Excel_File):
                                     SqlAlchemy.ObjectTypes.ObjectType == row[0].value
                                 ).first().ObjectTypeID
                             except Exception as e:
-                                raise Exception('Error with {} sheet\nCannot Find {} in ObjectTypes table'.
+                                raise Exception('Error with {} sheet\n Cannot Find {} in ObjectTypes table'.
                                                         format(sheet_name, row[0].value))
                                 # raise Exception(e.message)
                             if link_test:
