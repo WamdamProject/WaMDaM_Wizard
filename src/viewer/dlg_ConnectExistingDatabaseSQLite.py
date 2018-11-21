@@ -86,7 +86,7 @@ class dlg_ConnectExistingDatabaseSQLite(WaMDaMWizard.dlg_ConnectExistingDatabase
             sql = 'SELECT  DISTINCT  VersionNumber FROM "WaMDaMVersion"'
             result = temp_session.execute(sql)
             for row in result:
-                if row.VersionNumber != 1.03:
+                if row.VersionNumber != 1.04:
                     define.logger.error('Failed database connection.\n\nError: The database you are trying to connect to does not matched WaMDaM 1.03 schema version.')
                     raise Exception('\n\nError: The database you are trying to connect to does not matched WaMDaM 1.03 schema version')
 
