@@ -4,6 +4,11 @@ Here is the schema that the Wizard works within: [WaMDaM Schema](https://wamdamp
 
 The Wizard is built using Python 2.7 and the [wxPython](https://www.wxpython.org/) GUI library with the help of [wxFormBuilder](https://github.com/wxFormBuilder/wxFormBuilder).  
 
+# Instructions to use WaMDaM software  
+The Wizard also provides modelers with automated detailed and summary comparisons of network topology, metadata, and data between Scenarios in the same master network. 
+https://github.com/WamdamProject/WaMDaM_Wizard/blob/master/README.md
+
+
 ## [Download the WaMDaM Excel Workbook Templates for Input Data]
 1. Excel Workbook template to prepare your data into it. Each dataset into one workbook
 https://github.com/WamdamProject/WaMDaM_UseCases/tree/master/0_WorkbookTemplates/InputData_Template
