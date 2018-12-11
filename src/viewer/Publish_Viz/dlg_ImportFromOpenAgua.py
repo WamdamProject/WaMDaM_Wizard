@@ -37,7 +37,16 @@ class dlg_ImportFromOpenAgua( Publish_Viz.dlg_ImportFromOpenAgua ):
             if not self.m_textCtr_username.Value or not self.m_textCtrl_pass.Value:
                 raise Exception("Provid a username and password")
 
-            login_response = self.conn.login(self.m_textCtr_username.Value, self.m_textCtrl_pass.Value)
+            while True:
+                try:
+                    login_response = self.conn.login(self.m_textCtr_username.Value, self.m_textCtrl_pass.Value)
+                    print 'Connected to Hydra Platform web services first time'
+                    break
+                except:
+                    continue
+                    # login_response = self.conn.login(self.m_textCtr_username.Value, self.m_textCtrl_pass.Value)
+                    # print 'Connected to Hydra Platform web services second time'
+
             projects = self.conn.call('get_projects', {})
             project_names = []
             self.project_ids = {}
@@ -77,13 +86,17 @@ class dlg_ImportFromOpenAgua( Publish_Viz.dlg_ImportFromOpenAgua ):
             self.template_id_list = {}
             for network in GetNetworks_metadata:
                 active_template_id = network['layout']['active_template_id']
+                # get the templates based on the network active template id inside.
                 Template = self.conn.call('get_template', {'template_id': int(active_template_id)})
+
+
                 if not Template['name'] in TemplateName_list:
                     TemplateName_list.append(Template['name'])
                     self.template_id_list[Template['name']] = Template['id']
 
-                self.GlobalAttributesID= network['types'][0]['id']
-                # Then return the GlobalAttributesID into the controller
+
+                    self.GlobalAttributesID= network['types'][0]['id']
+                    # Then return the GlobalAttributesID into the controller
 
             self.m_SelectModel.SetItems(TemplateName_list)
 

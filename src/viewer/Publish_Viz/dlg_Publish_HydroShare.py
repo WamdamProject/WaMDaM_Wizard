@@ -38,14 +38,11 @@ class dlg_Publish( Publish_Viz.dlg_Publish ):
 				db_setup = DB_Setup()
 				fullPathOfSqlite = db_setup.get_dbpath()
 
-				resource_id,file_id,params,hs = publishOnHydraShare(userName, password, fullPathOfSqlite, title, abstract, author)
+				resource_id= publishOnHydraShare(userName, password, fullPathOfSqlite, title, abstract, author)
 				if resource_id:
-					# hs.resource(resource_id).files.metadata(file_id, params)
-
-
 					from viewer.Messages_forms.msg_connSQLiteSuccs import msg_connSQLiteSuccs
 					msgdlg = msg_connSQLiteSuccs(self)
-					msgdlg.setMessage("\n\nSuccessfully, Uploaded Sqlite file.")
+					msgdlg.setMessage("\n\nSuccessfully, uploaded Sqlite file.")
 					msgdlg.ShowModal()
 
 					# options = {"file_path": 'WEAP_WASH.sqlite', "hs_file_type": "SingleFile"}
@@ -54,7 +51,7 @@ class dlg_Publish( Publish_Viz.dlg_Publish ):
 					self.Destroy()
 				else:
 					msg_somethigWrong(self,
-									  msg='\n\nError: Sorry, Failed uploading the sqlite file.').Show()
+									  msg='\n\nError: Sorry, failed uploading the sqlite file.').Show()
 				self.btn_Publish.Enabled = True
 		pass
 	

@@ -232,9 +232,9 @@ class LoadMetaData(Parse_Excel_File):
                             if row[0] == "":
                                 raise Exception('Error in {} row of "Methods_table" of sheet "{}"\nField named "MethodName" is empty.\nThis field should not be empty.\nPlease fill this field to a value.'
                                                 .format(row_id, metadata_sheets_ordered[1]))
-                            if row[3] == "":
-                                raise Exception('Error in {} row of "Methods_table" of sheet "{}"\nField named "MethodTypeCV" is empty.\nThis field should not be empty.\nPlease fill this field to a value.'
-                                                .format(row_id, metadata_sheets_ordered[1]))
+                            # if row[3] == "":
+                            #     raise Exception('Error in {} row of "Methods_table" of sheet "{}"\nField named "MethodTypeCV" is empty.\nThis field should not be empty.\nPlease fill this field to a value.'
+                            #                     .format(row_id, metadata_sheets_ordered[1]))
                             if row[4] == "":
                                 raise Exception('Error in {} row of "Methods_table" of sheet "{}"\nField named "PersonName" is empty.\nThis field should not be empty.\nPlease fill this field to a value.'
                                                 .format(row_id, metadata_sheets_ordered[1]))
@@ -247,9 +247,10 @@ class LoadMetaData(Parse_Excel_File):
                                 method.MethodWebpage = row[1]
                                 method.MethodCitation = row[2]
                                 try:
-                                    method.MethodTypeCV = self.__session.query(SqlAlchemy.CV_MethodType).filter(
-                                        SqlAlchemy.CV_MethodType.Name == row[3]
-                                    ).first().Name
+                                    if not row[3] == "":
+                                        method.MethodTypeCV = self.__session.query(SqlAlchemy.CV_MethodType).filter(
+                                            SqlAlchemy.CV_MethodType.Name == row[3]
+                                        ).first().Name
                                 except Exception as e:
                                     raise Exception('Error with sheet "{}"\ncould not find "{}" in MethodType'
                                                     .format(metadata_sheets_ordered[1], row[3]))

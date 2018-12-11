@@ -5,7 +5,7 @@
 """"""
 
 """
-WaMDaM: The Water Management Data Model Version 1.04 
+WaMDaM: The Water Management Data Model Version 1.05
 See the schema at http://schema.wamdam.org/diagrams/01_WaMDaM.html
 Instructions at http://docs.wamdam.org/Getting_started/Steps
 
@@ -13,7 +13,7 @@ Adel M. Abdallah
 email: amabdallah@aggiemail.usu.edu
 website: http://adelmabdallah.com/
 
-November 2018
+December 2018
 """
 
 

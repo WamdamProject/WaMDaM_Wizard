@@ -1,6 +1,7 @@
-import gdxpds
 import pandas as pds
+import gdxpds.gdx
 
+from IPython.display import display, Image, SVG, Math, YouTubeVideo
 
 
 
@@ -16,21 +17,22 @@ df = pds.DataFrame(data=d)
 # gdx_file = './o_gams.gdx'
 # gdx = gdxpds.to_gdx(data_ready_for_GAMS, gdx_file)
 
-
+display (df)
 out_file = 'my_new_gdx_data.gdx'
-with gdxpds.gdx.GdxFile() as gdx:
-    # Create a new set with one dimension
-    # gdx.append(gdxpds.gdx.GdxSymbol('my_set',gdxpds.gdx.GamsDataType.Set,dims=['u']))
-    # data = pds.DataFrame([['u' + str(i)] for i in range(1,11)])
-    # data['Value'] = True
-    # gdx[-1].dataframe = data
-    # Create a new parameter with one dimension
-    gdx.append(gdxpds.gdx.GdxSymbol('my_parameter',gdxpds.gdx.GamsDataType.Parameter,dims=['u']))
-    data = df
-    gdx[-1].dataframe = data
-    gdx.write(out_file)
+# with gdxpds.gdx.GdxFile() as gdx:
+#     # Create a new set with one dimension
+#     # gdx.append(gdxpds.gdx.GdxSymbol('my_set',gdxpds.gdx.GamsDataType.Set,dims=['u']))
+#     # data = pds.DataFrame([['u' + str(i)] for i in range(1,11)])
+#     # data['Value'] = True
+#     # gdx[-1].dataframe = data
+#     # Create a new parameter with one dimension
+#     gdx.append(gdxpds.gdx.GdxSymbol('my_parameter',gdxpds.gdx.GamsDataType.Parameter,dims=['u']))
+#     data = df
+#     gdx[-1].dataframe = data
+#     gdx.write(out_file)
 
 
+print 'done'
 
 # with gdxpds.gdx.GdxFile() as gdx:
 #     # Create a new set with one dimension

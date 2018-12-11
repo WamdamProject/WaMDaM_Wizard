@@ -120,17 +120,21 @@ def publishOnHydraShare(userName, password, filePathOfSqlite, title, abstract, a
     # or a string representing path to file to be uploaded as part of the new resource
     # this line uploads the new WaMdaM resource to HydroShare
 
+    # filePathOfSqlite = 'C:\\Users\\Adel\\Documents\\GitHub\\WaMDaM_Wizard_1.04\\2_Workbooks_datasets_GitHub\\November_files\\WEAP.sqlite'
 
 
-    print SqliteName
 
+    print 'filePathOfSqlite= '+filePathOfSqlite
+    filePathOfSqlite = str(filePathOfSqlite)
+
+    # here we create the resource and upload the SQLite file
     resource_id=hs.createResource(resource_type, title=title, resource_file=filePathOfSqlite, resource_filename=SqliteName, abstract=abstract, keywords=keywords,
                       edit_users=None, view_users=None, edit_groups=None, view_groups=None, metadata=metadata,
                       extra_metadata=extra_metadata, progress_callback=None)
 
-    print resource_id
+    # add metadata to the SQLite file
     options = {"file_path": SqliteName, "hs_file_type": "SingleFile"}
-    print options
+    # print options
 
     result = hs.resource(resource_id).functions.set_file_type(options)
 
@@ -141,7 +145,7 @@ def publishOnHydraShare(userName, password, filePathOfSqlite, title, abstract, a
 
     file_json = json.loads(file)
     file_id = file_json["results"][0]["id"]
-    print file_id
+    # print file_id
 
 
 
@@ -169,6 +173,6 @@ def publishOnHydraShare(userName, password, filePathOfSqlite, title, abstract, a
     spatial=hs.resource(resource_id).files.metadata(file_id, params)
 
     print 'Done'
-    print resource_id
-    return resource_id,file_id,params,hs
+    print 'resource_id= '+resource_id
+    return resource_id
 

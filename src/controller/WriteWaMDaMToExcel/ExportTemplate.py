@@ -13,55 +13,26 @@ class ExportTemplate (object):
 	def __init__(self, full_path):
 
 		# create class variables to write data in xlsx file.
-
-
-		self.setup = DB_Setup()
-		self.session = self.setup.get_session()
-
-		self.dataStructure = GetResourceStructure()
-		self.getDataValues = GetDataValues()
+        #
+        #
+		# self.setup = DB_Setup()
+		# self.session = self.setup.get_session()
+        #
+		# self.dataStructure = GetResourceStructure()
+		# self.getDataValues = GetDataValues()
 		##############################################
 
 		# create xlsx file with "full_path".
 		workbook1 = xlsxwriter.Workbook(full_path)
-
-		cell_format_field_name = workbook1.add_format()
-		cell_format_field_name.set_font_size(14)
-		cell_format_field_name.set_bold()
-
-		cell_format_values = workbook1.add_format()
-		cell_format_values.set_border()
-		cell_format_values.set_bg_color('#FFFFCC')
-
-		worksheet = workbook1.add_worksheet('1.1_Organiz&People')
-		# # fieldNames = [["OrganizationName", "OrganizationType", "OrganizationWebpage", "Description"]]
-		# # Global.SetValuesAndFormatCells(worksheet, fieldNames, 0, 0, 0, 0, cell_format_field_name)
-		# Global.SetValuesAndFormatCells(worksheet, [], 1, 5, 0, 4, cell_format_values)
-		# fieldNames = [["PersonName", "Address", "Email", "Phone", "PersonWebpage", "Position", "OrganizationName"]]
-		# Global.SetValuesAndFormatCells(worksheet, fieldNames, 7, 0, 0, 0, cell_format_field_name)
-		# Global.SetValuesAndFormatCells(worksheet, [], 8, 10, 0, 7, cell_format_values)
-
+		workbook1.add_worksheet('1.1_Organiz&People')
 		workbook1.add_worksheet('1.2_Sources&Methods')
 		workbook1.add_worksheet('2.1_ResourceTypes&ObjectTypes')
 		workbook1.add_worksheet('2.2_Attributes')
 		workbook1.add_worksheet('3.1_Networks&Scenarios')
 		workbook1.add_worksheet('3.2_Nodes')
-
-		# def write_nodes(NodesSheetList, wb):
-		# 	field_names = ['ObjectType', 'InstanceName', 'InstanceNameCV', 'ScenarioName', 'SourceName', 'MethodName'
-		# 		, 'InstanceCategory', 'Longitude_x', 'Latitude_y', 'Description']
-
-
 		workbook1.add_worksheet('3.3_Links')
-
-		# def write_links(LinksSheetList, wb):
-		# 	field_names = ['ObjectType', 'InstanceName', 'InstanceNameCV', 'ScenarioName', 'SourceName', 'MethodName'
-		# 		, 'StartNodeInstanceName', 'EndNodeInstanceName', 'InstanceCategory', 'Description']
-
-
 		workbook1.add_worksheet('4_NumericValues')
 		workbook1.add_worksheet('4_FreeText')
-
 		workbook1.add_worksheet('4_CategoricalValues')
 		workbook1.add_worksheet('4_SeasonalNumericValues')
 		workbook1.add_worksheet('4_TimeSeries')

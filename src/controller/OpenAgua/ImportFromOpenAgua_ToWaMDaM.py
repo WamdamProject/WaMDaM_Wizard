@@ -1,8 +1,4 @@
-from controller.OpenAgua.HydraLib.PluginLib import JsonConnection, \
-    create_xml_response, \
-    write_progress, \
-    write_output
-from collections import OrderedDict
+
 
 # General library for working with JSON objects
 import json
@@ -20,7 +16,7 @@ import pandas as pd
 
 def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario_id, ExportFilePath,GlobalAttributesID):
 
-    # hard coded metadata can be upated here. Right now, they dont exist in Hydra/OpenAgua.
+    # hard coded metadata can be upated here. Right now, they dont exist in Hydra/OpenAgua for nodes and links.
     # future work will allow a systematic way to define these metadata items in Hydra which then allows us to import them back to WaMDaM
 
     MethodName='AddMethodName'
@@ -247,6 +243,12 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
     # scenario sheet
     Scenario_sheet_result = []
 
+    # ChildScenarioID
+    #
+    # Look it up here
+    #
+    # ParentScenario=conn.call('get_scenario',{'scenario_id': ChildScenarioID})
+
     try:
         ScenarioStartDate= datetime.strptime(Scenario['start_time'].split(' ')[0], '%Y-%m-%d').strftime("%m/%d/%Y")
     except:
@@ -255,11 +257,16 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
         ScenarioEndDate=datetime.strptime(Scenario['end_time'].split(' ')[0], '%Y-%m-%d').strftime("%m/%d/%Y")
     except:
         ScenarioEndDate = ''
+
+    TimeStep=1
+
+    # try:
     try:
-        TimeStep=Scenario['time_step']
+        TimeStepUnitCV = Scenario['time_step']  # in case ['time_step'] does not exist in the child scenario
+
     except:
-        TimeStep = ''
-    TimeStepUnitCV='' # empty
+        TimeStepUnitCV = ''
+
     try:
         Description=Scenario['description']
     except:
@@ -305,7 +312,7 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
                 ObjectType=node['types'][0]['name']
                 InstanceName=node['name']
                 ObjectTyplology='NODE'
-                ObjectType_lst[(InstanceName,ObjectTyplology)] = ObjectType  # Add "ObjectTyplology"
+                ObjectType_lst[(InstanceName,ObjectTyplology)] = ObjectType
 
 
                 NodeID=node['id']
@@ -378,16 +385,16 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
                         link_row.append('')
                 Link_data_result.append(link_row)
 
-
+        # Network object
         if key == 'types':
             GlobalInstanceName = Network['name']
             ObjectType = Network['types'][0]['name']
             ObjectTyplology = 'NETWORK'
+            ObjectType_lst[(GlobalInstanceName,ObjectTyplology)] = ObjectType # Add "Network"
 
             #
             #
             # ResourceTypeAcronym + ' Global Attributes'
-            ObjectType_lst[(GlobalInstanceName,ObjectTyplology)] = ObjectType # Add "Network"
 
 
     LinksData_df = pd.DataFrame(Link_data_result, columns=columns_link_data)
@@ -395,7 +402,7 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
 
     YearType='CalenderYear'
     AggregationStatisticCV='Average'
-    AggregationInterval='1'
+    AggregationInterval=1
     IntervalTimeUnit='month'
     IsRegular=''
     NoDataValue='-9999'
@@ -405,9 +412,7 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
         ObjectTyplology=row['ref_key']
         InstanceName = row['ref_name']
         ObjectType = ''
-
-
-
+        # if row['attr_name']=='Demand' and row['ref_name']=='DR Bajo Rio San Juan':
 
         if (InstanceName, ObjectTyplology) in ObjectType_lst.keys():  # here we need to also use "Node" or "Link" or "Network" in addition to Instance Name
             # Look up the ObjectType in the NodesData_df using the InstanceName
@@ -416,6 +421,7 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
             # check if the attribute does not exist for this Object Type in the Attributes table.
             # if it does not exist then continie the for loop (to skip the rest of he code)
             AttributeName = row['attr_name']
+
             exist_row = Attribute_Frame_df[(Attribute_Frame_df.ObjectType == ObjectType) & (Attribute_Frame_df.AttributeName == AttributeName)]
             if exist_row.empty:
                 continue
@@ -424,12 +430,12 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
         dataset_metadata = json.loads(row['dataset_metadata'])
 
         if not 'source' in  dataset_metadata.keys():
-            SourceName='AddSource'
+            SourceName='AddSourceName'
         else:
             SourceName=dataset_metadata['source']
 
         if not 'method' in  dataset_metadata.keys():
-            MethodName='AddMethod'
+            MethodName='AddMethodName'
         else:
             MethodName=dataset_metadata['method']
 
@@ -463,7 +469,7 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
 
 
         if row['dataset_type']=='scalar':
-            NumericValue_value=row['dataset_value']
+            NumericValue_value=str(row['dataset_value'])
             output_row = []
             for header in FreeText_data_header:
                 if header == "InstanceName":
@@ -474,16 +480,21 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
 
                 elif header == "AttributeName":
                     output_row.append(AttributeName)
+
                 elif header == 'ScenarioName':
                     output_row.append(ScenarioName)
+
                 elif header == 'SourceName':
                     output_row.append(SourceName)
+
                 elif header == 'MethodName':
                     output_row.append(MethodName)
                 else:
                     output_row.append('')
 
             output_row.append(NumericValue_value)
+            if output_row=='':
+                output_row='-9999'
             NumericValue_data_result.append(output_row)
 
 
@@ -492,8 +503,9 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
             for key in json_times.keys():
                 if key == 'Header' :  continue
                 all_monthes = {}
-                for time in json_times[key].keys():
+                for time in sorted(json_times[key].keys()):
                     value = json_times[key][time]
+
                     output_row = []
                     output_row_times = []
                     year = time.split('T')[0]
@@ -501,17 +513,18 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
                         for header in TimeSeriesValues_header:
                             if header == "InstanceName":
                                 output_row.append(InstanceName)
-                            elif header == "ObjectType":
+                            elif header == "ObjectType" :
                                 output_row.append(ObjectType)
-                            elif header == "AttributeName":
+                            elif header == "AttributeName" :
                                 output_row.append(AttributeName)
                             elif header == 'ScenarioName':
                                 output_row.append(ScenarioName)
                             else:
                                 output_row.append('')
                         output_row.append(datetime.strptime(time.split('T')[0], '%Y-%m-%d').strftime("%Y/%m/%d")) ### format MM/DD/YYYY  1975-12-01T00:00:00.000000000Z
-                        if value == '':
+                        if value == '' or value==None:
                             value = '-9999'
+                        value = str(value)
                         output_row.append(value)
                         TimeSeriesValues_data_result.append(output_row)
 
@@ -679,6 +692,8 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
                 for i in range(0, 6):
                     try:
                         value = json_array[i][index]
+                        value = str(value)
+
                     except:
                         value = ''
                     output_row.append(value)

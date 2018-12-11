@@ -102,6 +102,14 @@ class CV_AttributeName(Base):
     SourceVocabularyURI = Column(String(255))
 
 
+class CV_ResourceType(Base):
+    __tablename__ = 'CV_ResourceType'
+
+    Name = Column(String(255), primary_key=True)
+    Term = Column(String(255), primary_key=True)
+    Definition = Column(String(5000))
+    Category = Column(String(255))
+    SourceVocabularyURI = Column(String(255))
 
 
 class CV_ElectronicFileFormat(Base):
@@ -253,10 +261,12 @@ class ResourceTypes(Base):
     ResourceTypeID = Column(Integer, primary_key=True)
     ResourceType = Column(String(255), nullable=False)
     ResourceTypeAcronym = Column(String(255), nullable=False)
+    ResourceTypeCV = Column(ForeignKey('CV_ResourceType.Name'))
     MethodID = Column(ForeignKey('Methods.MethodID'), nullable=False)
     Description = Column(Text)
 
     Methods = relationship('Methods')
+    CV_ResourceType = relationship('CV_ResourceType')
 
 
 class ObjectCategories(Base):

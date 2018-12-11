@@ -176,9 +176,9 @@ class Load_Struct_To_DB(Parse_Excel_File):
                                 raise Exception('Error in {} row of "ResourceTypes_table" of sheet "{}"\nField named "ResourceTypeAcronym" is empty.\nThis field should not be empty.\nPlease fill this field to a value\n\n'
                                                 .format(row_id, sheet_names[2]))
 
-                            if row[2].value == "":
+                            if row[3].value == "":
                                 raise Exception('Error in {} row of "ResourceTypes_table" of sheet "{}"\nField named "MethodName" is empty.\nThis field should not be empty.\nPlease fill this field to a value\n\n'
-                                                .format(row_id, sheet_names[2]))
+                                                .format(row_id, sheet_names[3]))
 
                             if not row[0].value:
 
@@ -209,13 +209,13 @@ class Load_Struct_To_DB(Parse_Excel_File):
 
                                 try:
                                     data_struct.MethodID = self.__session.query(SqlAlchemy.Methods).filter(
-                                        SqlAlchemy.Methods.MethodName == row[2].value
+                                        SqlAlchemy.Methods.MethodName == row[3].value
                                     ).first().MethodID
                                 except Exception as e:
                                     print e
                                     raise Exception('Error in sheet {}\ncould not find {} in Methods\n\n'
-                                                    .format(sheet_names[2], row[2].value))
-                                data_struct.Description = row[3].value
+                                                    .format(sheet_names[2], row[3].value))
+                                data_struct.Description = row[4].value
                                 self.setup.push_data(data_struct)
 
                                 # Storing ResourceTypeAcronym in Dict.

@@ -124,7 +124,7 @@ def UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, select
             projectID=p.id
             break
     if not my_new_project:
-        my_new_project = conn.call('add_project', {'project': {'name': projectName}})
+        my_new_project = conn.call('add_project', {'project': {'name': projectName,'description ': 'add pro description'}})
         projectID=my_new_project.id
 
     # Add the attribute:
@@ -153,7 +153,7 @@ def UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, select
     # 2.1_Datasets&ObjectTypes sheet, look in the Datasets_table
     # DatasetName which is cell A10 in 2.1_Datasets&ObjectTypes sheet
 
-    template = {'name': type_sheet_resourceTypes.values[0][1], 'types': []}  # insert the value of the "DatasetName" from excel
+    template = {'name': type_sheet_resourceTypes.values[0][1],'description':'add description here', 'types': []}  # insert the value of the "DatasetName" from excel
     # A template is equivalent to a dataset in wamdam
 
     # my_templates lists available templates. A template equates to the 'Dataset' in WaMDaM.
@@ -206,99 +206,101 @@ def UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, select
 
         # -------------------------------------
 
-    for j in range(len(attr_sheet.values)):
+        for j in range(len(attr_sheet.values)):
 
-        if attr_sheet.values[j][6] == 'AttributeSeries':
-            continue # dont upload this attribute to the template. Its used in WaMDaM to keep track of the indiviual attributes
-                    # for an array. But Hydra does not have it. Uploading it confused users.
+            if type_sheet_objectTypes.values[i][0] == attr_sheet.values[j][0]:
 
-        ObjectType = attr_sheet.values[j][0] #ObjectType
-        attr_name = attr_sheet.values[j][1] #AttributeName
+                if attr_sheet.values[j][6] == 'AttributeSeries':
+                    continue # dont upload this attribute to the template. Its used in WaMDaM to keep track of the indiviual attributes
+                            # for an array. But Hydra does not have it. Uploading it confused users.
 
-
-
-        AttributeUnitCV= attr_sheet.values[j][5]
-
-        try:
-            # AttributeUnitCV = attr_sheet.values[j][5]
-            attr_dimension = UnitsTable_df.loc[UnitsTable_df[0]==AttributeUnitCV].iloc[0,1]
-
-            attr_unit = UnitsTable_df.loc[UnitsTable_df[0]==AttributeUnitCV].iloc[0,2]
-
-
-            # attr_dimension = UnitsTable_df.loc[UnitsTable_df[2]==AttributeUnit].iloc[0,1]
-
-        except:
-            msg = "There is a problem with looking up units \n. Invalid Key : {} \n Objectype:{}".format(AttributeUnitCV , ObjectType)
-            raise Exception(msg)
-            # attr_dimension = ''
-
-        # attr_unit=AttributeUnitCV
-        # attr_unit=AttributeUnit
-
-
-        # if not all_attr_dict.get(name,dimension) :
-        # if not all_attr_dict.get(attr_name,attr_dimension) :
-        if not (attr_name, attr_dimension) in all_attr_dict.keys(): #and all_attr_dict[(attr_name, attr_dimension)]['dimension'] == attr_dimension):
-            attr_id = conn.call('add_attribute', {'attr': {'name': attr_name, 'dimen': attr_dimension}})['id']
-
-        else:
-            tem = all_attr_dict[attr_name, attr_dimension]
-            # x=all_attr_dict.keys()
-            attr_id = tem['id']
-
-        # Build a list that has attribute id, name, dimension to use it later to look up dimensions for each atrribute below.
-        # Dataset_attr_Name_Dim=[ObjectType,attr_dimension,attr_name]
-        Dataset_attr_Name_Dim_list[(ObjectType,attr_name)] = attr_dimension
+                ObjectType = attr_sheet.values[j][0] #ObjectType
+                attr_name = attr_sheet.values[j][1] #AttributeName
 
 
 
-        # connect the Template Type (ObjectType) with its Attributes
-        # Based on the link below, add a unit =AttributeUnit, and a datatype=AttributeDataTypeCV
-        # http://umwrg.github.io/HydraPlatform/devdocs/HydraServer/index.html?highlight=typeattrs#HydraServer.soap_server.hydra_complexmodels.TypeAttr
+                AttributeUnitCV= attr_sheet.values[j][5]
 
-        # read value of unit from  "AttributeUnit" column in 2.2_Attributes.
-        # attr_unit = attr_sheet.values[j][4]
+                try:
+                    # AttributeUnitCV = attr_sheet.values[j][5]
+                    attr_dimension = UnitsTable_df.loc[UnitsTable_df[0]==AttributeUnitCV].iloc[0,1]
+
+                    attr_unit = UnitsTable_df.loc[UnitsTable_df[0]==AttributeUnitCV].iloc[0,2]
 
 
-        AttributeCategory=  attr_sheet.values[j][7]
+                    # attr_dimension = UnitsTable_df.loc[UnitsTable_df[2]==AttributeUnit].iloc[0,1]
 
-        # read value of datatype from  "AttributeDataTypeCV" column in 2.2_Attributes.
-        attr_datatype = attr_sheet.values[j][6]
-        if not attr_datatype:
-            attr_datatype = ''
-        elif  attr_datatype =='MultiAttributeSeries':
-            attr_datatype='array'
+                except:
+                    msg = "There is a problem with looking up units \n. Invalid Key : {} \n Objectype:{}".format(AttributeUnitCV , ObjectType)
+                    raise Exception(msg)
+                    # attr_dimension = ''
 
-        elif  attr_datatype =='SeasonalNumericValues':
-            attr_datatype='periodic timeseries'
+                # attr_unit=AttributeUnitCV
+                # attr_unit=AttributeUnit
 
-        elif attr_datatype =='NumericValues':
-            attr_datatype='scalar'
 
-        elif attr_datatype =='TimeSeries':
-            attr_datatype='timeseries'
+                # if not all_attr_dict.get(name,dimension) :
+                # if not all_attr_dict.get(attr_name,attr_dimension) :
+                if not (attr_name, attr_dimension) in all_attr_dict.keys(): #and all_attr_dict[(attr_name, attr_dimension)]['dimension'] == attr_dimension):
+                    attr_id = conn.call('add_attribute', {'attr': {'name': attr_name, 'dimen': attr_dimension}})['id']
 
-        elif attr_datatype =='FreeText':
-            attr_datatype='descriptor'
+                else:
+                    tem = all_attr_dict[attr_name, attr_dimension]
+                    # x=all_attr_dict.keys()
+                    attr_id = tem['id']
 
-        elif attr_datatype == 'CategoricalValues':
-            attr_datatype = 'descriptor'
-        #
-        elif attr_datatype == 'AttributeSeries':
-             attr_datatype = 'array'
+                # Build a list that has attribute id, name, dimension to use it later to look up dimensions for each atrribute below.
+                # Dataset_attr_Name_Dim=[ObjectType,attr_dimension,attr_name]
+                Dataset_attr_Name_Dim_list[(ObjectType,attr_name)] = attr_dimension
 
-        AttributeScale=int(float(attr_sheet.values[j][10]))
 
-        mytemplatetype['typeattrs'].append({'type_id': i + 1, 'attr_is_var':True,'attr_id': attr_id,
-                                            'data_type': attr_datatype,
-                                            'unit': attr_unit,
-                                            'properties': {'category': AttributeCategory,'scale':AttributeScale}})
-        # ,
-        # --------------------------------------------
-        # ,
 
-        # Add some object types to the Template Type  (resource type can be NODE, LINK, GROUP, NETWORK)
+                # connect the Template Type (ObjectType) with its Attributes
+                # Based on the link below, add a unit =AttributeUnit, and a datatype=AttributeDataTypeCV
+                # http://umwrg.github.io/HydraPlatform/devdocs/HydraServer/index.html?highlight=typeattrs#HydraServer.soap_server.hydra_complexmodels.TypeAttr
+
+                # read value of unit from  "AttributeUnit" column in 2.2_Attributes.
+                # attr_unit = attr_sheet.values[j][4]
+
+
+                AttributeCategory=  attr_sheet.values[j][7]
+
+                # read value of datatype from  "AttributeDataTypeCV" column in 2.2_Attributes.
+                attr_datatype = attr_sheet.values[j][6]
+                if not attr_datatype:
+                    attr_datatype = ''
+                elif  attr_datatype =='MultiAttributeSeries':
+                    attr_datatype='array'
+
+                elif  attr_datatype =='SeasonalNumericValues':
+                    attr_datatype='periodic timeseries'
+
+                elif attr_datatype =='NumericValues':
+                    attr_datatype='scalar'
+
+                elif attr_datatype =='TimeSeries':
+                    attr_datatype='timeseries'
+
+                elif attr_datatype =='FreeText':
+                    attr_datatype='descriptor'
+
+                elif attr_datatype == 'CategoricalValues':
+                    attr_datatype = 'descriptor'
+                #
+                elif attr_datatype == 'AttributeSeries':
+                     attr_datatype = 'array'
+
+                AttributeScale=int(float(attr_sheet.values[j][10]))
+
+                mytemplatetype['typeattrs'].append({'type_id': i + 1, 'attr_is_var':True,'attr_id': attr_id,
+                                                    'data_type': attr_datatype,
+                                                    'unit': attr_unit,
+                                                    'properties': {'category': AttributeCategory,'scale':AttributeScale}})
+                    # ,
+            # --------------------------------------------
+            # ,
+
+            # Add some object types to the Template Type  (resource type can be NODE, LINK, GROUP, NETWORK)
         template['types'].append(mytemplatetype)
         # print mytemplatetype
 
@@ -307,6 +309,8 @@ def UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, select
     flag_exist_template = False
     for template_item in tempDB:
         if template_item['name'] == template['name']:
+            print 'The template already exists in OpenAgua'
+
             flag_exist_template = True
             new_template = conn.call('get_template', {'template_id' : template_item['id']})
             break
@@ -540,10 +544,15 @@ def UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, select
                 startdate=scenario_sheet.values[i][4].replace('-', '/')
 
                 try:
+
                     ScenarioStartDate = datetime.datetime.strptime(str(startdate), "%Y/%m/%d").isoformat()
                 except:
                     ScenarioStartDate = startdate.isoformat()
 
+                # get month value from date (either numeric month like 1 or text month like January)
+                # we use the value later as a flag to check
+                ScenarioStartMonth = datetime.datetime.strptime(ScenarioStartDate, '%Y-%m-%dT%H:%M:%S').month
+                print ScenarioStartMonth
         ###############################################################################################################
 
                 enddate=scenario_sheet.values[i][5].replace('-', '/')
@@ -670,17 +679,25 @@ def UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, select
             for time, value in seasonal_list[key]:
                 try:
 
-                    if time == 'October':
+                    if time == 'October' and ScenarioStartMonth==10:
                         time_date = '9998/10/1'
 
-                    elif time == 'November':
+                    elif time == 'October' and ScenarioStartMonth==1:
+                        time_date = '9999/10/1'
+
+                    elif time == 'November' and ScenarioStartMonth==10:
                         time_date = '9998/11/1'
 
-                    elif time == 'December':
+                    elif time == 'November' and ScenarioStartMonth==1:
+                        time_date = '9999/11/1'
+
+                    elif time == 'December' and ScenarioStartMonth==10:
                         time_date = '9998/12/1'
 
+                    elif time == 'December' and ScenarioStartMonth==1:
+                        time_date = '9999/12/1'
+
                     elif time == 'January':
-                        SeasonNameCV = 'January'
                         time_date = '9999/01/1'
 
                     elif time == 'February':
@@ -729,6 +746,7 @@ def UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, select
 
             # rs = {'resource_attr_id': all_attr_dict[attr_name]['id']}
 
+            # print 'done with '+ Attr_name
             dataset = {'type': 'timeseries', 'name': Attr_name, 'unit': attr_unit, 'dimension': dimension,
                        'metadata': json.dumps(metadata, ensure_ascii=True),
                        'hidden': 'N', 'value': json.dumps(seasonals)}
@@ -752,8 +770,6 @@ def UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, select
 
         # TimeSeriesValues_sheet = wamdam_data['4_TimeSeriesValues']
         TimeSeriesValues_sheet = getValuesAll.GetAllTimeSeriesValues(selectedResourceTypeAcro, selectedMasterNetworkName,selectedScenarioName)
-
-
 
 
         # Iterate over the rows in the TimeSeriesValues sheet [dataset] and associate the value with resource attribute
@@ -849,7 +865,6 @@ def UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, select
             subsets = multiAttr_sheet_bottom_df.groupby(['ObjectType', 'InstanceName', 'AttributeName'])
 
             for subset in subsets.groups.keys():
-
 
                 dt = subsets.get_group(name=subset)
                 ObjectType = dt['ObjectType'].values[0]

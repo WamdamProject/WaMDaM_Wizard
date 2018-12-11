@@ -23,8 +23,13 @@ class dlg_VisulaizeWaMDaM( Publish_Viz.dlg_VisulaizeWaMDaM ):
 
 			ur = "https://data.openagua.org"
 			conn = JsonConnection(ur)
-			login_response = conn.login('amabdallah@aggiemail.usu.edu', 'TestOpenAgua!')
-
+			while True:
+				try:
+					login_response = conn.login('amabdallah@aggiemail.usu.edu', 'TestOpenAgua!')
+					print 'Connected to Hydra Platform web services first time'
+					break
+				except:
+					continue
 
 			# include like a wake up call to the server
 

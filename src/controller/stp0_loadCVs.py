@@ -198,6 +198,17 @@ class Load_CV_To_DB(Parse_Excel_File):
                         if model:
                             self.setup.push_data(model)
 
+
+                if key == "resourcetype":
+                    result = self.__session.query(SqlAlchemy.CV_ResourceType.Name).all()
+                    result = [row[0] for row in result]
+                    for row in list(csv_content)[1:]:
+                        model = cv_model()
+                        model = self.load_cv(model, row, result)
+                        if model:
+                            self.setup.push_data(model)
+
+
                 if key == "objecttypology":
                     result = self.__session.query(SqlAlchemy.CV_ObjectTypology.Name).all()
                     result = [row[0] for row in result]
