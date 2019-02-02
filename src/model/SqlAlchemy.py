@@ -588,10 +588,12 @@ class Scenarios(Base):
 
     ScenarioID = Column(Integer, primary_key=True)
     ScenarioName = Column(String(255), nullable=False)
-    ScenarioStartDate = Column(Date)
-    ScenarioEndDate = Column(Date)
-    TimeStepValue = Column(Integer)
-    TimeStepUnitCV = Column(ForeignKey('CV_Units.Name'))
+    ScenarioParentName=Column(String(255))
+    ScenarioType=Column(String(255))
+    ScenarioStartDate = Column(Date, nullable=False)
+    ScenarioEndDate = Column(Date, nullable=False)
+    TimeStepValue = Column(Integer, nullable=False)
+    TimeStepUnitCV = Column(ForeignKey('CV_Units.Name'), nullable=False)
     MasterNetworkID = Column(ForeignKey('MasterNetworks.MasterNetworkID'), nullable=False)
     Description = Column(Text)
 

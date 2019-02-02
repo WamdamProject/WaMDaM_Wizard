@@ -338,6 +338,30 @@ class Load_Networks_Data(Parse_Excel_File,object):
                             if row[3].value == "":
                                 raise Exception('Error in {} row of "Scenarios_table" of sheet "{}"\nField named "MethodName" is empty.\nThis field should not be empty.\nPlease fill this field to a value'
                                                 .format(row_id, Network_sheets_ordered[1]))
+
+                            if row[4].value == "":
+                                raise Exception('Error in {} row of "Scenarios_table" of sheet "{}"\nField named "ScenarioStartDate" is empty.\nThis field should not be empty.\nPlease fill this field to a value'
+                                                .format(row_id, Network_sheets_ordered[1]))
+
+                            if row[5].value == "":
+                                raise Exception('Error in {} row of "Scenarios_table" of sheet "{}"\nField named "ScenarioEndDate" is empty.\nThis field should not be empty.\nPlease fill this field to a value'
+                                                .format(row_id, Network_sheets_ordered[1]))
+
+                            if row[6].value == "":
+                                raise Exception('Error in {} row of "Scenarios_table" of sheet "{}"\nField named "TimeStep" is empty.\nThis field should not be empty.\nPlease fill this field to a value'
+                                                .format(row_id, Network_sheets_ordered[1]))
+
+                            if row[7].value == "":
+                                raise Exception('Error in {} row of "Scenarios_table" of sheet "{}"\nField named "TimeStepUnitCV" is empty.\nThis field should not be empty.\nPlease fill this field to a value'
+                                                .format(row_id, Network_sheets_ordered[1]))
+
+                            if row[9].value == "":
+                                raise Exception(
+                                    'Error in {} row of "Scenarios_table" of sheet "{}"\nField named "ScenarioType" is empty.\nThis field should not be empty.\nPlease fill this field to a value'
+                                    .format(row_id, Network_sheets_ordered[1]))
+
+
+
                             Scenario.ScenarioName = row[0].value
                             if row[4].value:
                                 try:
@@ -362,8 +386,17 @@ class Load_Networks_Data(Parse_Excel_File,object):
                                 print e
                                 raise Exception('Error in sheet {}\ncould not find {} in Units table'
                                                 .format(Network_sheets_ordered[2], row[7].value))
+
                             if row[8].value:
-                                Scenario.Description = row[8].value
+                                    Scenario.ScenarioParentName = row[8].value
+
+                            if row[9].value:
+                                Scenario.ScenarioType = row[9].value
+
+                            # Foreign key constraint
+                            if row[10].value:
+                                Scenario.Description = row[10].value
+
                             # Foreign key constraint
                             # Raise an error if the provided MasterNetworkName in the spreadsheet does not exist in the MasterNetworks table
                             try:

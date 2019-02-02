@@ -5,7 +5,7 @@
 """"""
 
 """
-WaMDaM: The Water Management Data Model Version 1.05
+WaMDaM: The Water Management Data Model Version 1.06
 See the schema at http://schema.wamdam.org/diagrams/01_WaMDaM.html
 Instructions at http://docs.wamdam.org/Getting_started/Steps
 
@@ -13,8 +13,9 @@ Adel M. Abdallah
 email: amabdallah@aggiemail.usu.edu
 website: http://adelmabdallah.com/
 
-December 2018
+Feb 2019
 """
+
 
 
 """
@@ -22,7 +23,7 @@ Wamdam.py is the calling/initializing function for the Wizard.
 
 Before you start, make sure to install all the required Python libraries listed in 
 requirements.md text file
-
+@
 
 Wamdam.py calls the GUI homepage wxform in the viewer folder which calls frm_Home.py. In the GUI homepage,
 users can mainly connect to a WaMDaM SQLite database and import data from multiple sources
@@ -40,7 +41,7 @@ folder. For example, clicking at the button "From Excel" under the GUI homepage 
 dlg_ImportSpreadsheetBasic.py which exist in the viewer Folder. Then when the user
 clicks at "load Data" in this dialog box, a function calls one or all the sub-data importers
 for the checked boxes from the controller folder: 
-stp0_loadCVs.py, stp1_loadMetadata.py,
+stp0_loadCVs.py, stp1_loadMetadata.py, 
 stp2_loadDataStructure.py,
 stp3_loadNetworks.py,
 and stp4_loadDataValues.py
@@ -57,8 +58,12 @@ The Wizard either loads all the dataset and it's metadata etc or nothing.
 
 See the software architecture in a flowchart @ https://github.com/WamdamProject/WaMDaM_Wizard
 """
-
+import logging
 import wx, os
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+logger = logging.getLogger(__name__)
 
 
 class pyWamdam(wx.App):
@@ -78,8 +83,11 @@ class pyWamdam(wx.App):
         wx.App.ExitMainLoop(self)
 
 def main():
-    application = pyWamdam()
-    application.MainLoop()
+    try:
+        application = pyWamdam()
+        application.MainLoop()
+    except Exception as err:
+        logging.info(err.message)
 
 if __name__ == '__main__':
     main()

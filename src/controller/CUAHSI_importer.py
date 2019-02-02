@@ -218,7 +218,7 @@ class CUAHSI_importer():
             attributes.UnitName = response_data.timeSeries[0].variable.unit.unitName
 
             if attributes.UnitName=='ft3/s':
-                attributes.UnitNameCV = 'cubic feet per second'
+                attributes.UnitNameCV = 'cubic foot per second'
 
             attributes.AttributeDataTypeCV = 'TimeSeries'
             attributes.AttributeNameCV = 'Flow'

@@ -1,6 +1,6 @@
 
 # Extact the Network
-
+from pyproj import Proj, transform
 from collections import OrderedDict
 import pandas as pd
 
@@ -331,8 +331,14 @@ def Extract_Network(WEAP):
     # print BranchesNew_list
 
     # make BranchesNew_list as a data frame just to view it and  see how its columns and rrows
+    NodesSheetList
+    # view = pd.DataFrame(BranchesNew_list)
 
-    view = pd.DataFrame(BranchesNew_list)
+
+
+
+
+
     # print BranchesNew_list
 
     # view.to_csv('this.csv', sep=',')

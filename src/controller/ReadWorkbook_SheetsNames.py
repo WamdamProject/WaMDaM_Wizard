@@ -24,6 +24,7 @@ vocab = OrderedDict({
     "electronicfileformat": CV_ElectronicFileFormat,
     "instancename": CV_InstanceName,
     "methodtype": CV_MethodType,
+    "resourcetype": CV_ResourceType,
     "objecttypology": CV_ObjectTypology,
     "objecttype": CV_ObjectType,
     "seasonname": CV_SeasonName,

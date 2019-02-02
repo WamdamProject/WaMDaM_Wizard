@@ -173,7 +173,6 @@ class ExportTemplate (object):
 		df.to_excel(self.pandas_excel_writer, sheet_name="4_TimeSeriesValues", startrow=8, startcol=0,
 					header=True,
 					index=False)
-		# self.write2excel(data_list, 11, '4_TimeSeriesValues')
 
 
 	def exportCategoricalValues(self, data_list):

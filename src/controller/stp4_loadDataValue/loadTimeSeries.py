@@ -538,16 +538,29 @@ class LoadTimeSeriesValue(Parse_Excel_File, LoadingUtils):
 
                 # test if an entry already exists in timeseriesvalues ( TimeSeriesID, Value, DateTimeStamp)
                 # if not a new timeseries value entry is added to the db
-                try:
-                    test_query = self.__session.query(SqlAlchemy.TimeSeriesValues).filter(
-                        and_(
-                            SqlAlchemy.TimeSeriesValues.TimeSeriesID == result.TimeSeriesID,
-                            SqlAlchemy.TimeSeriesValues.DataValue == row[5].value,
-                            SqlAlchemy.TimeSeriesValues.DateTimeStamp == datetime.date.fromordinal(int(row[4].value)
-                                                                                                   + 693594)
-                        )
-                    ).first().TimeSeriesValueID
 
+                try:
+                    if isinstance(row[4].value, float) or isinstance(row[4].value, int):
+                        timeserieval.DateTimeStamp = datetime.date.fromordinal(int(row[4].value) + 693594)
+
+                        test_query = self.__session.query(SqlAlchemy.TimeSeriesValues).filter(
+                            and_(
+                                SqlAlchemy.TimeSeriesValues.TimeSeriesID == result.TimeSeriesID,
+                                SqlAlchemy.TimeSeriesValues.DataValue == row[5].value,
+                                SqlAlchemy.TimeSeriesValues.DateTimeStamp == datetime.date.fromordinal(int(row[4].value)
+                                                                                                       + 693594)
+                            )
+                        ).first().TimeSeriesValueID
+                    else:
+                        test_query = self.__session.query(SqlAlchemy.TimeSeriesValues).filter(
+                            and_(
+                                SqlAlchemy.TimeSeriesValues.TimeSeriesID == result.TimeSeriesID,
+                                SqlAlchemy.TimeSeriesValues.DataValue == row[5].value,
+                                SqlAlchemy.TimeSeriesValues.DateTimeStamp ==datetime.date(int(row[4].value.split("/")[2]),
+                                                                       int(row[4].value.split("/")[0]),
+                                                                       int(row[4].value.split("/")[1]))
+                            )
+                        ).first().TimeSeriesValueID
                     # print row
 
                 except Exception as e:
@@ -572,7 +585,7 @@ class LoadTimeSeriesValue(Parse_Excel_File, LoadingUtils):
                     self.setup.push_data(timeserieval)
 
                     # adding start and end dates to timeseries.
-                    # TODO: add dates to the timeseries when the timeseries values for an instance has been loaded [[is this done? or still to be??]]
+                    # TODO: add dates to the timeseries when the timeseries values for an instance has been loaded
                     if row[1].value == init_instance:
                         try:
                             if isinstance(row[4].value, float) or isinstance(row[4].value, int):

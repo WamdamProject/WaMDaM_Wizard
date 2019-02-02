@@ -566,6 +566,7 @@ class dlg_compare_scenarios( WaMDaMWizard.dlg_compare_scenarios ):
 				except Exception as e:
 					raise Exception("Permission denied!\nFileName : {}\nThis file is open or used by another application. Please close it first".format(e.filename))
 			from Messages_forms.msg_successLoadDatabase import msg_successLoadDatabase
+
 			instance = msg_successLoadDatabase(None)
 			instance.m_staticText1.SetLabel("\n \n The comparison and writing to Excel where successful. \n Check the excel file you provided to see the results")
 			instance.ShowModal()

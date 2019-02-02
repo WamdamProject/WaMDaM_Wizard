@@ -5,7 +5,7 @@ import xlsxwriter
 from collections import OrderedDict
 import datetime
 # this functon saves all the data into a single excel workbook of multiple sheets
-
+from pyproj import Proj, transform
 # Excel file name =WEAP_Output
 # "C:/Users/Adel/Documents/Results/
 # ProvidedDir=self.
@@ -19,8 +19,20 @@ def SaveExcel(NodesSheetList, LinksSheetList, result_list, UniqObjectAtt_list,WE
     # write_ResourceTypesObjectTypes(BranchesNew_list, wb,WEAP)
     write_Attributes(UniqObjectAtt_list, wb,WEAP)
     # write_ScenarioNetwork(NodesSheetList, wb)
+    SourceSystem = 'EPSG:26912'
+    OutputSystem = 'EPSG:4326'
+    inProj = Proj(init=SourceSystem)
+    outProj = Proj(init=OutputSystem)
+
+    for node in range(len(NodesSheetList)):
+        x1, y1 = NodesSheetList[node]['Longitude_x'],NodesSheetList[node]['Latitude_y']
+
+
+        NodesSheetList[node]['Longitude_x'],  NodesSheetList[node]['Latitude_y'] = transform(inProj, outProj, x1, y1)
+
 
     write_nodes(NodesSheetList, wb)
+
     write_links(LinksSheetList, wb)
     write_Numeric(result_list, wb, WEAP)
     write_FreeText(result_list, wb, WEAP)

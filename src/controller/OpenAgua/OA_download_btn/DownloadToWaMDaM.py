@@ -21,7 +21,7 @@ from controller.OpenAgua.HydraLib.PluginLib import JsonConnection
 ur = "https://data.openagua.org"
 
 conn = JsonConnection(ur)
-login_response = conn.login('amabdallah@aggiemail.usu.edu',  'TestOpenAgua!')
+login_response = conn.login('amabdallah@aggiemail.usu.edu',  'xxxx')
 
 
 Selected_template_id=int('683')

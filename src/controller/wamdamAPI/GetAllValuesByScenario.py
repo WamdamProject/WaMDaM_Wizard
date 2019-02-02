@@ -284,7 +284,8 @@ class GetAllValuesByScenario(object):
         try:
 
             TimeSeriesValues_sql = """
-            SELECT  ObjectType, InstanceName,ScenarioName,AttributeName, "TimeSeriesValues"."DateTimeStamp" ,"TimeSeriesValues"."DataValue",SourceName,MethodName
+            SELECT  ObjectType, InstanceName,ScenarioName,AttributeName, "TimeSeriesValues"."DateTimeStamp" ,
+            "TimeSeriesValues"."DataValue",SourceName,MethodName
                   FROM "ResourceTypes" 
                   Left JOIN "ObjectTypes" ON "ObjectTypes"."ResourceTypeID"="ResourceTypes"."ResourceTypeID" 
                   Left JOIN "Attributes" ON "Attributes"."ObjectTypeID"="ObjectTypes"."ObjectTypeID" 

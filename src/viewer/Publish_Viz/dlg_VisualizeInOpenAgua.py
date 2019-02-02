@@ -4,10 +4,9 @@
 import Publish_Viz
 from controller.ConnectDB_ParseExcel import DB_Setup
 from viewer.Messages_forms.msg_somethigWrong import msg_somethigWrong
-from controller.OpenAgua.UploadWaMDaM_SQLite_ToOpenAgua import UploadToOpenAgua
+from controller.OpenAgua.Upload.UploadWaMDaM_SQLite_ToOpenAgua import UploadToOpenAgua
 
 from controller.wamdamAPI.GetResourceStructure import GetResourceStructure
-from controller.wamdamAPI.GetMetadataByScenario import GetMetadataByScenario
 from controller.wamdamAPI.GetInstancesByScenario import GetInstancesBySenario
 from controller.OpenAgua.HydraLib.PluginLib import JsonConnection
 
@@ -18,39 +17,90 @@ class dlg_VisulaizeWaMDaM( Publish_Viz.dlg_VisulaizeWaMDaM ):
 		Publish_Viz.dlg_VisulaizeWaMDaM.__init__( self, parent )
 
 		if self.checkConnectingToSqlite():
-			self.m_textCtrl11.Value = 'amabdallah@aggiemail.usu.edu'
-			self.m_textCtrl12.Value = 'TestOpenAgua!'
-
-			ur = "https://data.openagua.org"
-			conn = JsonConnection(ur)
-			while True:
-				try:
-					login_response = conn.login('amabdallah@aggiemail.usu.edu', 'TestOpenAgua!')
-					print 'Connected to Hydra Platform web services first time'
-					break
-				except:
-					continue
-
-			# include like a wake up call to the server
-
-			projects = conn.call('get_projects', {})
-			project_names = []
-			for p in projects:
-				project_names.append(p.name)
-			self.m_SelectProject.SetItems(project_names)
-
-
-			self.dataStructure = GetResourceStructure()
-			self.datasets = self.dataStructure.GetResourceType()
-			list_acromy = list()
-			for index, row in self.datasets.iterrows():
-				list_acromy.append(row[0])
-			if list_acromy.__len__() > 0:
-				self.m_SelectModel.SetItems(list_acromy)
+			# self.m_textCtrl11.Value = 'amabdallah@aggiemail.usu.edu'
+			# self.m_textCtrl12.Value = 'TestOpenAgua!'
+			userName = self.m_textCtrl11.Value
+			password = self.m_textCtrl12.Value
+			# ur = "https://data.openagua.org"
+			# conn = JsonConnection(ur)
+			# while True:
+			# 	try:
+			# 		login_response = conn.login('amabdallah@aggiemail.usu.edu', 'TestOpenAgua!')
+			# 		print 'Connected to Hydra Platform web services first time'
+			# 		break
+			# 	except:
+			# 		raise Exception("The provided username and password do not match yours in OpenAgua")
+			#
+			# # include like a wake up call to the server
+			#
+			# projects = conn.call('get_projects', {})
+			# project_names = []
+			# for p in projects:
+			# 	project_names.append(p.name)
+			# self.m_SelectProject.SetItems(project_names)
+			#
+			#
+			# self.dataStructure = GetResourceStructure()
+			# self.datasets = self.dataStructure.GetResourceType()
+			# list_acromy = list()
+			# for index, row in self.datasets.iterrows():
+			# 	list_acromy.append(row[0])
+			# if list_acromy.__len__() > 0:
+			# 	self.m_SelectModel.SetItems(list_acromy)
 		else:
 			msg = "Warning: Please connect to sqlite."
 			msg_somethigWrong(self, msg).ShowModal()
 			self.Destroy()
+
+	# Handlers for dlg_VisulaizeWaMDaM events.
+	def Btn_LoginOnButtonClick( self, event ):
+		# TODO: Implement Btn_LoginOnButtonClick
+
+		# self.m_textCtrl11.Value = 'amabdallah@aggiemail.usu.edu'
+		# self.m_textCtrl12.Value = 'TestOpenAgua!'
+		userName = self.m_textCtrl11.Value
+		password = self.m_textCtrl12.Value
+		ur = "https://data.openagua.org"
+		conn = JsonConnection(ur)
+		while True:
+			try:
+				login_response = conn.login(userName, password)
+				print 'Connected to Hydra Platform web services first time'
+
+				self.Btn_Login.Enabled = False
+				break
+			except:
+
+				from viewer.Messages_forms.msg_somethigWrong import msg_somethigWrong
+
+				msg = "\n\nThe provided username and password do not match yours in OpenAgua"
+				msg_somethigWrong(None, msg=msg).Show()
+
+				return
+				# raise Exception("The provided username and password do not match yours in OpenAgua")
+
+		# include like a wake up call to the server
+
+		projects = conn.call('get_projects', {})
+		project_names = []
+		for p in projects:
+			project_names.append(p.name)
+		self.m_SelectProject.SetItems(project_names)
+
+		self.dataStructure = GetResourceStructure()
+		self.datasets = self.dataStructure.GetResourceType()
+		list_acromy = list()
+		for index, row in self.datasets.iterrows():
+			list_acromy.append(row[0])
+		if list_acromy.__len__() > 0:
+			self.m_SelectModel.SetItems(list_acromy)
+		pass
+
+
+
+
+
+
 	# Handlers for dlg_VisulaizeWaMDaM events.
 	def btn_UploadToOpenAguaOnButtonClick( self, event ):
 		# TODO: Implement btn_UploadToOpenAguaOnButtonClick
@@ -94,7 +144,7 @@ class dlg_VisulaizeWaMDaM( Publish_Viz.dlg_VisulaizeWaMDaM ):
 
 
 
-            # add project here? then just pass its  my_new_project.id to the controller
+			# add project here? then just pass its  my_new_project.id to the controller
 
 			UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, selectedScenarioNames, projectName)
 

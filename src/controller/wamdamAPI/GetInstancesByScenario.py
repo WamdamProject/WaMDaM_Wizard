@@ -83,7 +83,8 @@ class GetInstancesBySenario(object):
         try:
             # get all data
             Scenarios_sql_command = """
-                    Select DISTINCT ScenarioName,MasterNetworkName,SourceName,MethodName,ScenarioStartDate,ScenarioEndDate,TimeStepValue,TimeStepUnitCV,Scenarios.Description As Description
+                    Select DISTINCT ScenarioName,MasterNetworkName,SourceName,MethodName,ScenarioStartDate,ScenarioEndDate,TimeStepValue,
+                    TimeStepUnitCV,ScenarioParentName,ScenarioType,Scenarios.Description As Description
                                     FROM ResourceTypes 
                                     left join ObjectTypes on ObjectTypes.ResourceTypeid=ResourceTypes.ResourceTypeid  
                                     left join Attributes on Attributes.ObjectTypeid = Objecttypes.Objecttypeid 

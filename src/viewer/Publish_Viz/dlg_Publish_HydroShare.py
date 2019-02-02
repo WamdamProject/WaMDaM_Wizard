@@ -5,16 +5,40 @@ import Publish_Viz
 from controller.ConnectDB_ParseExcel import DB_Setup
 from viewer.Messages_forms.msg_somethigWrong import msg_somethigWrong
 # from hs_restclient import HydroShare, HydroShareAuthBasic
-
+from hs_restclient import HydroShare, HydroShareAuthBasic
 from controller.HydroShare.PublishWaMDaM import publishOnHydraShare
 
 class dlg_Publish( Publish_Viz.dlg_Publish ):
 	def __init__( self, parent ):
 		Publish_Viz.dlg_Publish.__init__( self, parent )
 
-		self.m_textCtrl7.Value = 'amabdallah'
-		self.m_textCtrl8.Value = 'MyHydroShareWorld'
-	
+		# self.m_textCtrl7.Value
+		# self.m_textCtrl8.Value
+
+	# Handlers for dlg_Publish events.
+	def btn_loginOnButtonClick( self, event ):
+		# TODO: Implement btn_loginOnButtonClick
+		userName = self.m_textCtrl7.Value
+		password = self.m_textCtrl8.Value
+
+		auth = HydroShareAuthBasic(username=userName, password=password)
+		# hs = HydroShare(auth=auth)
+		# hs = HydroShare(auth=auth, hostname='beta.hydroshare.org')
+		# hs is the login resposne
+		hs = HydroShare(auth=auth, hostname='hydroshare.org')
+		try:
+			for resource in hs.resources():
+				print("success")
+                # self.Btn_Login.Enabled = False
+				break
+			pass
+		except:
+			from viewer.Messages_forms.msg_somethigWrong import msg_somethigWrong
+
+			msg = "\n\nThe provided username and password do not match yours in OpenAgua"
+			msg_somethigWrong(None, msg=msg).Show()
+
+
 	# Handlers for dlg_Publish events.
 	def btn_PublishOnButtonClick( self, event ):
 		self.btn_Publish.Enabled = False
@@ -38,7 +62,10 @@ class dlg_Publish( Publish_Viz.dlg_Publish ):
 				db_setup = DB_Setup()
 				fullPathOfSqlite = db_setup.get_dbpath()
 
+				# connect to te server and create a resource
 				resource_id= publishOnHydraShare(userName, password, fullPathOfSqlite, title, abstract, author)
+
+
 				if resource_id:
 					from viewer.Messages_forms.msg_connSQLiteSuccs import msg_connSQLiteSuccs
 					msgdlg = msg_connSQLiteSuccs(self)
