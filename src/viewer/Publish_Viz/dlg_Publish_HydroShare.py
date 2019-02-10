@@ -29,13 +29,13 @@ class dlg_Publish( Publish_Viz.dlg_Publish ):
 		try:
 			for resource in hs.resources():
 				print("success")
-                # self.Btn_Login.Enabled = False
+				self.btn_login.Enabled = False
 				break
 			pass
 		except:
 			from viewer.Messages_forms.msg_somethigWrong import msg_somethigWrong
 
-			msg = "\n\nThe provided username and password do not match yours in OpenAgua"
+			msg = "\n\nThe provided username and password do not match yours in HydroShare"
 			msg_somethigWrong(None, msg=msg).Show()
 
 

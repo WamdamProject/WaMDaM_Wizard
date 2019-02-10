@@ -14,8 +14,9 @@ class WEAP_export():
     WEAP = None
     # NodesSheetList = None
     # LinksSheetList = None
-    def __init__(self, textCtrl_AreaNameOnText,fileDir):
+    def __init__(self, textCtrl_AreaNameOnText, SelectedScenarioName,fileDir):
         self.textCtrl_AreaNameOnText = textCtrl_AreaNameOnText
+        self.SelectedScenarioName = SelectedScenarioName
         self.fileDir = fileDir
         self.ConnectWEAP()
         self.NodesSheetList = None
@@ -28,6 +29,7 @@ class WEAP_export():
         self.setup = DB_Setup()
         self.session = self.setup.get_session()
         self.excel_pointer = None
+
 
     def ConnectWEAP(self):
 
@@ -57,7 +59,7 @@ class WEAP_export():
     def extarct_network(self):
         from Extract_Network import Extract_Network
 
-        self.NodesSheetList, self.LinksSheetList, self.unique_object_types_value_list,self.BranchesNew_list = Extract_Network(self.WEAP)
+        self.NodesSheetList, self.LinksSheetList, self.unique_object_types_value_list,self.BranchesNew_list = Extract_Network(self.WEAP, self.SelectedScenarioName)
 
     # here we need to pass the parameters above into the next functions
     # Paramters: SourceName, WEAP.Branches:
@@ -67,13 +69,13 @@ class WEAP_export():
         from GetValues import GetValues_WEAP
         return GetValues_WEAP(self.WEAP, self.BranchesNew_list, self.unique_object_types_value_list)
 
-    def SaveToExcel(self, result_list, UniqObjectAtt_list):
-        from SaveToExcel import SaveExcel
+    def SaveToExcel(self, result_list, UniqObjectAtt_list, Projection_source=''):
+        from SaveWEAPToExcel import SaveExcel
         # add dir here?
         DateStamp = datetime.now().strftime('%m-%d-%Y')
         excel_filename = self.fileDir + '/' + self.textCtrl_AreaNameOnText + '_' + DateStamp + '.xlsx'
         SaveExcel(self.NodesSheetList, self.LinksSheetList, result_list, UniqObjectAtt_list, self.WEAP,
-                  excel_filename)
+                  excel_filename, Projection_source)
 
 if __name__ == '__main__':
     weap_export = WEAP_export()

@@ -426,68 +426,112 @@ class dlg_SelectRules ( wx.Dialog ):
 	
 	def btn_exportOnButtonClick( self, event ):
 		event.Skip()
-	
+
 
 ###########################################################################
 ## Class dlg_ExtractWeapArea
 ###########################################################################
 
-class dlg_ExtractWeapArea ( wx.Dialog ):
-	
-	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = 90, title = u"Extract Network and data of a WEAP Area ", pos = wx.DefaultPosition, size = wx.Size( 686,307 ), style = wx.DEFAULT_DIALOG_STYLE )
-		
-		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
-		
-		gSizer5 = wx.BoxSizer( wx.VERTICAL )
-		
-		self.m_staticText20 = wx.StaticText( self, wx.ID_ANY, u"Select the WEAP Area name \n You need to have WEAP already installed", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText20.Wrap( -1 )
-		gSizer5.Add( self.m_staticText20, 0, wx.ALL, 5 )
-		
+class dlg_ExtractWeapArea(wx.Dialog):
+
+	def __init__(self, parent):
+		wx.Dialog.__init__(self, parent, id=90, title=u"Extract Network and data of a WEAP Area ",
+						   pos=wx.DefaultPosition, size=wx.Size(686, 438), style=wx.DEFAULT_DIALOG_STYLE)
+
+		self.SetSizeHintsSz(wx.DefaultSize, wx.DefaultSize)
+
+		gSizer5 = wx.BoxSizer(wx.VERTICAL)
+
+		self.m_staticText20 = wx.StaticText(self, wx.ID_ANY, u"Select the WEAP Area name", wx.DefaultPosition,
+											wx.DefaultSize, 0)
+		self.m_staticText20.Wrap(-1)
+		gSizer5.Add(self.m_staticText20, 0, wx.ALL, 5)
+
 		comboBox_WEAPAreaChoices = []
-		self.comboBox_WEAPArea = wx.ComboBox( self, 576, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, comboBox_WEAPAreaChoices, 0 )
-		gSizer5.Add( self.comboBox_WEAPArea, 0, wx.ALL|wx.EXPAND, 5 )
-		
-		self.m_staticText21 = wx.StaticText( self, wx.ID_ANY, u"Select output directory", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText21.Wrap( -1 )
-		gSizer5.Add( self.m_staticText21, 0, wx.ALL, 5 )
-		
-		self.dirPicker_output = wx.DirPickerCtrl( self, 120, wx.EmptyString, u"Select a folder", wx.DefaultPosition, wx.DefaultSize, wx.DIRP_DEFAULT_STYLE )
-		gSizer5.Add( self.dirPicker_output, 0, wx.ALL|wx.EXPAND, 5 )
-		
-		gSizer51 = wx.GridSizer( 0, 2, 0, 0 )
+		self.comboBox_WEAPArea = wx.ComboBox(self, 576, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize,
+											 comboBox_WEAPAreaChoices, 0)
+		gSizer5.Add(self.comboBox_WEAPArea, 0, wx.ALL | wx.EXPAND, 5)
+
+		self.m_staticText24 = wx.StaticText(self, wx.ID_ANY, u"Seclect a WEAP Scenario", wx.DefaultPosition,
+											wx.DefaultSize, 0)
+		self.m_staticText24.Wrap(-1)
+		gSizer5.Add(self.m_staticText24, 0, wx.ALL, 5)
+
+		Combo_WEAP_scenarioChoices = []
+		self.Combo_WEAP_scenario = wx.ComboBox(self, 987, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize,
+											   Combo_WEAP_scenarioChoices, 0)
+		gSizer5.Add(self.Combo_WEAP_scenario, 0, wx.ALL | wx.EXPAND, 5)
+
+		self.m_staticText25 = wx.StaticText(self, wx.ID_ANY,
+											u"Provide the current WEAP projection using the EPSG Codes in this format: EPSG:26912 \n "
+											u"Leave it empty if the current projection is the global WGS84 ",
+											wx.DefaultPosition, wx.DefaultSize, 0)
+		self.m_staticText25.Wrap(-1)
+		gSizer5.Add(self.m_staticText25, 0, wx.ALL, 5)
+
+		self.m_staticText26 = wx.StaticText(self, wx.ID_ANY,
+											u"e.g., NAD83 / UTM zone 12N is EPSG:26912 so enter: EPSG:26912",
+											wx.DefaultPosition, wx.DefaultSize, 0)
+		self.m_staticText26.Wrap(-1)
+		gSizer5.Add(self.m_staticText26, 0, wx.ALL, 5)
+
+		self.ProjectionText = wx.TextCtrl(self, 4554, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0)
+		gSizer5.Add(self.ProjectionText, 0, wx.ALL | wx.EXPAND, 5)
+
+		self.m_staticText21 = wx.StaticText(self, wx.ID_ANY, u"Select output directory", wx.DefaultPosition,
+											wx.DefaultSize, 0)
+		self.m_staticText21.Wrap(-1)
+		gSizer5.Add(self.m_staticText21, 0, wx.ALL, 5)
+
+		self.dirPicker_output = wx.DirPickerCtrl(self, 120, wx.EmptyString, u"Select a folder", wx.DefaultPosition,
+												 wx.DefaultSize, wx.DIRP_DEFAULT_STYLE)
+		gSizer5.Add(self.dirPicker_output, 0, wx.ALL | wx.EXPAND, 5)
+
+		gSizer51 = wx.GridSizer(0, 2, 0, 0)
 
 		self.btn_extract = wx.Button(self, 121, u"Extract", wx.DefaultPosition, wx.DefaultSize, 0)
 		gSizer51.Add(self.btn_extract, 0, wx.ALL | wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, 5)
 
 		self.btn_cancel = wx.Button(self, 123, u"Cancel", wx.DefaultPosition, wx.DefaultSize, 0)
 		gSizer51.Add(self.btn_cancel, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
-		
-		
-		gSizer5.Add( gSizer51, 1, wx.EXPAND, 5 )
-		
-		
-		self.SetSizer( gSizer5 )
+
+		gSizer5.Add(gSizer51, 1, wx.EXPAND, 5)
+
+		self.SetSizer(gSizer5)
 		self.Layout()
-		
-		self.Centre( wx.BOTH )
-		
+
+		self.Centre(wx.BOTH)
+
 		# Connect Events
-		self.btn_cancel.Bind( wx.EVT_BUTTON, self.btn_backOnButtonClick )
-		self.btn_extract.Bind( wx.EVT_BUTTON, self.btn_exportOnButtonClick )
-	
-	def __del__( self ):
+		self.comboBox_WEAPArea.Bind(wx.EVT_COMBOBOX, self.comboBox_WEAPAreaOnCombobox)
+		self.Combo_WEAP_scenario.Bind(wx.EVT_COMBOBOX, self.Combo_WEAP_scenarioOnCombobox)
+		self.ProjectionText.Bind(wx.EVT_TEXT, self.ProjectionTextOnText)
+		self.dirPicker_output.Bind(wx.EVT_DIRPICKER_CHANGED, self.dirPicker_outputOnDirChanged)
+		self.btn_cancel.Bind(wx.EVT_BUTTON, self.btn_cancelOnButtonClick)
+		self.btn_extract.Bind(wx.EVT_BUTTON, self.btn_extractOnButtonClick)
+
+	def __del__(self):
 		pass
-	
-	
+
 	# Virtual event handlers, overide them in your derived class
-	def btn_backOnButtonClick( self, event ):
+	def comboBox_WEAPAreaOnCombobox(self, event):
 		event.Skip()
-	
-	def btn_exportOnButtonClick( self, event ):
+
+	def Combo_WEAP_scenarioOnCombobox(self, event):
 		event.Skip()
-	
+
+	def ProjectionTextOnText(self, event):
+		event.Skip()
+
+	def dirPicker_outputOnDirChanged(self, event):
+		event.Skip()
+
+	def btn_cancelOnButtonClick(self, event):
+		event.Skip()
+
+	def btn_extractOnButtonClick(self, event):
+		event.Skip()
+
 
 ###########################################################################
 ## Class dlg_re_run_export

@@ -28,7 +28,6 @@ def GetValues_WEAP(WEAP,BranchesNew_list, unique_object_types_value_list):
     # unique_object_types_value_list_shortend= not in 'River Headflow','Return Flow Node','River Withdrawal','Tributary Inflow','River Mouth','Diversion Outflow')
 
 
-
     # these WEAP Object Types have no input variables. They are just used as connections in the network
     exclude_object_type_list = ['Return Flow Node', 'River Withdrawal', 'Tributary Inflow', 'River Mouth']
     # loop over all the WEAP branches to get their variables and values
@@ -228,7 +227,10 @@ def GetValues_WEAP(WEAP,BranchesNew_list, unique_object_types_value_list):
                                     UniqObjectAtt['AttributeUnit']=AttributeUnit
                                     UniqObjectAtt['AttributeDataTypeCV'] = 'SeasonalNumericValues'
                                     UniqObjectAtt['attributeName'] = VariableName
+
+
 ########################################################################################################################
+
                                 # multi columns if the value starts with "VolumeElevation"
                                 elif 'VolumeElevation' in ExpresValue:
                                     MultiColumns_ExpressValue = ExpresValue

@@ -5,8 +5,8 @@ from collections import OrderedDict
 import pandas as pd
 
 # Lists all transmission links, including the source and destination.
-def Extract_Network(WEAP):
-
+def Extract_Network(WEAP, SelectedScenarioName):
+    ScenarioName=SelectedScenarioName
     LinksSheetList = []
     NodesSheetList = []
     Result_list = []
@@ -119,7 +119,7 @@ def Extract_Network(WEAP):
             LinksSheet['BranchName'] = Branch.Name
             LinksSheet['FullBranchName'] = Branch.FullName
             LinksSheet['InstanceNameCV'] = ''
-            LinksSheet['ScenarioName'] = "USU WEAP Model 2017"
+            LinksSheet['ScenarioName'] = ScenarioName
 
             LinksSheet['SourceName'] = SourceName
             LinksSheet['MethodName'] = "Water Evaluation And Planning System"
@@ -140,7 +140,7 @@ def Extract_Network(WEAP):
             NodesSheet1['FullBranchName'] = Branch.FullName
 
             NodesSheet1['InstanceNameCV'] = ''
-            NodesSheet1['ScenarioName'] = "USU WEAP Model 2017"
+            NodesSheet1['ScenarioName'] = ScenarioName
             NodesSheet1['SourceName'] = SourceName
             NodesSheet1['MethodName'] = "Water Evaluation And Planning System"
             NodesSheet1['InstanceCategory'] = ''
@@ -159,7 +159,7 @@ def Extract_Network(WEAP):
             NodesSheet2['BranchName'] = Branch.Name
             NodesSheet2['FullBranchName'] = Branch.FullName
             NodesSheet2['InstanceNameCV'] = ''
-            NodesSheet2['ScenarioName'] = "USU WEAP Model 2017"
+            NodesSheet2['ScenarioName'] = ScenarioName
             NodesSheet2['SourceName'] = SourceName
             NodesSheet2['MethodName'] = "Water Evaluation And Planning System"
             NodesSheet2['InstanceCategory'] = ''
@@ -190,7 +190,7 @@ def Extract_Network(WEAP):
             LinksSheet['FullBranchName'] = Branch.FullName
 
             LinksSheet['InstanceNameCV'] = ''
-            LinksSheet['ScenarioName'] = "USU WEAP Model 2017"
+            LinksSheet['ScenarioName'] = ScenarioName
             LinksSheet['SourceName'] = SourceName
             LinksSheet['MethodName'] = "Water Evaluation And Planning System"
             LinksSheet['StartNodeInstanceName'] = GetReachNameFromPart
@@ -229,7 +229,7 @@ def Extract_Network(WEAP):
             #         print Branch.Name
             #         print startName
             NodesSheet1['InstanceNameCV'] = ''
-            NodesSheet1['ScenarioName'] = "USU WEAP Model 2017"
+            NodesSheet1['ScenarioName'] = ScenarioName
             NodesSheet1['SourceName'] = SourceName
             NodesSheet1['MethodName'] = "Water Evaluation And Planning System"
             NodesSheet1['InstanceCategory'] = ''
@@ -257,7 +257,7 @@ def Extract_Network(WEAP):
             NodesSheet1['FullBranchName'] = Branch.FullName
 
             NodesSheet1['InstanceNameCV'] = ''
-            NodesSheet1['ScenarioName'] = "USU WEAP Model 2017"
+            NodesSheet1['ScenarioName'] = ScenarioName
             NodesSheet1['SourceName'] = SourceName
             NodesSheet1['MethodName'] = "Water Evaluation And Planning System"
             NodesSheet1['InstanceCategory'] = ''

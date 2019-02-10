@@ -35,7 +35,7 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
 
 
     columns_Attributes = ['ObjectType','AttributeName','AttributeName_Abstract','AttributeNameCV','AttributeUnit','AttributeUnitCV',
-                          'AttributeDataTypeCV','AttributeCategory','ModelInputOrOutput','AttributeDescription','AttributeScale','AttributeID']
+                          'AttributeDataTypeCV','AttributeCategory','ModelInputOrOutput','AttributeDescription','AttributeScale']#,'AttributeID']
     ResourceType_top_data = []
     ResourceType_bottom_data = []
     Attributes_data_result = []
@@ -105,7 +105,7 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
                             AttributeName=attr['attr_name']
                             AttributeName_Abstract=attr['attr_name']
                             AttributeNameCV=[]
-                            AttributeID=attr['attr_id']
+                            # AttributeID=attr['attr_id']
 
 
                             AttributeUnit=attr['unit']  # [unit]default_dataset
@@ -161,8 +161,8 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
                                     attribute_row.append(AttributeCategory)
                                 elif 'AttributeScale' == header:
                                     attribute_row.append(AttributeScale)
-                                elif 'AttributeID' == header:
-                                    attribute_row.append(AttributeID)
+                                # elif 'AttributeID' == header:
+                                #     attribute_row.append(AttributeID)
                                 else:
                                     attribute_row.append('')
 

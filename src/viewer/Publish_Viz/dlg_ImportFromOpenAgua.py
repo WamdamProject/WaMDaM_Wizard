@@ -37,11 +37,13 @@ class dlg_ImportFromOpenAgua( Publish_Viz.dlg_ImportFromOpenAgua ):
                 try:
                     login_response = self.conn.login(self.m_textCtr_username.Value, self.m_textCtrl_pass.Value)
                     print 'Connected to Hydra Platform web services first time'
+                    self.m_connect.Enabled = False
                     break
                 except:
                     raise Exception("The provided username and password do not match yours in OpenAgua")
 
                     # login_response = self.conn.login(self.m_textCtr_username.Value, self.m_textCtrl_pass.Value)
+
                     # print 'Connected to Hydra Platform web services second time'
 
             projects = self.conn.call('get_projects', {})

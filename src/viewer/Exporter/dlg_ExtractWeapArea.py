@@ -14,6 +14,14 @@ class dlg_ExtractWeapArea( ExportModels.dlg_ExtractWeapArea ):
 			list_code.append(area.name)
 
 		self.comboBox_WEAPArea.SetItems(list_code)
+		self.Projection_source = ''
+
+
+		list_scen = []
+		for scen in WEAP.Scenarios:
+			list_scen.append(scen.name)
+
+		self.Combo_WEAP_scenario.SetItems(list_scen)
 
 	def comboBox_WEAPAreaOnCombobox( self, event ):
 		pass
@@ -24,6 +32,16 @@ class dlg_ExtractWeapArea( ExportModels.dlg_ExtractWeapArea ):
 		# for area in WEAP.Areas:
 		# 	Area_value = area.name
 
+	def Combo_WEAP_scenarioOnCombobox( self, event ):
+
+		pass
+
+
+	def ProjectionTextOnText( self, event ):
+		self.Projection_source = self.ProjectionText.Value
+		pass
+
+
 	def dirPicker_outputOnDirChanged( self, event ):
 		# TODO: Implement dirPicker_outputOnDirChanged
 		pass
@@ -32,7 +50,7 @@ class dlg_ExtractWeapArea( ExportModels.dlg_ExtractWeapArea ):
 		self.Destroy()
 
 	
-	def btn_exportOnButtonClick( self, event ):
+	def btn_extractOnButtonClick( self, event ):
 
 		self.btn_extract.Enabled = False
 		try:
@@ -40,15 +58,25 @@ class dlg_ExtractWeapArea( ExportModels.dlg_ExtractWeapArea ):
 			if not textCtrl_AreaNameOnText:
 				raise Exception("Select a WEAP Area to extract")
 
+			SelectedScenarioName = self.Combo_WEAP_scenario.Value
+			if not SelectedScenarioName:
+				raise Exception("Select a WEAP scenario to extract")
+
 			fileDir = self.dirPicker_output.Path
 			if not fileDir:
-				raise Exception("Select a dirtory to export the resulting Excel workbook into ")
+				raise Exception("Select a directory to export the resulting Excel workbook into ")
 
 			from controller.WEAP.ExtractWEAP_ToWaMDaM.ExtractWeapArea import WEAP_export
-			weap_Export = WEAP_export(textCtrl_AreaNameOnText, fileDir)
+			weap_Export = WEAP_export(textCtrl_AreaNameOnText, SelectedScenarioName, fileDir)
+
+			WEAP = win32com.client.Dispatch("WEAP.WEAPApplication")
+			WEAP.ActiveArea = textCtrl_AreaNameOnText
+			WEAP.ActiveScenario = SelectedScenarioName
+
 			result_list, uniqObjectAtt_list = weap_Export.GetWEAPValues()
-			# uniqObjectAtt_list = weap_Export.GetWEAPValues()
-			weap_Export.SaveToExcel(result_list,uniqObjectAtt_list)
+
+
+			weap_Export.SaveToExcel(result_list,uniqObjectAtt_list, self.Projection_source)
 
 			from viewer.Messages_forms.msg_connSQLiteSuccs import msg_connSQLiteSuccs
 			msgdlg = msg_connSQLiteSuccs(self)

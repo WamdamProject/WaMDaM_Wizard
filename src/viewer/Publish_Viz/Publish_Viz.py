@@ -27,7 +27,7 @@ class dlg_Publish(wx.Dialog):
         gSizer5 = wx.BoxSizer(wx.VERTICAL)
 
         self.m_staticText20 = wx.StaticText(self, 564,
-                                            u"Publish a WaMDaM 1.05 SQLite file as a new HydroShare Resource (Composite Resource Type) at \n                                                                            https://www.hydroshare.org\n\nWaMDaM Wizard automatically extracts most of the metadata and uploads the SQLite file\nbut you only need to provide the following items:\n ",
+                                            u"Publish a WaMDaM 1.06 SQLite file as a new HydroShare Resource (Composite Resource Type) at \n                                                                            https://www.hydroshare.org\n\nWaMDaM Wizard automatically extracts most of the metadata and uploads the SQLite file\nbut you only need to provide the following items:\n ",
                                             wx.DefaultPosition, wx.DefaultSize, 0)
         self.m_staticText20.Wrap(-1)
         gSizer5.Add(self.m_staticText20, 1, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
@@ -441,7 +441,7 @@ class dlg_ImportFromOpenAgua(wx.Dialog):
                                            m_SelectNetworkChoices, 0)
         gSizer5.Add(self.m_SelectNetwork, 0, wx.ALL, 5)
 
-        self.m_staticText32 = wx.StaticText(self, wx.ID_ANY, u"Select a scenario to import", wx.DefaultPosition,
+        self.m_staticText32 = wx.StaticText(self, wx.ID_ANY, u"Select a parent scenario to import", wx.DefaultPosition,
                                             wx.DefaultSize, 0)
         self.m_staticText32.Wrap(-1)
         gSizer5.Add(self.m_staticText32, 0, wx.ALL, 5)

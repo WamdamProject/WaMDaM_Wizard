@@ -78,13 +78,48 @@ def GetNetworkScenarios(conn, Selected_network_id, Selected_scenario_id, Dataset
     columns_link_data = ['ObjectType', 'LinkInstanceName', 'InstanceNameCV', 'ScenarioName', 'SourceName', 'MethodName',
                          'StartNodeInstanceName', 'EndNodeInstanceName', 'InstanceCategory', 'Description']
 
+    # Children_Ids = []
+    parent_data = None
+    Children_Ids = []
+    Children_Ids_list = []
+    parent_index = 0
+
+    try:
+        if not Get_scenarios_metadata_df['layout.children']:
+
+
+            row_list = Get_scenarios_metadata_df.iterrows()
+            for i, row1 in enumerate(row_list):
+                # row1[1]['layout.children'] = []
+                Children_Ids_list.append([])
+                if row1[1]['layout.class'] == 'baseline':
+                    parent_index = i
+
+                else:
+                    childID=row1[1]['id']
+                    Children_Ids_list[parent_index].append(childID)
+
+            Get_scenarios_metadata_df['layout.children'] = Children_Ids_list
+
+    except:
+        pass
+
+
+   # Children_Ids = []
+
     for row1 in Get_scenarios_metadata_df.iterrows():
         if row1[1]['layout.class'] == 'baseline':
+            ParentID = row1[1]['id']
             # use the select scenario id to look up the children
             try:
                 Children_Ids = row1[1]['layout.children']
             except:
-                Children_Ids=[]
+                childID=row1[1]['id']
+                Children_Ids.append(childID)
+    #         # append the childID into a list of childIDs
+
+
+
 
     Selected_scenario_ids.append(Selected_scenario_id)
     for Children_Id in Children_Ids:

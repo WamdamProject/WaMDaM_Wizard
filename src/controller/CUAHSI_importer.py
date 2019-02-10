@@ -38,8 +38,8 @@ class CUAHSI_importer():
             organizationID = int(n[0])
             organizationID += 1
 
-        organizationName = response_data.timeSeries[0].values[0].source[0].organization
-        organizationWebpage = response_data.timeSeries[0].values[0].source[0].sourceLink[0]
+        organizationName = 'CUAHSI' #response_data.timeSeries[0].values[0].source[0].organization
+        organizationWebpage = 'http://hydroportal.cuahsi.org/nwisdv/cuahsi_1_1.asmx?op=GetValuesObject'
 
         # Check whether same name exist in Organizations table
         exsting = None
@@ -103,7 +103,7 @@ class CUAHSI_importer():
             sources = SqlAlchemy.Sources()
             sources.SourceID = sourceID
             sources.SourceName = source_name
-            sources.SourceWebpage = "http://hydroportal.cuahsi.org/nwisuv/cuahsi_1_1.asmx?WSDL"
+            sources.SourceWebpage = "http://hydroportal.cuahsi.org/nwisdv/cuahsi_1_1.asmx?WSDL"
             sources.PersonID = personID
             self.setup.push_data(sources)
             self.setup.add_data()
@@ -215,7 +215,7 @@ class CUAHSI_importer():
             except:
                 raise Exception('Error \n Could not find {} in ObjectTypes'
                                 .format('site'))
-            attributes.UnitName = response_data.timeSeries[0].variable.unit.unitName
+            attributes.UnitName = 'ft3/s'
 
             if attributes.UnitName=='ft3/s':
                 attributes.UnitNameCV = 'cubic foot per second'
@@ -270,8 +270,18 @@ class CUAHSI_importer():
         if exsting is None:
             scenarios = SqlAlchemy.Scenarios()
             scenarios.ScenarioID = scenarioID
+            scenarios.ScenarioName = 'AS-is'
             scenarios.MasterNetworkID = masterNetworkID
-            scenarios.ScenarioName = scenario_name
+            scenarios.ScenarioParentName = 'self'
+            scenarios.ScenarioType = 'Baseline'
+            scenarios.ScenarioStartDate = '1900-10-01'
+            scenarios.ScenarioEndDate = '2020-10-01'
+            scenarios.TimeStepValue = 1
+            scenarios.TimeStepUnitCV = 'day'
+
+
+
+
             self.setup.push_data(scenarios)
             self.setup.add_data()
     #////////////////////////////////////////////////////////////////////#

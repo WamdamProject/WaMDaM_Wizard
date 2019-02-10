@@ -16,7 +16,7 @@ class dlg_ImportFromCUAHS( WaMDaMWizard.dlg_ImportFromCUAHS ):
         self.btn_Load.Enabled = False
 
         ''' init comboxs'''
-        list_code = ['NWISUV:10092700', 'NWISUV:10011500', 'NWISUV:10046500']
+        list_code = ['NWISDV:10092700', 'NWISDV:10011500', 'NWISDV:10046500']
         list_Variablecode = ['NWISDV:00060/DataType=MEAN']
         self.comboBox_Code.SetItems(list_code)
         self.comboBox_VariableCode.SetItems(list_Variablecode)
@@ -211,7 +211,7 @@ class dlg_ImportFromCUAHS( WaMDaMWizard.dlg_ImportFromCUAHS ):
     # Check whether Sqlite db is connected.
         setup = DB_Setup()
         if not setup.get_session():
-            message = msg_somethigWrong(None, msg='\n\n\nError, No Database Found, Please first connect to a Database.')
+            message = msg_somethigWrong(None, msg='\n\n\nError, No Database Found, Please first connect to a database.')
             message.ShowModal()
             return False
     #///////////////////////////////////////////////////////////////////////#
