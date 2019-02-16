@@ -123,8 +123,8 @@ class frm_Home( WaMDaMWizard.frm_Home ):
         Qva.ShowModal()
 
     def rtbn_WEAPOnRibbonButtonClicked( self, event ):
-        import Exporter.dlg_SelectModel as fServ
-        Serv=fServ.dlg_SelectModel(None)
+        import Exporter.dlg_ServeToWEAP as fServ
+        Serv=fServ.dlg_ServeToWEAP(None)
         Serv.ShowModal()
 
     def rtbn_WASHOnRibbonButtonClicked( self, event ):

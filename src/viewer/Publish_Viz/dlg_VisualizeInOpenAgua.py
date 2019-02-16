@@ -25,7 +25,6 @@ class dlg_VisulaizeWaMDaM( Publish_Viz.dlg_VisulaizeWaMDaM ):
 			# conn = JsonConnection(ur)
 			# while True:
 			# 	try:
-			# 		login_response = conn.login('amabdallah@aggiemail.usu.edu', 'TestOpenAgua!')
 			# 		print 'Connected to Hydra Platform web services first time'
 			# 		break
 			# 	except:
@@ -56,8 +55,6 @@ class dlg_VisulaizeWaMDaM( Publish_Viz.dlg_VisulaizeWaMDaM ):
 	def Btn_LoginOnButtonClick( self, event ):
 		# TODO: Implement Btn_LoginOnButtonClick
 
-		# self.m_textCtrl11.Value = 'amabdallah@aggiemail.usu.edu'
-		# self.m_textCtrl12.Value = 'TestOpenAgua!'
 		userName = self.m_textCtrl11.Value
 		password = self.m_textCtrl12.Value
 		ur = "https://data.openagua.org"
@@ -104,6 +101,10 @@ class dlg_VisulaizeWaMDaM( Publish_Viz.dlg_VisulaizeWaMDaM ):
 	# Handlers for dlg_VisulaizeWaMDaM events.
 	def btn_UploadToOpenAguaOnButtonClick( self, event ):
 		# TODO: Implement btn_UploadToOpenAguaOnButtonClick
+
+		userName = self.m_textCtrl11.Value
+		password = self.m_textCtrl12.Value
+
 		try:
 			projectName = self.m_textCtrl7.Value
 			if not projectName:
@@ -146,7 +147,7 @@ class dlg_VisulaizeWaMDaM( Publish_Viz.dlg_VisulaizeWaMDaM ):
 
 			# add project here? then just pass its  my_new_project.id to the controller
 
-			UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, selectedScenarioNames, projectName)
+			UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, selectedScenarioNames, projectName,userName,password)
 
 			from viewer.Messages_forms.msg_connSQLiteSuccs import msg_connSQLiteSuccs
 			msgdlg = msg_connSQLiteSuccs(self)

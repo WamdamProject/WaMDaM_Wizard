@@ -10,72 +10,117 @@
 import wx
 import wx.xrc
 
+
 ###########################################################################
-## Class dlg_SelectModel
+## Class dlg_ServeToWEAP
 ###########################################################################
 
-class dlg_SelectModel ( wx.Dialog ):
-	
-	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = 1, title = u"Select Model", pos = wx.DefaultPosition, size = wx.Size( 602,249 ), style = wx.DEFAULT_DIALOG_STYLE )
-		
-		self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
-		
-		bSizer2 = wx.BoxSizer( wx.VERTICAL )
-		
-		self.m_staticText2 = wx.StaticText( self, wx.ID_ANY, u"Select the destination model (e.g., WEAP, WASH) ", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText2.Wrap( -1 )
-		self.m_staticText2.SetFont( wx.Font( 9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
-		
-		bSizer2.Add( self.m_staticText2, 0, wx.ALL, 5 )
-		
-		comboBox_SelectModelChoices = [ u"Water Evaluation and Planning system (WEAP)", u"Watershed Area of Suitable Habitat (WASH)- GAMS" ]
-		self.comboBox_SelectModel = wx.ComboBox( self, 10, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, comboBox_SelectModelChoices, 0 )
-		bSizer2.Add( self.comboBox_SelectModel, 0, wx.ALL|wx.EXPAND, 5 )
-		
-		self.btn_addmodel = wx.Button( self, 11, u"How to add a new model?", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer2.Add( self.btn_addmodel, 0, wx.ALL, 5 )
-		
-		gSizer5 = wx.GridSizer( 0, 2, 0, 0 )
-		
-		self.btn_cancel = wx.Button( self, 12, u"Cancel", wx.DefaultPosition, wx.DefaultSize, 0 )
-		gSizer5.Add( self.btn_cancel, 0, wx.ALL|wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL, 5 )
-		
-		self.btn_next = wx.Button( self, 13, u"Next", wx.DefaultPosition, wx.DefaultSize, 0 )
-		gSizer5.Add( self.btn_next, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
-		
-		
-		bSizer2.Add( gSizer5, 1, wx.EXPAND, 5 )
-		
-		
-		self.SetSizer( bSizer2 )
-		self.Layout()
-		
-		self.Centre( wx.BOTH )
-		
-		# Connect Events
-		self.comboBox_SelectModel.Bind( wx.EVT_COMBOBOX, self.comboBox_SelectModelOnCombobox )
-		self.btn_addmodel.Bind( wx.EVT_BUTTON, self.btn_addmodelOnButtonClick )
-		self.btn_cancel.Bind( wx.EVT_BUTTON, self.btn_cancelOnButtonClick )
-		self.btn_next.Bind( wx.EVT_BUTTON, self.btn_nextOnButtonClick )
-	
-	def __del__( self ):
-		pass
-	
-	
-	# Virtual event handlers, overide them in your derived class
-	def comboBox_SelectModelOnCombobox( self, event ):
-		event.Skip()
-	
-	def btn_addmodelOnButtonClick( self, event ):
-		event.Skip()
-	
-	def btn_cancelOnButtonClick( self, event ):
-		event.Skip()
-	
-	def btn_nextOnButtonClick( self, event ):
-		event.Skip()
-	
+class dlg_ServeToWEAP(wx.Dialog):
+
+    def __init__(self, parent):
+        wx.Dialog.__init__(self, parent, id=1, title=u"Serve Data to WEAP", pos=wx.DefaultPosition,
+                           size=wx.Size(602, 399), style=wx.DEFAULT_DIALOG_STYLE)
+
+        self.SetSizeHintsSz(wx.DefaultSize, wx.DefaultSize)
+
+        bSizer2 = wx.BoxSizer(wx.VERTICAL)
+
+        self.m_staticText2 = wx.StaticText(self, wx.ID_ANY, u"Select a model", wx.DefaultPosition, wx.DefaultSize, 0)
+        self.m_staticText2.Wrap(-1)
+        self.m_staticText2.SetFont(
+            wx.Font(9, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial"))
+
+        bSizer2.Add(self.m_staticText2, 0, wx.ALL, 5)
+
+        Select_ModelChoices = []
+        self.Select_Model = wx.ComboBox(self, 323, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize,
+                                        Select_ModelChoices, 0)
+        bSizer2.Add(self.Select_Model, 0, wx.ALL, 5)
+
+        self.m_staticText31 = wx.StaticText(self, wx.ID_ANY, u"Select a network", wx.DefaultPosition, wx.DefaultSize, 0)
+        self.m_staticText31.Wrap(-1)
+        bSizer2.Add(self.m_staticText31, 0, wx.ALL, 5)
+
+        SelectWaMDAM_NetworkChoices = []
+        self.SelectWaMDAM_Network = wx.ComboBox(self, 2322, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize,
+                                                SelectWaMDAM_NetworkChoices, 0)
+        bSizer2.Add(self.SelectWaMDAM_Network, 0, wx.ALL, 5)
+
+        self.m_staticText32 = wx.StaticText(self, wx.ID_ANY, u"Select a scenario", wx.DefaultPosition, wx.DefaultSize,
+                                            0)
+        self.m_staticText32.Wrap(-1)
+        bSizer2.Add(self.m_staticText32, 0, wx.ALL, 5)
+
+        Seclect_WaMDaM_ScenrioChoices = []
+        self.Seclect_WaMDaM_Scenrio = wx.ComboBox(self, 554, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize,
+                                                  Seclect_WaMDaM_ScenrioChoices, 0)
+        bSizer2.Add(self.Seclect_WaMDaM_Scenrio, 0, wx.ALL, 5)
+
+        self.m_staticText30 = wx.StaticText(self, wx.ID_ANY, u"Choose a WEAP Area", wx.DefaultPosition, wx.DefaultSize,
+                                            0)
+        self.m_staticText30.Wrap(-1)
+        bSizer2.Add(self.m_staticText30, 0, wx.ALL, 5)
+
+        comboBox_SelectAreaChoices = []
+        self.comboBox_SelectArea = wx.ComboBox(self, 10, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize,
+                                               comboBox_SelectAreaChoices, 0)
+        bSizer2.Add(self.comboBox_SelectArea, 0, wx.ALL | wx.EXPAND, 5)
+
+        gSizer11 = wx.GridSizer(0, 2, 0, 0)
+
+        self.m_staticText27 = wx.StaticText(self, wx.ID_ANY, u"Select a WEAP scenario, or ", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
+        self.m_staticText27.Wrap(-1)
+        gSizer11.Add(self.m_staticText27, 0, wx.ALL, 5)
+
+        combo_selectWEAPScenarioChoices = []
+        self.combo_selectWEAPScenario = wx.ComboBox(self, 543, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize,
+                                                    combo_selectWEAPScenarioChoices, 0)
+        gSizer11.Add(self.combo_selectWEAPScenario, 0, wx.ALL | wx.EXPAND, 5)
+
+        self.m_staticText28 = wx.StaticText(self, wx.ID_ANY, u"Add new WEAP Scenario", wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
+        self.m_staticText28.Wrap(-1)
+        gSizer11.Add(self.m_staticText28, 0, wx.ALL, 5)
+
+        self.Value_NewWEAPScenario = wx.TextCtrl(self, 564, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0)
+        gSizer11.Add(self.Value_NewWEAPScenario, 0, wx.ALL | wx.EXPAND, 5)
+
+        bSizer2.Add(gSizer11, 1, wx.EXPAND, 5)
+
+        gSizer5 = wx.GridSizer(0, 2, 0, 0)
+
+        self.btn_serve = wx.Button(self, 12, u"Serve To WEAP", wx.DefaultPosition, wx.DefaultSize, 0)
+        gSizer5.Add(self.btn_serve, 0, wx.ALL | wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        self.btn_cancel = wx.Button(self, 13, u"Cancel", wx.DefaultPosition, wx.DefaultSize, 0)
+        gSizer5.Add(self.btn_cancel, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 5)
+
+        bSizer2.Add(gSizer5, 1, wx.EXPAND, 5)
+
+        self.SetSizer(bSizer2)
+        self.Layout()
+
+        self.Centre(wx.BOTH)
+
+        # Connect Events
+        self.comboBox_SelectArea.Bind(wx.EVT_COMBOBOX, self.comboBox_SelectModelOnCombobox)
+        self.btn_serve.Bind(wx.EVT_BUTTON, self.btn_serveOnButtonClick)
+        self.btn_cancel.Bind(wx.EVT_BUTTON, self.btn_cancelOnButtonClick)
+
+    def __del__(self):
+        pass
+
+    # Virtual event handlers, overide them in your derived class
+    def comboBox_SelectModelOnCombobox(self, event):
+        event.Skip()
+
+    def btn_serveOnButtonClick(self, event):
+        event.Skip()
+
+    def btn_cancelOnButtonClick(self, event):
+        event.Skip()
+
 
 ###########################################################################
 ## Class dlg_ProvideNetwork

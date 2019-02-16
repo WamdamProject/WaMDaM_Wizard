@@ -16,7 +16,7 @@ class GetDataStructureFromWeap(object):
     # def getResourceTypes(self):
 
     ResourceTypes_List=[]
-    ResourceTypesFields = ['ResourceType', 'ResourceTypeAcronym','MethodName','Description']
+    ResourceTypesFields = ['ResourceType', 'ResourceTypeAcronym','ResourceTypeCV','MethodName','Description']
 
     ResourceTypes = OrderedDict()
     ResourceTypes['ResourceType'] = 'Water Evaluation And Planning'
@@ -31,7 +31,7 @@ class GetDataStructureFromWeap(object):
 
     # def getObjecttypes(self, selectedResourceType=''):
 
-    ObjectTypeFields = ['ObjectType', 'ObjectTypology','ResourceTypeAcronym','ObjectTypeCV','Layout','IconLocationOnDesk','ObjectCategory','Description']
+    ObjectTypeFields = ['ObjectType', 'ObjectTypology','ResourceTypeAcronym','ObjectTypeCV','Layout','ObjectCategory','Description']
 
 
 

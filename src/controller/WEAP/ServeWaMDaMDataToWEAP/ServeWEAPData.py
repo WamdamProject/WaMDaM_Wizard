@@ -40,23 +40,26 @@ class WEAP_export(object):
 
     def QueryWaMDaMDataForWEAP(self):
         # call the function wich will run the query and write its output to excel
-        from ServeWaMDaMDataToWEAP.QueryTimeSeries import TimeSeries_query, Timeseries_csv_file
+
+        # Time Series
+        from controller.WEAP.ServeWaMDaMDataToWEAP.QueryTimeSeries import TimeSeries_query, Timeseries_csv_file
         df_TimeSeries = TimeSeries_query(self.session)
         csv_file_name_timeseries = Timeseries_csv_file(df_TimeSeries)
 
 
-        from ServeWaMDaMDataToWEAP.QueryMultiAttributes import MultiAttributes_query, MultiAttributes_csv_file
+        # Multi Columns
+        from controller.WEAP.ServeWaMDaMDataToWEAP.QueryMultiAttributes import MultiAttributes_query, MultiAttributes_csv_file
         df_MultiColumns = MultiAttributes_query(self.session)
         csv_file_path_or_value_multi = MultiAttributes_csv_file(df_MultiColumns)
 
 
-        from ServeWaMDaMDataToWEAP.QuerySeasonal import Seasonal_query, Seasonal_csv_file
+        # Seasonal
+        from controller.WEAP.ServeWaMDaMDataToWEAP.QuerySeasonal import Seasonal_query, Seasonal_csv_file
         df_Seasonal = Seasonal_query(self.session)
         csv_file_path_or_value_seasonal = Seasonal_csv_file(df_Seasonal)
 
-        # print the metadata for all the files together (pass all these to the function
-
-        from ServeWaMDaMDataToWEAP.ExportWEAP_Inputfile import WriteMetadataFile
+        # Metadata for all the files together (pass all these to the function
+        from controller.WEAP.ServeWaMDaMDataToWEAP.ExportWEAP_Inputfile import WriteMetadataFile
         WriteMetadataFile(df_TimeSeries, df_MultiColumns, df_Seasonal,
                           csv_file_name_timeseries, csv_file_path_or_value_seasonal,
                           csv_file_path_or_value_multi)

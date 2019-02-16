@@ -17,7 +17,6 @@ def Extract_Network(WEAP, SelectedScenarioName):
         BranchFullName=Branch.FullName
 
 
-
         if Branch.TypeName == 'River' and Branch.Isline:
             RiverNodeFullPath = Branch.FullName
             RiverNodeBranchName = Branch.Name

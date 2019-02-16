@@ -56,7 +56,7 @@ import logging
 
 
 
-def UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, selectedScenarioNames, projectName):
+def UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, selectedScenarioNames, projectName,userName,password):
     # selectedResourceTypeAcro='WASH'
     # selectedMasterNetworkName='Lower Bear River Network'
     # selectedScenarioName='base case scenario 2003'
@@ -89,7 +89,7 @@ def UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, select
     # More info: http://umwrg.github.io/HydraPlatform/tutorials/plug-in/tutorial_json.html#creating-a-client
     ur = "https://data.openagua.org"
     conn = JsonConnection(ur)
-    login_response = conn.login('amabdallah@aggiemail.usu.edu', 'TestOpenAgua!')
+    login_response = conn.login(userName,password)
 
     get_all_dimensions=conn.call('get_all_dimensions', ({}))
 
@@ -117,6 +117,9 @@ def UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, select
 
     ## Load the new Project name to the Hydra db
     my_new_project = None
+
+
+    User5char=userName[0:4]
     for p in projects:
         if projectName==p.name:
             my_new_project=p
@@ -152,7 +155,11 @@ def UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, select
     # 2.1_Datasets&ObjectTypes sheet, look in the Datasets_table
     # DatasetName which is cell A10 in 2.1_Datasets&ObjectTypes sheet
 
-    template = {'name': type_sheet_resourceTypes.values[0][1],'description':'add description here', 'types': []}  # insert the value of the "DatasetName" from excel
+    # concatnate part of the user name into the project name to make globally unique in HydraPlatform
+    GlobalTemplate=type_sheet_resourceTypes.values[0][1]+'_'+User5char
+
+
+    template = {'name': GlobalTemplate,'description':'add description here', 'types': []}  # insert the value of the "DatasetName" from excel
     # A template is equivalent to a dataset in wamdam
 
     # my_templates lists available templates. A template equates to the 'Dataset' in WaMDaM.

@@ -85,7 +85,6 @@ class frm_Home ( wx.Frame ):
         self.m_ribbonButtonBar7 = rb.RibbonButtonBar( self.rtab_Export, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
         self.m_ribbonButtonBar7.AddSimpleButton( 17, u"First time", WEAP.GetBitmap(), wx.EmptyString)
 
-        self.m_ribbonButtonBar7.AddSimpleButton( 18, u"Re-run a previous export", rerun.GetBitmap(), wx.EmptyString)
         self.m_ribbonButtonBar7.AddSimpleButton( 19, u"Export WaMDaM to Excel Template", ImportExcel.GetBitmap(), wx.EmptyString)
 
 
