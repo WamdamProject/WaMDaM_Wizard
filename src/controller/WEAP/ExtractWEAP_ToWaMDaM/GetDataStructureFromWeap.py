@@ -21,6 +21,8 @@ class GetDataStructureFromWeap(object):
     ResourceTypes = OrderedDict()
     ResourceTypes['ResourceType'] = 'Water Evaluation And Planning'
     ResourceTypes['ResourceTypeAcronym'] = 'WEAP'
+    ResourceTypes['ResourceTypeCV'] = 'WEAP'
+
     ResourceTypes['MethodName'] = 'Water Evaluation And Planning System'
     ResourceTypes['Description'] = 'WEAP (Water Evaluation And Planning" system) is a user-friendly software tool that takes an integrated approach to water resources planning."'
 
@@ -41,8 +43,12 @@ class GetDataStructureFromWeap(object):
             :param  selectedResourceType: value of selected ResourceTypeAcronym.
             :return: list of set of data queried
         '''
+
+
+
         try:
-            AttributeFields = ['ObjectType', 'AttributeName', 'AttributeName_Abstract','AttributeNameCV','AttributeUnit','AttributeUnitCV', 'AttributeDataTypeCV','AttributeCategory','ModelInputOrOutput','AttributeDescription']
+            AttributeFields = ['ObjectType', 'AttributeName', 'AttributeName_Abstract','AttributeNameCV','AttributeUnit','AttributeUnitCV', 'AttributeDataTypeCV',
+                               'AttributeCategory','ModelInputOrOutput','AttributeDescription','AttributeScale']
             complete_result = list()
 
             for UniqObjectAtt in self.unique_object_types_value_list:

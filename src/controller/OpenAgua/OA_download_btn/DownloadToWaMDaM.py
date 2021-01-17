@@ -18,7 +18,7 @@ from controller.OpenAgua.HydraLib.PluginLib import JsonConnection
 # Handlers for dlg_ImportFromOpenAgua events.
 
 
-ur = "https://data.openagua.org"
+ur = "https://www.openagua.org/api/v1/hydra/"
 
 conn = JsonConnection(ur)
 login_response = conn.login('amabdallah@aggiemail.usu.edu',  'xxxx')
@@ -29,7 +29,7 @@ Selected_network_id=int('1022')
 Selected_scenario_id=int('2206')
 
 
-ExportFilePath='C:\Users\Adel\Desktop\Test.xlsx'
+# ExportFilePath='C:\Users\Adel\Desktop\Test.xlsx'
 
 
 
@@ -41,7 +41,7 @@ GlobalAttributesID='57725'
 MethodName='AddMethodName'
 SourceName='AddSourceName'
 
-exportTemplate = ExportTemplate(ExportFilePath)
+# exportTemplate = ExportTemplate(ExportFilePath)
 
 
 Template=conn.call('get_template',{'template_id':Selected_template_id})

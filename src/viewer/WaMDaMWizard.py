@@ -83,7 +83,7 @@ class frm_Home ( wx.Frame ):
         self.rtab_Export = rb.RibbonPage( self.Main_ribbonBar, wx.ID_ANY, u"Export Data to Models" , wx.NullBitmap , 0 )
         self.rtab_Export = rb.RibbonPanel( self.rtab_Export, wx.ID_ANY, wx.EmptyString , wx.NullBitmap , wx.DefaultPosition, wx.DefaultSize, wx.lib.agw.ribbon.RIBBON_PANEL_DEFAULT_STYLE )
         self.m_ribbonButtonBar7 = rb.RibbonButtonBar( self.rtab_Export, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
-        self.m_ribbonButtonBar7.AddSimpleButton( 17, u"First time", WEAP.GetBitmap(), wx.EmptyString)
+        self.m_ribbonButtonBar7.AddSimpleButton( 17, u"Export to WEAP", WEAP.GetBitmap(), wx.EmptyString)
 
         self.m_ribbonButtonBar7.AddSimpleButton( 19, u"Export WaMDaM to Excel Template", ImportExcel.GetBitmap(), wx.EmptyString)
 

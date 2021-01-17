@@ -10,10 +10,9 @@ import csv
 import os
 def Seasonal_query(conn,multi_Seasonal):
     total_df_Seasonal = []
-    Seasonal_Full_Branch_total = []
     for input_param in multi_Seasonal:
         Seasonal_query="""
-        Select ScenarioName,ObjectTypeCV,ObjectType,AttributeName,AttributeDataTypeCV,InstanceName,SeasonName,UnitName,
+        Select ScenarioName,ObjectTypeCV,ObjectType,AttributeName_Abstract,AttributeDataTypeCV,InstanceName,SeasonName,UnitName,
         SourceName,MethodName,
         SeasonNumericValue,SeasonOrder
         --,Longitude_x,Latitude_y
@@ -70,28 +69,27 @@ def Seasonal_query(conn,multi_Seasonal):
     
         AND ObjectType= '%s'
 
-        AND AttributeName='%s'
+        AND AttributeName_Abstract='%s'
         AND InstanceName='%s'
+            AND ScenarioName='%s' 
 
-        ORDER BY ResourceTypeAcronym,ObjectType,AttributeName,InstanceName, ScenarioName,SeasonOrder,SeasonName ASC
+        ORDER BY ResourceTypeAcronym,ObjectType,AttributeName_Abstract,InstanceName, ScenarioName,SeasonOrder,SeasonName ASC
 
-     """%(input_param['Required_ObjectType'],  input_param['Required_AttributeName'], input_param['Provided_InstanceName'] )
-
-        Full_Branch=input_param['Provided_FullBranch']
-        Seasonal_Full_Branch_total.append(Full_Branch)
-
-        df_Seasonal = pd.read_sql_query(Seasonal_query, conn)
-        # df_Seasonal = session.execute(Seasonal_query)
+     """%(input_param[1]['ObjectType'],  input_param[1]['AttributeName_Abstract'],
+          input_param[1]['InstanceName'],input_param[1]['ScenarioName'] )
 
 
-        # df_Seasonal.keys()
+        df_Seasonal = pd.DataFrame(list(conn.execute(Seasonal_query)))
+
+        df_Seasonal_columns = list(conn.execute(Seasonal_query).keys())
+        df_Seasonal.columns = df_Seasonal_columns
 
         total_df_Seasonal.append(df_Seasonal)
-    # df_Seasonal
-    return total_df_Seasonal,Seasonal_Full_Branch_total
+
+    return total_df_Seasonal
 
 
-def Seasonal_csv_file(total_df_Seasonal,Seasonal_Full_Branch_total):
+def Seasonal_csv_file(total_df_Seasonal, weap_area_directory):
 
     # Write
     # the order is important and should follow SeasonOrder
@@ -102,15 +100,15 @@ def Seasonal_csv_file(total_df_Seasonal,Seasonal_Full_Branch_total):
     Multi_df_Seasonal=[]
 
 
-    output_dir = "Seasonal_csv_files/"
+    output_dir = weap_area_directory +"/Seasonal_csv_files/"
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
 
 
     # SeasonName,SeasonNumericValue
-    for df_Seasonal,Seasonal_Full_Branch in zip( total_df_Seasonal,Seasonal_Full_Branch_total):
-        if len(df_Seasonal['AttributeName']) < 2: continue
+    for df_Seasonal in total_df_Seasonal:
+        if len(df_Seasonal['AttributeName_Abstract']) < 2: continue
         SeasonalParam = ''
         # print df_Seasonal['SeasonName']
         for i in range(len(df_Seasonal['SeasonName'])):
@@ -123,7 +121,7 @@ def Seasonal_csv_file(total_df_Seasonal,Seasonal_Full_Branch_total):
         csv_file_path_or_value_seasonal="MonthlyValues("+SeasonalParam+")"
 
 
-        x = df_Seasonal['AttributeName'][1]
+        x = df_Seasonal['AttributeName_Abstract'][1]
         y = df_Seasonal['InstanceName'][1]
         z = x.replace(" ", "_")
         w = y.replace(" ", "_")
@@ -132,7 +130,6 @@ def Seasonal_csv_file(total_df_Seasonal,Seasonal_Full_Branch_total):
 
         Metadata_seasonal1 = OrderedDict()
 
-        Metadata_seasonal1['FullBranch'] =Seasonal_Full_Branch
         Metadata_seasonal1['Value'] =csv_file_path_or_value_seasonal
         Metadata_seasonal1['csv_fileName'] =csv_fileName
 
@@ -146,7 +143,7 @@ def Seasonal_csv_file(total_df_Seasonal,Seasonal_Full_Branch_total):
         # # save the three columns into a csv file with a name csv_file_name
 
         # save the the multi columns into a csv file with a name csv_file_name
-        field_names = ['ObjectTypeCV', 'InstanceName', 'ScenarioName', 'AttributeName', 'SeasonName', 'SeasonNumericValue',
+        field_names = ['ObjectTypeCV', 'InstanceName', 'ScenarioName', 'AttributeName_Abstract', 'SeasonName', 'SeasonNumericValue',
                        'SeasonOrder']
 
         # add them into a folder called "Seasonal_Input_Files"
@@ -157,7 +154,7 @@ def Seasonal_csv_file(total_df_Seasonal,Seasonal_Full_Branch_total):
         for j in range(len(df_Seasonal['SeasonNumericValue'])):
             try:
                 field_values = [df_Seasonal['ObjectTypeCV'][j], df_Seasonal['InstanceName'][j],
-                                df_Seasonal['ScenarioName'][j], df_Seasonal['AttributeName'][j]
+                                df_Seasonal['ScenarioName'][j], df_Seasonal['AttributeName_Abstract'][j]
                     , df_Seasonal['SeasonName'][j], df_Seasonal['SeasonNumericValue'][j], df_Seasonal['SeasonOrder'][j]]
                 writer1.writerow(field_values)
             except:

@@ -15,11 +15,20 @@ import pandas as pd
 from datetime import datetime
 import json
 
+from controller.OpenAgua.Download.NewOA2 import Hydra_OA
 
-def GetScenarioData(Selected_scenario_ids, conn, Selected_network_id, Attribute_Frame_df, ObjectType_lst):
+def GetScenarioData(Selected_scenario_ids, Selected_network_id, Attribute_Frame_df, ObjectType_lst, username_oa,
+                    password_oa):
     FreeText_data_header = ['ObjectType', 'InstanceName', 'ScenarioName', 'AttributeName', 'SourceName', 'MethodName']
 
+
+    endpoint = 'https://www.openagua.org/api/v1/hydra/'
+
+    hydra = Hydra_OA(endpoint, username=username_oa,password=password_oa)
+
+
     FreeText_data_result = []
+
     NumericValue_data_result = []
     TimeSeriesValues_data_result = []
     TimeSeries_data_result = []
@@ -53,20 +62,37 @@ def GetScenarioData(Selected_scenario_ids, conn, Selected_network_id, Attribute_
     ParentScenario = Selected_scenario_ids[0]
 
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-    ParentResource_data_result = conn.call('get_all_resource_data',
-                                           {'network_id': Selected_network_id, 'scenario_id': ParentScenario,
-                                            'include_values': 'Y', 'include_metadata': 'Y'})
+     # old Hydra method
+    # ParentResource_data_result = hydra_call(username_oa, password_oa, 'get_all_resource_data',
+    #                                         {'network_id': Selected_network_id, 'scenario_id': ParentScenario,
+    #                                          'include_values': 'Y', 'include_metadata': 'Y'})
+
+    # new one
+    # https: // github.com / openagua / hydra - base / blob / master / hydra_base / lib / network.py  # L2471
+    ParentResource_data_result = hydra.call('get_all_resource_data',
+                                            {'scenario_id': ParentScenario,
+                                             'include_metadata': 'Y'})
 
     ParentResource_data_result_df = json_normalize(ParentResource_data_result)
-    Scenario = conn.call('get_scenario', {'scenario_id': ParentScenario})
 
-    ScenarioStartDate = Scenario['start_time']
-    ScenarioStartMonth = datetime.strptime(ScenarioStartDate, '%Y-%m-%d %H:%M:%S').month
-    print ScenarioStartMonth
+    Scenario = hydra.call('get_scenario', {'scenario_id': ParentScenario,
+                                                                     'get_parent_data':'False', 'include_data': 'True',
+                                                                     'include_group_items':'True'})
+
+    # ScenarioStartDate = Scenario['start_time']
+    try:
+
+        ScenarioStartDate = datetime.strptime(Scenario['start_time'], '%Y-%m-%dT%H:%M:%S.%f')
+    except:
+
+        ScenarioStartDate = datetime.strptime(Scenario['start_time'], '%Y-%m-%d %H:%M:%S')
+
+    ScenarioStartMonth = ScenarioStartDate.month
+
+    print(ScenarioStartMonth)
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-
-    # Get_scenarios_metadata = conn.call('get_scenarios',
+    # Get_scenarios_metadata = hydra_call(username_oa, password_oa, 'get_scenarios',
     #                                         {'network_id': Selected_network_id, 'include_values': 'N'})
     # Get_scenarios_metadata_df = json_normalize(Get_scenarios_metadata)
     #
@@ -75,7 +101,6 @@ def GetScenarioData(Selected_scenario_ids, conn, Selected_network_id, Attribute_
     #
     # Selected_scenario_ids
 
-
     Selected_scenario_id = []
     for Selected_scenario_id in Selected_scenario_ids:
         # print Selected_scenario_id
@@ -83,16 +108,17 @@ def GetScenarioData(Selected_scenario_ids, conn, Selected_network_id, Attribute_
         # use the same data for all the childs.
         # if a child has new different data, then we overwrite the parent data
         #########################################################################################################################################3
-        Scenario = conn.call('get_scenario', {'scenario_id': Selected_scenario_id})
+        Scenario = hydra.call( 'get_scenario', {'scenario_id': Selected_scenario_id,
+                                                                         'get_parent_data':'False', 'include_data': 'True',
+                                                                         'include_group_items':'True'})
 
         ScenarioName = Scenario['name']
 
-        Child_Resource_data_result = conn.call('get_all_resource_data',
-                                               {'network_id': Selected_network_id, 'scenario_id': Selected_scenario_id,
-                                                'include_values': 'Y', 'include_metadata': 'Y'})
+        Child_Resource_data_result = hydra.call('get_all_resource_data',
+                                                {'network_id': Selected_network_id, 'scenario_id': Selected_scenario_id,
+                                                 'include_values': 'Y', 'include_metadata': 'Y'})
+
         Child_Resource_data_result_df = json_normalize(Child_Resource_data_result)
-
-
 
         # iterate over the parent
 
@@ -104,7 +130,7 @@ def GetScenarioData(Selected_scenario_ids, conn, Selected_network_id, Attribute_
                 # if child row exist and matches the row parent metadata, then overwrite the row and index values with the child's data
                 if row['resource_attr_id'] == row_child['resource_attr_id']:
                     if row['dataset_id'] != row_child['dataset_id']:
-                        print 'diff value'
+                        print('diff value')
                         index = index_child
                         row = row_child
                         # changing the method name from the other scenarios is needed
@@ -140,18 +166,20 @@ def GetScenarioData(Selected_scenario_ids, conn, Selected_network_id, Attribute_
                             attr_row[1]['AttributeName'] == AttributeName):
                         continue
 
-                    # get metadata
-                    dataset_metadata = json.loads(row['dataset_metadata'])
+                    print AttributeName
 
-                    if not 'source' in dataset_metadata.keys():
+                    # get metadata
+                    dataset_metadata = row
+
+                    if not 'source' in dataset_metadata.index.tolist():
                         SourceName = 'AddSourceName'
                     else:
-                        SourceName = dataset_metadata['source']
+                        SourceName = row['metadata.source']
 
                     if not 'method' in dataset_metadata.keys():
                         MethodName = MethodName
                     else:
-                        MethodName = dataset_metadata['method']
+                        MethodName = row['metadata.method']
 
                     # ValuesSheets['ScenarioName']=row['ref_name']
 
@@ -160,9 +188,9 @@ def GetScenarioData(Selected_scenario_ids, conn, Selected_network_id, Attribute_
                     # Get the data values and prepare them for WaMDaM for each data type
                     #######################################################
 
-                    if row['dataset_type'] == 'descriptor':
-                        if row['dataset_value']:
-                            FreeText_value = row['dataset_value']
+                    if row['type'] == 'descriptor':
+                        if row['value']:
+                            FreeText_value = row['value']
                         else:
                             FreeText_value = 'Empty_in_OpenAgua'
 
@@ -186,8 +214,8 @@ def GetScenarioData(Selected_scenario_ids, conn, Selected_network_id, Attribute_
                         output_row.append(FreeText_value)
                         FreeText_data_result.append(output_row)
 
-                    if row['dataset_type'] == 'scalar':
-                        NumericValue_value = str(row['dataset_value'])
+                    if row['type'] == 'scalar':
+                        NumericValue_value = str(row['value'])
                         output_row = []
                         for header in FreeText_data_header:
                             if header == "InstanceName":
@@ -215,8 +243,9 @@ def GetScenarioData(Selected_scenario_ids, conn, Selected_network_id, Attribute_
                             output_row = '-9999'
                         NumericValue_data_result.append(output_row)
 
-                    if row['dataset_type'] == 'timeseries':
-                        json_times = json.loads(row['dataset_value'])
+                    # print 'import time series'
+                    if row['type'] == 'timeseries':
+                        json_times = json.loads(row['value'])
                         for key in json_times.keys():
                             if key == 'Header':  continue
                             all_monthes = {}
@@ -279,6 +308,8 @@ def GetScenarioData(Selected_scenario_ids, conn, Selected_network_id, Attribute_
                                     TimeSeries_data_result.append(output_row_times)
 
                                 else:
+                                    # print 'import seasonal data'
+
                                     time = datetime.strptime(time.split('T')[0], '%Y-%m-%d').strftime("%Y/%m/%d")
                                     for header in Seasonal_header:
                                         if header == "InstanceName":
@@ -303,18 +334,18 @@ def GetScenarioData(Selected_scenario_ids, conn, Selected_network_id, Attribute_
                                     Order = 1
 
                                     if ScenarioStartMonth == 10:
-                                        if time == '9998/10/01':
+                                        if time == '9999/10/01':
                                             SeasonName = 'Oct'
                                             SeasonNameCV = 'October'
                                             Order = 1
 
-                                        elif time == '9998/11/01':
+                                        elif time == '9999/11/01':
                                             SeasonName = 'Nov'
                                             SeasonNameCV = 'November'
                                             Order = 2
 
 
-                                        elif time == '9998/12/01':
+                                        elif time == '9999/12/01':
                                             SeasonName = 'Dec'
                                             SeasonNameCV = 'December'
                                             Order = 3
@@ -452,8 +483,10 @@ def GetScenarioData(Selected_scenario_ids, conn, Selected_network_id, Attribute_
                             for key in keylist:
                                 SeasonalValues.append(all_monthes[key])
 
-                    if row['dataset_type'] == 'array':
-                        json_array = json.loads(row['dataset_value'])
+                    # print 'import array data'
+
+                    if row['type'] == 'array':
+                        json_array = json.loads(row['value'])
                         for index, item in enumerate(json_array[0]):
                             output_row = []
                             for header in FreeText_data_header:
@@ -500,7 +533,7 @@ def GetScenarioData(Selected_scenario_ids, conn, Selected_network_id, Attribute_
 
     FreeText_data_header.pop(-1)
 
-    FreeText_data_header.append('NumericValue')  # this one should be for Numric not
+    FreeText_data_header.append('NumericValue')  # this one should be for Numeric not
 
     NumericValue_frame_result = pd.DataFrame(NumericValue_data_result, columns=FreeText_data_header)
 
@@ -536,3 +569,5 @@ def GetScenarioData(Selected_scenario_ids, conn, Selected_network_id, Attribute_
 
     return FreeText_frame_result, NumericValue_frame_result, SeasonalValues_df, \
            Times_frame_result, TimeSeriesValues_frame_result, up_frame_data, array_frame_result
+
+    print 'done with importing data'

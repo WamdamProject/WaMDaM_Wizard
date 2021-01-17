@@ -9,14 +9,13 @@ from collections import OrderedDict
  # for the model (Distination)
 
 def Numeric_query(conn,multi_Numeric):
-    total_df_MultiColumns=[]
     Metadata_multi_numeric=[]
     total_df_Numeric=[]
 
     for input_param in multi_Numeric:
 
         Numeric_query="""
-        Select ScenarioName,ObjectTypeCV,ObjectType,AttributeName,AttributeDataTypeCV,InstanceName,
+        Select ScenarioName,ObjectTypeCV,ObjectType,AttributeName_Abstract,AttributeDataTypeCV,InstanceName,
         UnitName,MethodName,SourceName,
          --As Existing_UnitName,
          NumericValue,'' as Converted_NumericValue
@@ -68,30 +67,24 @@ def Numeric_query(conn,multi_Numeric):
         AttributeDataTypeCV IN ('NumericValues' ) and NumericValue is not null
         
         AND ObjectType= '%s' 
-        AND AttributeName='%s'
+        AND AttributeName_Abstract='%s'
         AND InstanceName='%s' 
                   
-        
-    """%(input_param['Required_ObjectType'],  input_param['Required_AttributeName'], input_param['Provided_InstanceName'] )
+                    AND ScenarioName='%s' 
 
-        # something wrong with this query and passing the Instance name below . It is not getting values back as expeced
-
-
-        # df_Numeric = session.execute(Numeric_query)
-        df_Numeric = pd.read_sql_query(Numeric_query, conn)
+    """%(input_param[1]['ObjectType'],  input_param[1]['AttributeName_Abstract'],
+         input_param[1]['InstanceName'],input_param[1]['ScenarioName'] )
 
 
-        Full_Branch=input_param['Provided_FullBranch']
+        df_Numeric = pd.DataFrame(list(conn.execute(Numeric_query)))
 
-        if len (df_Numeric['AttributeName']) == 0 : continue
+        Numeric_query_columns = list(conn.execute(Numeric_query).keys())
+        df_Numeric.columns = Numeric_query_columns
 
+        # if len (df_Numeric['AttributeName_Abstract']) == 0 : continue
         df_Numeric['Value']=df_Numeric['NumericValue']
 
-
         total_df_Numeric.append(df_Numeric)
-
-        # df_Numeric.keys()
-        # df_Numeric
 
     # convert unit from the existing into the required (or distination)
 
@@ -110,7 +103,6 @@ def Numeric_query(conn,multi_Numeric):
 
         Metadata_multi_numeric1 = OrderedDict()
 
-        Metadata_multi_numeric1['FullBranch'] =Full_Branch
 
         Metadata_multi_numeric1['csv_fileName'] =''
 

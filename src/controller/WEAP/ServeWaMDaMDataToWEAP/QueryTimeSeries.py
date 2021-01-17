@@ -1,6 +1,6 @@
 #
 #  query Time series data:
-# Input paramters: ObjectTypeCV,InstanceNameCV,AttributeNameCV
+# Input paramters: ObjectTypeCV,InstanceNameCV,AttributeName_AbstractCV
 # return: df_TimeSeries
 import csv
 from collections import OrderedDict
@@ -26,7 +26,7 @@ def TimeSeries_query(conn,multi_timeseries):
     TimeSeries_Full_Branch_total = []
 
     for input_param in multi_timeseries:
-        TimeSeries_query="""SELECT ResourceTypeAcronym,ObjectType,ScenarioName,InstanceName,AttributeName, AggregationStatisticCV,IntervalTimeUnitCV,UnitName,SourceName,
+        TimeSeries_query="""SELECT ResourceTypeAcronym,ObjectType,ScenarioName,InstanceName,AttributeName_Abstract, AggregationStatisticCV,IntervalTimeUnitCV,UnitName,SourceName,
             MethodName,PeopleSources.PersonName As SourcePerson,OrganizationsSources.OrganizationName As SoureOrganization,DateTimeStamp,DataValue
             
             FROM "ResourceTypes"
@@ -91,34 +91,34 @@ def TimeSeries_query(conn,multi_timeseries):
             
             AND ObjectType= '%s' 
         
-            AND AttributeName='%s'
+            AND AttributeName_Abstract='%s'
+            
             AND InstanceName='%s' 
             
-     """%(input_param['Required_ObjectType'],  input_param['Required_AttributeName'], input_param['Provided_InstanceName'] )
+            AND ScenarioName='%s' 
 
-        # df_TimeSeries = session.execute(TimeSeries_query)
-        df_TimeSeries = pd.read_sql_query(TimeSeries_query, conn)
+            
+     """%(input_param[1]['ObjectType'],  input_param[1]['AttributeName_Abstract'],
+          input_param[1]['InstanceName'] ,input_param[1]['ScenarioName'])
 
-        Full_Branch=input_param['Provided_FullBranch']
-        TimeSeries_Full_Branch_total.append(Full_Branch)
+        df_TimeSeries = pd.DataFrame(list(conn.execute(TimeSeries_query)))
 
-
-        # df_TimeSeries = pd.read_sql_query(query, conn)
-        # df_TimeSeries.to_csv('query_resut.csv')
-        df_TimeSeries.keys()
+        df_TimeSeries_columns = list(conn.execute(TimeSeries_query).keys())
+        df_TimeSeries.columns = df_TimeSeries_columns
 
         total_df_TimeSeries.append(df_TimeSeries)
 
-    return total_df_TimeSeries,TimeSeries_Full_Branch_total  # pass this value into the csv function next
+
+    return total_df_TimeSeries  # pass this value into the csv function next
 
 
-def Timeseries_csv_file(total_df_TimeSeries,TimeSeries_Full_Branch_total):
+def Timeseries_csv_file(total_df_TimeSeries, weap_area_directory):
 
 # Write to csv file name dynamicly:
-# csv_file_name=AttributeName_InstanceName.csv
+# csv_file_name=AttributeName_Abstract_InstanceName.csv
 #
-# Replace any space within the AttributeName or the the InstanceName with underscore
-# AttributeName=Headflow
+# Replace any space within the AttributeName_Abstract or the the InstanceName with underscore
+# AttributeName_Abstract=Headflow
 # InstanceName=BlacksmithFork Inflow
 #
 # e.g,
@@ -138,13 +138,18 @@ def Timeseries_csv_file(total_df_TimeSeries,TimeSeries_Full_Branch_total):
 
     Metadata_TimeSeries = []
 
-    output_dir = "TimeSeries_csv_files/"
+
+    output_dir = weap_area_directory +"\TimeSeries_csv_files\\"
+
+    # output_dir = "TimeSeries_csv_files\\"
+
+
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    for df_TimeSeries,TimeSeries_Full_Branch in zip(total_df_TimeSeries,TimeSeries_Full_Branch_total):
-        if len(df_TimeSeries['AttributeName']) < 2: continue
-        x = df_TimeSeries['AttributeName'][1]
+    for df_TimeSeries in total_df_TimeSeries:
+        if len(df_TimeSeries['AttributeName_Abstract']) < 2: continue
+        x = df_TimeSeries['AttributeName_Abstract'][1]
         # print x
         y = df_TimeSeries['InstanceName'][1]
 
@@ -167,10 +172,8 @@ def Timeseries_csv_file(total_df_TimeSeries,TimeSeries_Full_Branch_total):
         Metadata_TimeSeries1['Value'] = timeSeriesValue
 
         Metadata_TimeSeries1['csv_fileName'] = csv_file_name
+        # print('Writing csv file: {}'.format(csv_file_name))
 
-        # for TimeSeries_Full_Branch in TimeSeries_Full_Branch_total:
-
-        Metadata_TimeSeries1['FullBranch'] = TimeSeries_Full_Branch
 
         Metadata_TimeSeries.append(Metadata_TimeSeries1)
 
@@ -182,8 +185,8 @@ def Timeseries_csv_file(total_df_TimeSeries,TimeSeries_Full_Branch_total):
         field_names = ['Column1', 'Column2', 'Column3']
         f1 = open(csv_file_name, "wb")
 
-        writer = csv.writer(f1, delimiter=',', quoting=csv.QUOTE_ALL)
-        writer.writerow(field_names)
+        writer = csv.writer(f1, delimiter=',', quoting=csv.QUOTE_NONE)
+        # writer.writerow(field_names)
 
         # for ii in x:
 
@@ -191,7 +194,7 @@ def Timeseries_csv_file(total_df_TimeSeries,TimeSeries_Full_Branch_total):
         # print type(x).__name__
         # print x_data[0]
 
-        # save all of   them into a folder called: TimeSeries_csv_files
+        # save all of   theDemaned Sitem into a folder called: TimeSeries_csv_files
 
         for i in range(len(x_data)):
             year, month, date = x_data[i].split('-')

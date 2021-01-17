@@ -36,7 +36,7 @@ import logging
 
 ur = "https://data.openagua.org"
 conn = JsonConnection(ur)
-login_response = conn.login('amabdallah@aggiemail.usu.edu', 'TestOpenAgua!')
+login_response = conn.login('amabdallah@aggiemail.usu.edu', 'OApass!')
 
 # get_all_dimensions = conn.call('get_all_dimensions', ({}))
 
@@ -82,3 +82,7 @@ login_response = conn.login('amabdallah@aggiemail.usu.edu', 'TestOpenAgua!')
 
 
 
+result='update_scenario', {'network_id': 1444, 'scen': {'layout': {'class': u'scenario'},
+                                                         'description': u'Scenario',
+                                                         'network_id': 1444, 'parent_id': 3433,
+                                                         'id': 3434, 'name': u'Reuso Industrial'}}

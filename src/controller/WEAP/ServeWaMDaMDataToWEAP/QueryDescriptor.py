@@ -15,8 +15,8 @@ def Descriptor_query(conn,multi_Descriptor):
     for input_param in multi_Descriptor:
 
         Descriptor_query="""
-        Select ScenarioName,ObjectTypeCV,ObjectType,SourceName,MethodName,
-        AttributeName,AttributeDataTypeCV,InstanceName,UnitName,DescriptorValue
+         Select ScenarioName,ObjectTypeCV,ObjectType,SourceName,MethodName,
+        AttributeName_Abstract,AttributeDataTypeCV,InstanceName,UnitName,FreeTextValue
             
         FROM ResourceTypes
         LEFT JOIN "ObjectTypes" 
@@ -55,39 +55,40 @@ def Descriptor_query(conn,multi_Descriptor):
         
         
         -- Join the ValuesMapper to get their Descriptor parameters   
-        LEFT JOIN "DescriptorValues"
-        ON "DescriptorValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID"
+        LEFT JOIN "FreeText"
+        ON "FreeText"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID"
         
         
         WHERE  
         
-        AttributeDataTypeCV IN ('DescriptorValues' ) and DescriptorValue is not null
+        AttributeDataTypeCV IN ('FreeText' ) and FreeTextValue is not null
+       
        
         AND ObjectType= '%s' 
     
-        AND AttributeName='%s'
+        AND AttributeName_Abstract='%s'
+        
         AND InstanceName='%s'     
         
-        """%(input_param['Required_ObjectType'], input_param['Required_AttributeName'], input_param['Provided_InstanceName'] )
+        AND ScenarioName='%s' 
 
-        df_Descriptor = pd.read_sql_query(Descriptor_query, conn)
+        """%(input_param[1]['ObjectType'], input_param[1]['AttributeName_Abstract'],
+             input_param[1]['InstanceName'],input_param[1]['ScenarioName'] )
 
-        # df_Descriptor = session.execute(Descriptor_query)
+        df_Descriptor = pd.DataFrame(list(conn.execute(Descriptor_query)))
 
-        df_Descriptor = pd.read_sql_query(Descriptor_query, conn)
+        df_Descriptor_columns = list(conn.execute(Descriptor_query).keys())
+        df_Descriptor.columns = df_Descriptor_columns
 
-
-        Full_Branch=input_param['Provided_FullBranch']
-
-        if len (df_Descriptor['AttributeName']) == 0 : continue
-
-        df_Descriptor['Value']=df_Descriptor['DescriptorValue']
+        # if len (df_Numeric['AttributeName_Abstract']) == 0 : continue
+        df_Descriptor['Value']=df_Descriptor['FreeTextValue']
 
         total_df_Descriptor.append(df_Descriptor)
 
+
+
         Metadata_multi_descriptor1 = OrderedDict()
 
-        Metadata_multi_descriptor1['FullBranch'] =Full_Branch
 
         Metadata_multi_descriptor1['csv_fileName'] =''
 

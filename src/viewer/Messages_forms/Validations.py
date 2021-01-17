@@ -13,6 +13,8 @@ import wx.xrc
 #################5##########################################################
 ## Class msg_connSQLiteSuccs
 ###########################################################################
+from wx import BoxSizer
+
 
 class msg_connSQLiteSuccs(wx.Dialog):
 	def __init__(self, parent):
@@ -448,7 +450,7 @@ class msg_somethigWrong(wx.Dialog):
 
 		self.SetSizeHintsSz(wx.DefaultSize, wx.DefaultSize)
 
-		bSizer1 = wx.BoxSizer(wx.VERTICAL)
+		bSizer1 = wx.BoxSizer(wx.VERTICAL)  # type: BoxSizer
 
 		self.m_staticText1 = wx.StaticText(self, wx.ID_ANY, msg, wx.DefaultPosition, wx.DefaultSize, 0)
 		self.m_staticText1.Wrap(-1)

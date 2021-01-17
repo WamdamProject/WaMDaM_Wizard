@@ -25,9 +25,10 @@ class dlg_Publish( Publish_Viz.dlg_Publish ):
 		# hs = HydroShare(auth=auth)
 		# hs = HydroShare(auth=auth, hostname='beta.hydroshare.org')
 		# hs is the login resposne
-		hs = HydroShare(auth=auth, hostname='hydroshare.org')
+		hs = HydroShare(auth=auth)
+
 		try:
-			for resource in hs.resources():
+			for resource in hs.resources(published=True):
 				print("success")
 				self.btn_login.Enabled = False
 				break

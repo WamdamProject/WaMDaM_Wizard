@@ -15,8 +15,6 @@ import json
 def publishOnHydraShare(userName, password, filePathOfSqlite, title, abstract, author):
     auth = HydroShareAuthBasic(username=userName, password=password)
     hs = HydroShare(auth=auth)
-    # hs = HydroShare(auth=auth, hostname='beta.hydroshare.org')
-    hs = HydroShare(auth=auth, hostname='hydroshare.org')
 
     # We Import the classes from ConnectDB_ParseExcel.py. These classes are inherited by LoadMetaData
     # from ..ConnectDB_ParseExcel import *
@@ -125,27 +123,28 @@ def publishOnHydraShare(userName, password, filePathOfSqlite, title, abstract, a
 
 
     print 'filePathOfSqlite= '+filePathOfSqlite
+
     filePathOfSqlite = str(filePathOfSqlite)
 
     # here we create the resource and upload the SQLite file
-    resource_id=hs.createResource(resource_type, title=title, resource_file=filePathOfSqlite, resource_filename=SqliteName, abstract=abstract, keywords=keywords,
-                      edit_users=None, view_users=None, edit_groups=None, view_groups=None, metadata=metadata,
-                      extra_metadata=extra_metadata, progress_callback=None)
+    resource_id=hs.createResource(resource_type, title=title, resource_file=filePathOfSqlite, resource_filename=SqliteName, abstract=abstract, keywords=keywords, metadata=metadata,
+                                extra_metadata=extra_metadata)
+    #--------------
 
-    # add metadata to the SQLite file
-    options = {"file_path": SqliteName, "hs_file_type": "SingleFile"}
-    # print options
+    # abstract = 'My abstract'
+    # title = 'My resource'
+    #
+    # keywords = ('my keyword 1', 'my keyword 2')
+    # rtype = 'CompositeResource'
+    #
+    # fpath = '/path/to/a/file'
+    # metadata = '[{"coverage":{"type":"period", "value":{"start":"01/01/2000", "end":"12/12/2010"}}}, {"creator":{"name":"John Smith"}}, {"creator":{"name":"Lisa Miller"}}]'
+    # extra_metadata = '{"key-1": "value-1", "key-2": "value-2"}'
+    #
+    # resource_id = hs.createResource(resource_type, title, resource_file='', keywords=keywords, abstract=abstract,
+    #                                 metadata=metadata, extra_metadata=extra_metadata)
 
-    result = hs.resource(resource_id).functions.set_file_type(options)
-
-
-    file = ""
-    for f in hs.resource(resource_id).files.all():
-        file += f.decode('utf8')
-
-    file_json = json.loads(file)
-    file_id = file_json["results"][0]["id"]
-    # print file_id
+    #--------------
 
 
 
@@ -169,10 +168,14 @@ def publishOnHydraShare(userName, password, filePathOfSqlite, title, abstract, a
 
     }
 
+    # add metadata to the SQLite file
+    options = {"file_path": SqliteName, "hs_file_type": "SingleFile"}
+    # print options
 
-    spatial=hs.resource(resource_id).files.metadata(file_id, params)
+    result = hs.resource(resource_id).functions.set_file_type(options)
 
-    print 'Done'
-    print 'resource_id= '+resource_id
+    spatial = hs.resource(resource_id).files.metadata(SqliteName, params)
+
+    print spatial
+
     return resource_id
-

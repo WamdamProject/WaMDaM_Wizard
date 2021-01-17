@@ -302,8 +302,9 @@ class LoadMultiCulumnArray(Parse_Excel_File, LoadingUtils):
                                 ).all()
 
                                 if len(main_var_map) > 1:
-                                    print 'length is greater than one'
-                                    exit(1)
+                                    pass # do nothing
+                                    #  print 'length is greater than one'
+                                    # exit(1)
 
                                 if len(main_var_map) == 1:
                                     main_var_map = main_var_map[0]

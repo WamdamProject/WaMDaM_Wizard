@@ -2,23 +2,137 @@
 
 import wx
 import ExportModels
+import win32com.client
+from controller.wamdamAPI.GetResourceStructure import GetResourceStructure
+from controller.wamdamAPI.GetInstancesByScenario import GetInstancesBySenario
+from controller.ConnectDB_ParseExcel import DB_Setup
+from viewer.Messages_forms.msg_somethigWrong import msg_somethigWrong
+
+from controller.WEAP.ServeWaMDaMDataToWEAP.ServeWaMDaM_Data_to_WEAP import ServeWaMDaM_Data_to_WEAP
 
 # Implementing dlg_ServeToWEAP
 class dlg_ServeToWEAP( ExportModels.dlg_ServeToWEAP ):
-	def __init__( self, parent ):
-		ExportModels.dlg_ServeToWEAP.__init__( self, parent )
-	
-	# Handlers for dlg_ServeToWEAP events.
-	def comboBox_SelectModelOnCombobox( self, event ):
-		# TODO: Implement comboBox_SelectModelOnCombobox
-		pass
-	
-	def btn_serveOnButtonClick( self, event ):
-		# TODO: Implement btn_serveOnButtonClick
-		pass
-	
-	def btn_cancelOnButtonClick( self, event ):
-		# TODO: Implement btn_cancelOnButtonClick
-		pass
-	
-	
+    def __init__( self, parent ):
+        ExportModels.dlg_ServeToWEAP.__init__( self, parent )
+        try:
+            if not DB_Setup().get_session():
+                msg = "\n\nWarning: Please connect to sqlite first."
+                raise Exception(msg)
+            ''' init combo model'''
+            self.dataStructure = GetResourceStructure()
+            self.datasets = self.dataStructure.GetResourceType()
+            list_acromy = list()
+            for index, row in self.datasets.iterrows():
+                list_acromy.append(row[0])
+            if list_acromy.__len__() > 0:
+                self.Select_Model.SetItems(list_acromy)
+
+            list_code = []
+            self.WEAP = win32com.client.Dispatch("WEAP.WEAPApplication")
+            for area in self.WEAP.Areas:
+                list_code.append(area.name)
+
+            self.comboBox_SelectArea.SetItems(list_code)
+
+            list_scen = []
+            for scen in self.WEAP.Scenarios:
+                list_scen.append(scen.name)
+
+            self.combo_selectWEAPScenario.SetItems(list_scen)
+        except Exception as e:
+            message = msg_somethigWrong(None, msg=e.message)
+            message.Show()
+            self.Destroy()
+
+    # Handlers for dlg_ServeToWEAP events.
+    def Select_ModelOnCombobox( self, event ):
+        # TODO: Implement Select_ModelOnCombobox
+        selectedDataset = self.Select_Model.Value
+        result = GetInstancesBySenario()
+        datas = result.GetMasterNetworks(selectedDataset)
+        GotMasterNetworkNames = []
+        for index, row in datas.iterrows():
+            GotMasterNetworkNames.append(row[0])
+        self.SelectWaMDAM_Network.SetItems(GotMasterNetworkNames)
+
+    def SelectWaMDAM_NetworkOnCombobox( self, event ):
+        # TODO: Implement SelectWaMDAM_NetworkOnCombobox
+        # pass
+        selectedMasterNetworkName = self.SelectWaMDAM_Network.Value
+        result = GetInstancesBySenario()
+        datas = result.GetScenarios(self.Select_Model.Value, selectedMasterNetworkName)
+        GotScenarioNames = []
+        for index, row in datas.iterrows():
+            GotScenarioNames.append(row[0])
+        self.Seclect_WaMDaM_Scenrio.SetItems(GotScenarioNames)
+
+    def comboBox_SelectAreaOnCombobox( self, event ):
+        # TODO: Implement comboBox_SelectAreaOnCombobox
+        pass
+
+
+
+    def Seclect_WaMDaM_ScenrioOnCombobox( self, event ):
+        # TODO: Implement Seclect_WaMDaM_ScenrioOnCombobox
+        pass
+
+
+
+    def btn_serveOnButtonClick( self, event ):
+        # TODO: Implement btn_serveOnButtonClick
+        try:
+            msg = ''
+            Model = self.Select_Model.Value
+            if not Model:
+                msg += "Select a wamdam model"
+
+            WaMDAM_Network = self.SelectWaMDAM_Network.Value
+            if not WaMDAM_Network:
+                msg += "\nSelect a wamdam Network"
+
+            WaMDaM_Scenrio = self.Seclect_WaMDaM_Scenrio.Value
+            if not WaMDaM_Scenrio:
+                msg += "\nSelect a wamdam scenario"
+
+            SelectArea = self.comboBox_SelectArea.Value
+            if not SelectArea:
+                msg += "\nSelect a weap area"
+
+            WEAPScenario = self.combo_selectWEAPScenario.Value
+            if not WEAPScenario:
+                NewWEAPScenario = self.Value_NewWEAPScenario.Value
+                if not NewWEAPScenario:
+                    msg += "\nselect an WEAP scenario name or input new scenario"
+            if msg:
+                msg_somethigWrong(None, msg=msg).Show()
+
+
+            else:
+
+                WEAP = win32com.client.Dispatch("WEAP.WEAPApplication")
+                WEAP.ActiveArea = SelectArea
+                WEAP.ActiveScenario = WEAPScenario
+                self.btn_serve1.Enabled = False
+
+                serveWaMDaM_Data_to_WEAP = ServeWaMDaM_Data_to_WEAP(self.WEAP, Model, WaMDAM_Network, WaMDaM_Scenrio,
+                                                                    SelectArea, WEAPScenario)
+                serveWaMDaM_Data_to_WEAP.load_data()
+
+                self.btn_serve1.Enabled = True
+                from viewer.Messages_forms.msg_connSQLiteSuccs import msg_connSQLiteSuccs
+                msgdlg = msg_connSQLiteSuccs(self)
+                msgdlg.setMessage(
+                    "\n\nSuccessfully, extracted csv files")
+                msgdlg.ShowModal()
+
+                self.Destroy()
+
+
+        except Exception as e:
+            msg_somethigWrong(self, e.message).ShowModal()
+
+    def btn_cancelOnButtonClick( self, event ):
+        # TODO: Implement btn_cancelOnButtonClick
+        pass
+
+

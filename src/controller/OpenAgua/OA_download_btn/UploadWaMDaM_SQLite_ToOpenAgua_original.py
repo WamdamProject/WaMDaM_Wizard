@@ -88,7 +88,7 @@ def UploadToOpenAgua(selectedResourceTypeAcro, selectedMasterNetworkName, select
 
     # Connect to the Hydra server on the local machine
     # More info: http://umwrg.github.io/HydraPlatform/tutorials/plug-in/tutorial_json.html#creating-a-client
-    ur = "https://data.openagua.org"
+    ur = "https://www.openagua.org/api/v1/hydra/"
     conn = JsonConnection(ur)
     login_response = conn.login('amabdallah@aggiemail.usu.edu', 'xxxxx!')
 

@@ -12,15 +12,14 @@ import os
 
 def MultiAttributes_query(conn,multi_AttributeSeries):
     total_df_MultiColumns = []
-    Multi_Full_Branch_total = []
 
     for input_param in multi_AttributeSeries:
         MultiAttributes_query="""
        SELECT "ObjectTypes"."ObjectType",
-        "Instances"."InstanceName",ScenarioName,"Attributes"."AttributeName" AS MultiAttributeName,
+        "Instances"."InstanceName",ScenarioName,"Attributes"."AttributeName_Abstract" AS MultiAttributeName,
         Attributes.UnitName As UnitName,Methods.MethodName,Sources.SourceName,
         "Attributes".AttributeDataTypeCV,
-        "AttributesColumns"."AttributeName" AS "AttributeName",
+        "AttributesColumns"."AttributeName_Abstract" AS "AttributeName_Abstract",
         "AttributesColumns"."AttributeNameCV",
         "AttributesColumns"."UnitNameCV" AS "AttributeNameUnitName",
         "DataValue","ValueOrder"
@@ -100,29 +99,28 @@ def MultiAttributes_query(conn,multi_AttributeSeries):
     
         AND MultiAttributeName='%s'
         AND InstanceName='%s' 
-        
+                    AND ScenarioName='%s' 
+
         -- Sort the the values of each column name based on their ascending order
     
     
-        ORDER BY ResourceType,ObjectType,InstanceName,ScenarioName,AttributeName,MultiAttributeName,ValueOrder ASC
+        ORDER BY ResourceType,ObjectType,InstanceName,ScenarioName,AttributeName_Abstract,MultiAttributeName,ValueOrder ASC
         
-    """%(input_param['Required_ObjectType'],  input_param['Required_AttributeName'], input_param['Provided_InstanceName'] )
+    """%(input_param[1]['ObjectType'],  input_param[1]['AttributeName_Abstract'],
+         input_param[1]['InstanceName'],input_param[1]['ScenarioName']  )
 
+        df_MultiColumns = pd.DataFrame(list(conn.execute(MultiAttributes_query)))
 
-        # df_MultiColumns = session.execute(MultiAttributes_query)
-        df_MultiColumns = pd.read_sql_query(MultiAttributes_query, conn)
+        df_MultiColumnsl_columns = list(conn.execute(MultiAttributes_query).keys())
+        df_MultiColumns.columns = df_MultiColumnsl_columns
 
-        # df_MultiColumnsKeys = df_MultiColumns.keys()
 
         total_df_MultiColumns.append(df_MultiColumns)
 
-        Full_Branch=input_param['Provided_FullBranch']
-        Multi_Full_Branch_total.append(Full_Branch)
-
-    return (total_df_MultiColumns,Multi_Full_Branch_total)
+    return (total_df_MultiColumns)
 
 
-def MultiAttributes_csv_file(total_df_MultiColumns,Multi_Full_Branch_total):
+def MultiAttributes_csv_file(total_df_MultiColumns, weap_area_directory):
 
     # Write
     # the order is important
@@ -132,11 +130,11 @@ def MultiAttributes_csv_file(total_df_MultiColumns,Multi_Full_Branch_total):
     Metadata_multi_att=[]
     total_multi_attribute_value=[]
 
-    output_dir = "Multi_Attributes_csv_files/"
+    output_dir = weap_area_directory + "/Multi_Attributes_csv_files/"
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    for df_MultiColumns,Multi_Full_Branch in zip (total_df_MultiColumns,Multi_Full_Branch_total):
+    for df_MultiColumns in  (total_df_MultiColumns):
         first_index = 0
         if len(df_MultiColumns['ValueOrder']) < 1: continue
         first_order_value = df_MultiColumns['ValueOrder'][0]
@@ -170,7 +168,7 @@ def MultiAttributes_csv_file(total_df_MultiColumns,Multi_Full_Branch_total):
                 break
         # print MultiParam
 
-        # AttributeName(Value),AttributeName(Value)
+        # AttributeName_Abstract(Value),AttributeName_Abstract(Value)
         # MultiParam=
 
         csv_file_path_or_value_multi = "VolumeElevation(" + MultiParam + ")"
@@ -185,7 +183,7 @@ def MultiAttributes_csv_file(total_df_MultiColumns,Multi_Full_Branch_total):
         # reuse the script athe link to print these to a csv file
         # https://github.com/WamdamProject/WaMDaM_Wizard/blob/master/src_1.0/controller/wamdamAPI/GetDataValues.py#L319
 
-        x = df_MultiColumns['AttributeName'][1]
+        x = df_MultiColumns['AttributeName_Abstract'][1]
         y = df_MultiColumns['InstanceName'][1]
         z = x.replace(" ", "_")
         w = y.replace(" ", "_")
@@ -195,7 +193,6 @@ def MultiAttributes_csv_file(total_df_MultiColumns,Multi_Full_Branch_total):
 
         Metadata_multi_att1 = OrderedDict()
 
-        Metadata_multi_att1['FullBranch'] =Multi_Full_Branch
         Metadata_multi_att1['Value'] =csv_file_path_or_value_multi
         Metadata_multi_att1['csv_fileName'] =csv_file_multi_columns
 
@@ -205,7 +202,7 @@ def MultiAttributes_csv_file(total_df_MultiColumns,Multi_Full_Branch_total):
 
         # # save the the multi columns into a csv file with a name csv_file_name
         field_names = ['ObjectType', 'InstanceName', 'ScenarioName', 'MultiAttributeName', 'AttributeDataTypeCV',
-                       df_MultiColumns['AttributeName'][first_index], df_MultiColumns['AttributeName'][second_index],
+                       df_MultiColumns['AttributeName_Abstract'][first_index], df_MultiColumns['AttributeName_Abstract'][second_index],
                        'ValueOrder', 'Date exported to this file']
 
         f2 = open(csv_file_multi_columns, "wb")

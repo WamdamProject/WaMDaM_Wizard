@@ -8,15 +8,27 @@ from datetime import datetime
 import logging
 
 from controller.WriteWaMDaMToExcel.ExportTemplate import ExportTemplate
+from controller.OpenAgua.Download.NewOA2 import Hydra_OA
 
 from pandas.io.json import json_normalize
 import pandas as pd
+# from controller.OpenAgua.Download.New_OA import hydra_call
 
-
-def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario_id, ExportFilePath,GlobalAttributesID):
+def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario_id, ExportFilePath,GlobalAttributesID, username_oa, password_oa):
 
     # hard coded metadata can be upated here. Right now, they dont exist in Hydra/OpenAgua for nodes and links.
     # future work will allow a systematic way to define these metadata items in Hydra which then allows us to import them back to WaMDaM
+
+    endpoint = 'https://www.openagua.org/api/v1/hydra/'
+
+
+    hydra = Hydra_OA(endpoint, username=username_oa,password=password_oa)
+
+
+    HydraUnits = hydra.call('get_units')
+
+
+
 
     MethodName='AddMethodName'
     SourceName='AddSourceName'
@@ -24,7 +36,8 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
     exportTemplate = ExportTemplate(ExportFilePath)
 
 
-    Template=conn.call('get_template',{'template_id':Selected_template_id})
+
+    Template=hydra.call('get_template',{'template_id':Selected_template_id})
 
 
     EndTime=''
@@ -35,7 +48,7 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
 
 
     columns_Attributes = ['ObjectType','AttributeName','AttributeName_Abstract','AttributeNameCV','AttributeUnit','AttributeUnitCV',
-                          'AttributeDataTypeCV','AttributeCategory','ModelInputOrOutput','AttributeDescription','AttributeScale']#,'AttributeID']
+                          'AttributeDataTypeCV','AttributeCategory','ModelInputOrOutput','AttributeDescription','AttributeScale','AttributeID']
     ResourceType_top_data = []
     ResourceType_bottom_data = []
     Attributes_data_result = []
@@ -56,7 +69,7 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
     ResourceType_top_data.append(top_row)
 
     for key in Template.keys():
-        if key=='types':
+        if key=='templatetypes':
             Types = Template[key]
             for type in Types:
                 if ((type['id']==GlobalAttributesID and type['resource_type']=='NETWORK') or \
@@ -102,15 +115,17 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
                         for attr in type['typeattrs']:
                             attribute_row = []
                             ObjectType=ObjectType
-                            AttributeName=attr['attr_name']
-                            AttributeName_Abstract=attr['attr_name']
+                            AttributeName=attr['attr']['name']
+                            AttributeName_Abstract=attr['attr']['name']
                             AttributeNameCV=[]
-                            # AttributeID=attr['attr_id']
+                            AttributeID=attr['attr_id']
 
+                            attr['unit_id'] #look it up https://github.com/openagua/hydra-base/blob/master/hydra_base/lib/units.py#L233
 
-                            AttributeUnit=attr['unit']  # [unit]default_dataset
-
-                            AttributeUnitCV='' # """ GET the UNIT """
+                            # Get the unit_id from the Hydra server
+                            for uni in HydraUnits:
+                                if uni['id'] == attr['unit_id']:
+                                    AttributeUnitCV=uni['name']
 
                             if not 'category' in attr['properties'].keys():
                                 AttributeCategory=''
@@ -122,7 +137,7 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
                             else:
                                 AttributeScale=attr['properties']['scale']
 
-                            Dimension = attr['dimension']
+                            # Dimension = attr['attr']['dimension']
 
                             if attr['data_type']=='array':
                                 AttributeDataTypeCV = 'MultiAttributeSeries'
@@ -156,13 +171,13 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
                                 elif 'AttributeUnitCV' == header:
                                     attribute_row.append(AttributeUnitCV)
                                 elif 'AttributeUnit' == header:
-                                    attribute_row.append(AttributeUnit)
+                                    attribute_row.append('')
                                 elif 'AttributeCategory' == header:
                                     attribute_row.append(AttributeCategory)
                                 elif 'AttributeScale' == header:
                                     attribute_row.append(AttributeScale)
-                                # elif 'AttributeID' == header:
-                                #     attribute_row.append(AttributeID)
+                                elif 'AttributeID' == header:
+                                    attribute_row.append(AttributeID)
                                 else:
                                     attribute_row.append('')
 
@@ -170,6 +185,8 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
 
 
     ResourceType_Top_df=pd.DataFrame(ResourceType_top_data, columns=columns_ResourceType)
+
+    print 'done with the template'
 
    # sort the Object types
     custom_dict = ['Network', 'Node', 'Link']
@@ -209,12 +226,12 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
     exportTemplate.exportAttributes(Attribute_Frame_df)
     # -----------------------------------------
 
-
+    print 'next is scenarios'
     from controller.OpenAgua.Download.GetNetwork_Scenarios import GetNetworkScenarios
 
     MasterNetwork_Frame_result, Scenario_Frame_result,\
     NodesData_df, LinksData_df,\
-    Selected_scenario_ids,ObjectType_lst=GetNetworkScenarios(conn, Selected_network_id, Selected_scenario_id, DatasetAcronym)
+    Selected_scenario_ids,ObjectType_lst=GetNetworkScenarios(conn, Selected_network_id, Selected_scenario_id, DatasetAcronym, username_oa, password_oa)
 
     exportTemplate.exportMasterNetwork(MasterNetwork_Frame_result)
     exportTemplate.exportScenario(Scenario_Frame_result)
@@ -234,11 +251,13 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
     # reset the scenario ID to pass it with its children as well
     Selected_scenario_id=[]
 
-    from controller.OpenAgua.Download.GetScenarioData import   GetScenarioData
+    from controller.OpenAgua.Download.GetScenarioData import GetScenarioData
+
+    print 'next is data'
 
     FreeText_frame_result, NumericValue_frame_result, SeasonalValues_df, \
     Times_frame_result, TimeSeriesValues_frame_result,\
-    up_frame_data, array_frame_result=GetScenarioData(Selected_scenario_ids,conn,Selected_network_id,Attribute_Frame_df,ObjectType_lst)
+    up_frame_data, array_frame_result=GetScenarioData(Selected_scenario_ids,Selected_network_id,Attribute_Frame_df,ObjectType_lst, username_oa, password_oa)
 
 
     exportTemplate.exportFreeText(FreeText_frame_result)
@@ -256,8 +275,10 @@ def ImportData(conn,Selected_template_id, Selected_network_id, Selected_scenario
 
     exportTemplate.exportMulti(up_frame_data, array_frame_result)
 
+    exportTemplate.file_save()
 
-    print 'Done'
+
+    print ('Done')
 
 
 

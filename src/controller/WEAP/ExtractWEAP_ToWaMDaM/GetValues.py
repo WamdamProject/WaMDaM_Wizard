@@ -18,8 +18,12 @@ def GetValues_WEAP(WEAP,BranchesNew_list, unique_object_types_value_list):
     # unique_object_types_value_list = ['River Headflow']
 
     # unique_object_types_value_list = ['River Headflow','Reservoir']
+    # unique_object_types_value_list = ['River Reach']
+    # unique_object_types_value_list = ['Flow Requirement']
+
+
     # unique_object_types_value_list = ['Streamflow Gauge','Reservoir','River Reach','Groundwater']
-    # unique_object_types_value_list = ['Streamflow Gauge','River Reach']
+    # unique_object_types_value_list = ['Flow Requirement','River Reach']
 
     # unique_object_types_value_list = ['Run of River Hydro','Wastewater Treatment Plant']
 
@@ -38,7 +42,8 @@ def GetValues_WEAP(WEAP,BranchesNew_list, unique_object_types_value_list):
         BranchName = Branch.Name
 
         if 'Key\\' in BranchFullName:
-            GlobalAttribute = BranchFullName.split("Key\\")[1]
+            # GlobalAttribute = BranchFullName.split("Key\\")[1]
+            GlobalAttribute = Branch.Name
 
             GlobalAttributes = OrderedDict()
             GlobalAttributes['ObjectType'] = 'WEAP Global Attributes'
@@ -86,10 +91,8 @@ def GetValues_WEAP(WEAP,BranchesNew_list, unique_object_types_value_list):
                 Global_Result['InstanceName'] = ''
                 Global_Result['ExpresValueType'] = GlobalAttributes['AttributeDataTypeCV']
                 Global_Result['ExpresValue'] = ExpresValue
-                Global_Result['BranchName'] = BranchName  # use it later for verification reasons
+                Global_Result['BranchName'] = BranchName  # use it later for verifications
                 Global_Result_List.append(Global_Result)
-
-            #print Global_Result_List
 
 
         for unique_object_types_value in unique_object_types_value_list:
@@ -130,8 +133,7 @@ def GetValues_WEAP(WEAP,BranchesNew_list, unique_object_types_value_list):
                     if Branch.FullName == branch_data['FullBranchName'] and Branch.TypeName==branch_data_Value:
                         # print 'BranchName='+ Branch.FullName
                         # print '''branch_data['BranchName']'''+branch_data['FullBranchName']
-                    # there is an issue in this above if clause that does not allow passing/getting the variables of a river headflow
-                    # maybe it has to do with how the headflow word is added to the branch name. check
+
                         #                     print  branch_data['ObjectType']
                         #                     print  branch_data['BranchName']
                         #                     print  branch_data['InstanceName']
@@ -144,7 +146,6 @@ def GetValues_WEAP(WEAP,BranchesNew_list, unique_object_types_value_list):
                                 BranchType = Branch.TypeName
                                 VariableName = V.Name
                                 # print VariableName
-
                                 #                             print FullBranch
                                 if BranchType == 'River':
                                     BranchType = 'River Headflow'
@@ -202,31 +203,63 @@ def GetValues_WEAP(WEAP,BranchesNew_list, unique_object_types_value_list):
 
                                     UniqObjectAtt['AttributeUnit']=AttributeUnit
                                     UniqObjectAtt['AttributeDataTypeCV']='TimeSeries'
-                                    UniqObjectAtt['attributeName'] = VariableName
+                                    UniqObjectAtt['AttributeName'] = VariableName
+
                                 # Seasonal if the value starts with "MonthlyValues"
+                                # if empty (i.e., nothing before it) then its seasonalNumeric.
+                                # if there is anything before it, then it goes to Text free
+
+                                # elif ExpresValue.index('MonthlyValues') == 0:  # if empty (i.e., nothing before it) then its seasonalNumeric.
+                                #     pass
+                                # elif ExpresValue.index('MonthlyValues') > 0:  # if there is anything before it, then it goes to Text free
+                                #     pass
                                 elif 'MonthlyValues' in ExpresValue:
-                                    # Seasonal_ExpressValue = ExpresValue
-                                    Result['ExpresValueType'] = 'Seasonal_ExpressValue'
-                                #                                 print Seasonal_ExpressValue
-                                    UniqObjectAtt['ObjectType'] = BranchType
-                                    objectType_names = {}
-                                    VariableName = VariableName + '_Se'
-                                    if (BranchType, VariableName) in atrr_names.keys():
-                                        objectType_names = atrr_names[(BranchType, VariableName)]
+                                    if ExpresValue.index('MonthlyValues') == 0:  # if empty (i.e., nothing before it) then its seasonalNumeric.
+                                        # Seasonal_ExpressValue = ExpresValue
+                                        Result['ExpresValueType'] = 'Seasonal_ExpressValue'
+                                    #                                 print Seasonal_ExpressValue
+                                        UniqObjectAtt['ObjectType'] = BranchType
+                                        objectType_names = {}
+                                        VariableName = VariableName + '_Se'
+                                        if (BranchType, VariableName) in atrr_names.keys():
+                                            objectType_names = atrr_names[(BranchType, VariableName)]
 
-                                    #is this updated_VariableName a string? yes?
-                                    updated_VariableName = getValuename(objectType_names, V.Name, '_Se', AttributeUnit)
+                                        #is this updated_VariableName a string? yes?
+                                        updated_VariableName = getValuename(objectType_names, V.Name, '_Se', AttributeUnit)
 
-                                    UniqObjectAtt['AttributeName'] = updated_VariableName
-                                    Result['VariableName'] = updated_VariableName
-                                    objectType_names[AttributeUnit] = updated_VariableName
-                                    atrr_names[(BranchType, VariableName)] = objectType_names
+                                        UniqObjectAtt['AttributeName'] = updated_VariableName
+                                        Result['VariableName'] = updated_VariableName
+                                        objectType_names[AttributeUnit] = updated_VariableName
+                                        atrr_names[(BranchType, VariableName)] = objectType_names
 
-                                    # UniqObjectAtt['AttributeName'] = VariableName + '_Se'
-                                    # Result['VariableName'] = VariableName + '_Se'
-                                    UniqObjectAtt['AttributeUnit']=AttributeUnit
-                                    UniqObjectAtt['AttributeDataTypeCV'] = 'SeasonalNumericValues'
-                                    UniqObjectAtt['attributeName'] = VariableName
+                                        # UniqObjectAtt['AttributeName'] = VariableName + '_Se'
+                                        # Result['VariableName'] = VariableName + '_Se'
+                                        UniqObjectAtt['AttributeUnit']=AttributeUnit
+                                        UniqObjectAtt['AttributeDataTypeCV'] = 'SeasonalNumericValues'
+                                        UniqObjectAtt['attributeName'] = VariableName
+                                    else:
+                                        Result['ExpresValueType'] = 'FreeText'
+
+                                        UniqObjectAtt['ObjectType'] = BranchType
+
+                                        objectType_names = {}
+                                        VariableName = VariableName + '_Fr'
+                                        if (BranchType, VariableName) in atrr_names.keys():
+                                            objectType_names = atrr_names[(BranchType, VariableName)]
+
+                                        updated_VariableName = getValuename(objectType_names, V.Name, '_Fr',
+                                                                            AttributeUnit)
+                                        UniqObjectAtt['AttributeName'] = updated_VariableName
+                                        Result['VariableName'] = updated_VariableName
+                                        objectType_names[AttributeUnit] = updated_VariableName
+                                        atrr_names[(BranchType, VariableName)] = objectType_names
+                                        # UniqObjectAtt['AttributeName'] = VariableName + '_Fr'
+                                        #
+                                        # Result['VariableName'] = VariableName + '_Fr'
+
+                                        UniqObjectAtt['AttributeUnit'] = AttributeUnit
+                                        UniqObjectAtt['AttributeDataTypeCV'] = 'FreeText'
+                                        UniqObjectAtt['attributeName'] = VariableName
 
 
 ########################################################################################################################
@@ -257,6 +290,9 @@ def GetValues_WEAP(WEAP,BranchesNew_list, unique_object_types_value_list):
                                     UniqObjectAtt['AttributeDataTypeCV'] = 'MultiAttributeSeries'
                                     UniqObjectAtt['attributeName'] = VariableName
                                 # Numeric if the value is a float (single value) e.g., "0", "100" etc
+
+                                elif ExpresValue=='0':
+                                    continue
 
                                 else:
                                     try:
@@ -314,7 +350,7 @@ def GetValues_WEAP(WEAP,BranchesNew_list, unique_object_types_value_list):
 
                                         UniqObjectAtt['AttributeUnit'] = AttributeUnit
                                         UniqObjectAtt['AttributeDataTypeCV'] = 'FreeText'
-                                        UniqObjectAtt['attributeName'] = VariableName
+                                        UniqObjectAtt['AttributeName_Abstract'] = VariableName
     #                                     print Descriptor_ExpressValue
 
     #     Bird Refuge,Bird Refuge,Demand Site

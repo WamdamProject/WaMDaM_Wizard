@@ -4,7 +4,9 @@ from controller.wamdamAPI.GetResourceStructure import GetResourceStructure
 from controller.wamdamAPI.GetDataValues import GetDataValues
 from controller.ConnectDB_ParseExcel import DB_Setup
 from controller.ConnectDB_ParseExcel import SqlAlchemy as sq
+
 import xlsxwriter, os, Global
+
 from openpyxl import load_workbook
 
 import pandas as pd
@@ -12,17 +14,6 @@ import pandas as pd
 class ExportTemplate (object):
 	def __init__(self, full_path):
 
-		# create class variables to write data in xlsx file.
-        #
-        #
-		# self.setup = DB_Setup()
-		# self.session = self.setup.get_session()
-        #
-		# self.dataStructure = GetResourceStructure()
-		# self.getDataValues = GetDataValues()
-		##############################################
-
-		# create xlsx file with "full_path".
 		workbook1 = xlsxwriter.Workbook(full_path)
 		workbook1.add_worksheet('1.1_Organiz&People')
 		workbook1.add_worksheet('1.2_Sources&Methods')
@@ -132,6 +123,7 @@ class ExportTemplate (object):
 		df.to_excel(self.pandas_excel_writer, sheet_name="4_FreeText", startrow=8, startcol=0,
 					header=True,
 					index=False)
+
 		# self.write2excel(data_list, 3, '4_FreeText')
 
 	def exportNumericValue(self, data_list):
@@ -194,6 +186,9 @@ class ExportTemplate (object):
 					index=False)
 		# self.write2excel(up_table_column_result, 2, '4_MultiAttributeSeries')
 		# self.write2excel(bottom_table_result, 20, '4_MultiAttributeSeries')
+
+	def file_save(self):
+		self.pandas_excel_writer.save()
 
 	def write2excel(self, resutl_list, startRow, sheet_name):
 		try:

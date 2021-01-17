@@ -36,13 +36,13 @@ import logging
 
 ur = "https://data.openagua.org"
 conn = JsonConnection(ur)
-login_response = conn.login('amabdallah@aggiemail.usu.edu', 'TestOpenAgua!')
+login_response = conn.login('amabdallah@aggiemail.usu.edu', 'OApass1')
 
-projectID=1916
-selectedMasterNetworkName='Qatar Mega Reservoirs'
-
-GetNetworks_metadata = conn.call('get_networks', {'project_id': projectID, 'include_values': 'N'})
-GetNetworks_metadata_df = json_normalize(GetNetworks_metadata)
+# projectID=1916
+# selectedMasterNetworkName='Qatar Mega Reservoirs'
+#
+# GetNetworks_metadata = conn.call('get_networks', {'project_id': projectID, 'include_values': 'N'})
+# GetNetworks_metadata_df = json_normalize(GetNetworks_metadata)
 
 
 # for network_row in GetNetworks_metadata_df.iterrows():
@@ -52,26 +52,18 @@ GetNetworks_metadata_df = json_normalize(GetNetworks_metadata)
 
 
 # Get all the scenarios inside the uploaded network
-Get_scenarios_metadata = conn.call('get_scenarios',
-                                   {'network_id': 1138, 'include_values': 'N'})
+# Get_scenarios_metadata = conn.call('get_scenarios',
+#                                    {'network_id': 1138, 'include_values': 'N'})
+#
+# Get_scenarios_metadata_df = json_normalize(Get_scenarios_metadata)
+#
+# print 'x'
 
-Get_scenarios_metadata_df = json_normalize(Get_scenarios_metadata)
 
-print 'x'
-
-result_scenario = conn.call('update_scenario',
-                                        {'network_id': 1138, 'scen': {
-                                            'id': 2424,
-                                            'network_id': 1138,
-                                            'name': 'Cons25PercCacheUrbWaterUse_result',
-                                            # 'description': 'This scenario is for calibration. It can be used to test variables before saving them to Baseline.',
-                                            'layout': {
-                                                'class': 'results',
-                                                'parent': 2422
-                                            }
-                                            }
-                                             }
-                                            )
+result='update_scenario', {'network_id': 1444, 'scen': {'layout': {'class': u'scenario'},
+                                                         'description': u'Scenario',
+                                                         'network_id': 1444, 'parent_id': 3433,
+                                                         'id': 3434, 'name': u'Reuso Industrial'}}
 
 
 

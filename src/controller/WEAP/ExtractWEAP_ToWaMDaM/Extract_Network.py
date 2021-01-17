@@ -1,6 +1,5 @@
 
 # Extact the Network
-from pyproj import Proj, transform
 from collections import OrderedDict
 import pandas as pd
 
@@ -20,6 +19,7 @@ def Extract_Network(WEAP, SelectedScenarioName):
         if Branch.TypeName == 'River' and Branch.Isline:
             RiverNodeFullPath = Branch.FullName
             RiverNodeBranchName = Branch.Name
+
         if Branch.TypeName == 'River Reach' and Branch.Isline:
             Reach_ObjectType = Branch.TypeName
 
@@ -27,6 +27,8 @@ def Extract_Network(WEAP, SelectedScenarioName):
             import re
 
             LinkPath = Branch.FullName
+            LinkName = Branch.Name
+
             start = "River"
             end = 'Reaches'
             result = re.search('%s(.*)%s' % (start, end), LinkPath).group(1)
@@ -52,6 +54,7 @@ def Extract_Network(WEAP, SelectedScenarioName):
             startType = Branch.NodeAbove.TypeName
             startName = Branch.NodeAbove.Name
             startFullName = Branch.NodeAbove.FullName
+
             startLongitude_x = Branch.NodeAbove.x
             startLatitude_y = Branch.NodeAbove.y
 
@@ -69,6 +72,7 @@ def Extract_Network(WEAP, SelectedScenarioName):
                 TempBranchName = RiverNodeBranchName
             else:
                 TempBranchName = Branch.Name
+
 
             if startType == 'Diversion Outflow':  # Swith the Full path from the Start Node Type itself to its River. We need that to get the River Attributes to this node
                 startFullName = RiverNodeFullPath
@@ -100,7 +104,8 @@ def Extract_Network(WEAP, SelectedScenarioName):
             if endLatitude_y == 0.0:
                 endLatitude_y = Branch.y2
 
-            Reach_LinkInstanceName = "%s from %s to %s" % (RiverName, GetReachNameFromPart, GetReachNameToPart)
+            # Reach_LinkInstanceName = "%s from %s to %s" % (RiverName, GetReachNameFromPart, GetReachNameToPart)
+            Reach_LinkInstanceName=LinkName
             LinkBranch = Reach_LinkInstanceName
 
             #         print startName
@@ -116,6 +121,8 @@ def Extract_Network(WEAP, SelectedScenarioName):
 
             LinksSheet['InstanceName'] = Reach_LinkInstanceName
             LinksSheet['BranchName'] = Branch.Name
+
+
             LinksSheet['FullBranchName'] = Branch.FullName
             LinksSheet['InstanceNameCV'] = ''
             LinksSheet['ScenarioName'] = ScenarioName
@@ -136,7 +143,11 @@ def Extract_Network(WEAP, SelectedScenarioName):
 
             NodesSheet1['InstanceName'] = startName
             NodesSheet1['BranchName'] = TempBranchName
-            NodesSheet1['FullBranchName'] = Branch.FullName
+
+            if startType=='River Headflow':
+                NodesSheet1['FullBranchName'] = RiverNodeFullPath
+            else:
+                NodesSheet1['FullBranchName'] = Branch.FullName
 
             NodesSheet1['InstanceNameCV'] = ''
             NodesSheet1['ScenarioName'] = ScenarioName
@@ -170,7 +181,7 @@ def Extract_Network(WEAP, SelectedScenarioName):
 
         if Branch.Isline and (
                 Branch.TypeName == 'Transmission Link' or Branch.TypeName == 'Return Flow' or Branch.TypeName == 'Runoff and Infiltration'):
-            RiverNodeFullPath = Branch.FullName
+            FullPath = Branch.FullName
             Link = Branch.TypeName
             GetReachNameFromPart = Branch.NodeAbove.Name
             GetReachNameToPart = Branch.NodeBelow.Name  # print Reach_LinkInstanceName
@@ -195,7 +206,7 @@ def Extract_Network(WEAP, SelectedScenarioName):
             LinksSheet['StartNodeInstanceName'] = GetReachNameFromPart
             LinksSheet['EndNodeInstanceName'] = GetReachNameToPart
             LinksSheet['InstanceCategory'] = ''
-            LinksSheet['Description'] = RiverNodeFullPath
+            LinksSheet['Description'] = FullPath
 
             LinksSheetList.append(LinksSheet)
             #         print LinksSheet
@@ -206,8 +217,8 @@ def Extract_Network(WEAP, SelectedScenarioName):
         # ######################################################################################################
 
         if Branch.TypeName == 'Diversion' and Branch.Isline:
-            startName = Branch.Name + ' Outflow'
-            startFullName = Branch.FullName
+            startName = Branch.NodeAbove.Name# + ' Outflow'
+            startFullName = Branch.NodeAbove.FullName
             startType = Branch.NodeAbove.TypeName
             startLongitude_x = Branch.NodeAbove.x
             startLatitude_y = Branch.NodeAbove.y
@@ -222,8 +233,6 @@ def Extract_Network(WEAP, SelectedScenarioName):
             NodesSheet1['InstanceName'] = startName
             NodesSheet1['BranchName'] = Branch.Name
             NodesSheet1['FullBranchName'] = Branch.FullName
-
-
             #         print startType
             #         print Branch.Name
             #         print startName
@@ -267,12 +276,6 @@ def Extract_Network(WEAP, SelectedScenarioName):
             NodesSheetList.append(NodesSheet1)
 
 # print 'done'
-
-# view=pd.DataFrame(NodesSheetList)
-
-# view2=pd.DataFrame(LinksSheetList)
-
-# view2.to_csv('LinksSheetList.csv', sep=',')
 
 
 # combine the node and link instances to pass them to get variables
@@ -329,18 +332,6 @@ def Extract_Network(WEAP, SelectedScenarioName):
 
     # print BranchesNew_list
 
-    # make BranchesNew_list as a data frame just to view it and  see how its columns and rrows
-    NodesSheetList
-    # view = pd.DataFrame(BranchesNew_list)
-
-
-
-
-
-
-    # print BranchesNew_list
-
-    # view.to_csv('this.csv', sep=',')
 
     return (NodesSheetList,LinksSheetList,unique_object_types_value_list, BranchesNew_list)
 

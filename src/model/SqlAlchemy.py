@@ -219,7 +219,7 @@ class CV_ElevationDatum(Base):
 
 # ****************************************************************************************************************** #
 #                                                                                                                    #
-#                                           CREATE DATASTRUCTURE TABLES                                              #
+#                                           CREATE DATA STRUCTURE TABLES                                              #
 #                                                                                                                    #
 # ****************************************************************************************************************** #
 
@@ -367,9 +367,12 @@ class SeasonalNumericValues(Base):
 
     SeasonalNumericValueID = Column(Integer, primary_key=True)
     SeasonName = Column(String(255))
+
     SeasonDateFormate=Column(Date)
+
     SeasonNameCV = Column(ForeignKey('CV_SeasonName.Name'))
     SeasonOrder = Column(Integer)
+
     SeasonNumericValue = Column(String(500), nullable=False)
     ValuesMapperID = Column(ForeignKey('ValuesMapper.ValuesMapperID'), nullable=False)
 

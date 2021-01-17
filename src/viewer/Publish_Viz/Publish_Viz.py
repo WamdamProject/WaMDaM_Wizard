@@ -514,4 +514,3 @@ class dlg_ImportFromOpenAgua(wx.Dialog):
     def btn_cancelOnButtonClick(self, event):
         event.Skip()
 
-

@@ -5,7 +5,7 @@
 """"""
 
 """
-WaMDaM: The Water Management Data Model Version 1.06
+WaMDaM: The Water Management Data Model Version 1.08
 See the schema at http://schema.wamdam.org/diagrams/01_WaMDaM.html
 Instructions at http://docs.wamdam.org/Getting_started/Steps
 
@@ -13,10 +13,18 @@ Adel M. Abdallah
 email: amabdallah@aggiemail.usu.edu
 website: http://adelmabdallah.com/
 
-Feb 2019
+Dec 2020
+
 """
 
+'''
+to create a new .exe, type this in the terminal
 
+pyinstaller --clean --icon=WaMDaM_Wizard.ico --onedir --noconfirm --noupx --onefile --windowed wamdam.py
+
+Please write the pyinstaller command here. specific version
+
+'''
 
 """
 Wamdam.py is the calling/initializing function for the Wizard. 
@@ -41,6 +49,7 @@ folder. For example, clicking at the button "From Excel" under the GUI homepage 
 dlg_ImportSpreadsheetBasic.py which exist in the viewer Folder. Then when the user
 clicks at "load Data" in this dialog box, a function calls one or all the sub-data importers
 for the checked boxes from the controller folder: 
+
 stp0_loadCVs.py, stp1_loadMetadata.py, 
 stp2_loadDataStructure.py,
 stp3_loadNetworks.py,

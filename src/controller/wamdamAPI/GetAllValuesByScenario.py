@@ -53,8 +53,7 @@ class GetAllValuesByScenario(object):
                   Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" 
                   Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" 
                   LEFT JOIN NumericValues ON NumericValues."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" 
-                  
-		        WHERE AttributeDataTypeCV="NumericValues" AND
+		          WHERE AttributeDataTypeCV="NumericValues" AND
                   "ResourceTypeAcronym" = '{}' AND "MasterNetworkName" = '{}' AND "ScenarioName" = '{}'""".format(selectedResourceType, selectedNetwork, selectedScenario)
 
 
@@ -205,8 +204,9 @@ class GetAllValuesByScenario(object):
                   Left JOIN "Sources" ON "Sources"."SourceID"="Mappings"."SourceID" 
                   Left JOIN "Instances" ON "Instances"."InstanceID"="Mappings"."InstanceID" 
                   LEFT JOIN "SeasonalNumericValues" ON "SeasonalNumericValues"."ValuesMapperID" = "ValuesMapper"."ValuesMapperID" 		    
-                    WHERE "AttributeDataTypeCV"="SeasonalNumericValues" 
-            		       AND "ResourceTypeAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"
+                  WHERE "AttributeDataTypeCV"="SeasonalNumericValues" 
+            	  AND "ResourceTypeAcronym" = "{}" AND "MasterNetworkName" = "{}" AND "ScenarioName" = "{}"
+                  ORDER BY SeasonOrder ASC
                         """.format(selectedResourceType, selectedNetwork, selectedScenario)
 
             SeasonalNumericValues_Result_df = pd.DataFrame(list(self.session.execute(SeasonalNumericValues_sql)))

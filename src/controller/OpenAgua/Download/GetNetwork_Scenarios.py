@@ -2,12 +2,18 @@
 
 from pandas.io.json import json_normalize
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, date
 
-def GetNetworkScenarios(conn, Selected_network_id, Selected_scenario_id, DatasetAcronym):
+from controller.OpenAgua.Download.NewOA2 import Hydra_OA
+
+def GetNetworkScenarios(conn, Selected_network_id, Selected_scenario_id, DatasetAcronym, username_oa, password_oa):
     MethodName = 'AddMethodName'
     SourceName = 'AddSourceName'
 
+    endpoint = 'https://www.openagua.org/api/v1/hydra/'
+
+
+    hydra = Hydra_OA(endpoint, username=username_oa,password=password_oa)
 
     Network_headers = ['MasterNetworkName', 'ResourceTypeAcronym', 'SpatialReferenceNameCV', 'ElevationDatumCV',
                        'Description']
@@ -18,8 +24,8 @@ def GetNetworkScenarios(conn, Selected_network_id, Selected_scenario_id, Dataset
 
     # master network sheet
 
-    Network = conn.call('get_network',
-                        {'network_id': Selected_network_id, 'scenario_id': Selected_scenario_id, 'include_values': 'N',
+    Network = hydra.call('get_network',{
+                        'network_id': Selected_network_id, 'scenario_id': Selected_scenario_id, 'include_values': 'N',
                          'summary': 'Y'})
 
     MasterNetworkName = Network['name']
@@ -45,8 +51,9 @@ def GetNetworkScenarios(conn, Selected_network_id, Selected_scenario_id, Dataset
 
     # Selected_scenario_id is the parent ID
 
-    Get_scenarios_metadata = conn.call('get_scenarios',
+    Get_scenarios_metadata = hydra.call('get_scenarios',
                                        {'network_id': Selected_network_id, 'include_values': 'N'})
+
     Get_scenarios_metadata_df = json_normalize(Get_scenarios_metadata)
 
     # Look up the parent scenario
@@ -84,71 +91,94 @@ def GetNetworkScenarios(conn, Selected_network_id, Selected_scenario_id, Dataset
     Children_Ids_list = []
     parent_index = 0
 
-    try:
-        if not Get_scenarios_metadata_df['layout.children']:
+   #  try:
+   #      if not Get_scenarios_metadata_df['layout.children']:
+   #
+   #
+   #          row_list = Get_scenarios_metadata_df.iterrows()
+   #          for i, row1 in enumerate(row_list):
+   #              # row1[1]['layout.children'] = []
+   #              Children_Ids_list.append([])
+   #              if row1[1]['layout.class'] == 'baseline':
+   #                  parent_index = i
+   #
+   #              else:
+   #                  childID=row1[1]['id']
+   #                  Children_Ids_list[parent_index].append(childID)
+   #
+   #          Get_scenarios_metadata_df['layout.children'] = Children_Ids_list
+   #
+   #  except:
+   #      pass
+   #
+   #
+   # # Children_Ids = []
+   #
+   #  for row1 in Get_scenarios_metadata_df.iterrows():
+   #      if row1[1]['layout.class'] == 'baseline':
+   #          ParentID = row1[1]['id']
+   #          # use the select scenario id to look up the children
+   #          try:
+   #              Children_Ids = row1[1]['layout.children']
+   #          except:
+   #              childID=row1[1]['id']
+   #              Children_Ids.append(childID)
+   #  #         # append the childID into a list of childIDs
+   #
+   #
+   #
+   #
+   #  Selected_scenario_ids.append(Selected_scenario_id)
+   #
+   #  for Children_Id in Children_Ids:
+   #      Selected_scenario_ids.append(Children_Id)
 
 
-            row_list = Get_scenarios_metadata_df.iterrows()
-            for i, row1 in enumerate(row_list):
-                # row1[1]['layout.children'] = []
-                Children_Ids_list.append([])
-                if row1[1]['layout.class'] == 'baseline':
-                    parent_index = i
-
-                else:
-                    childID=row1[1]['id']
-                    Children_Ids_list[parent_index].append(childID)
-
-            Get_scenarios_metadata_df['layout.children'] = Children_Ids_list
-
-    except:
-        pass
-
-
-   # Children_Ids = []
-
-    for row1 in Get_scenarios_metadata_df.iterrows():
-        if row1[1]['layout.class'] == 'baseline':
-            ParentID = row1[1]['id']
-            # use the select scenario id to look up the children
-            try:
-                Children_Ids = row1[1]['layout.children']
-            except:
-                childID=row1[1]['id']
-                Children_Ids.append(childID)
-    #         # append the childID into a list of childIDs
-
-
-
-
-    Selected_scenario_ids.append(Selected_scenario_id)
-    for Children_Id in Children_Ids:
-        Selected_scenario_ids.append(Children_Id)
 
     for row in Get_scenarios_metadata_df.iterrows():
         if row[0] == 0:
             # only for the first row.
-            ParentScenarioStartDate = datetime.strptime(row[1]['start_time'].split(' ')[0], '%Y-%m-%d').strftime("%m/%d/%Y")
-            ParentScenarioEndDate = datetime.strptime(row[1]['end_time'].split(' ')[0], '%Y-%m-%d').strftime("%m/%d/%Y")
+
+            if row[1]['start_time']!=float:
+
+                try:
+
+                    ParentScenarioStartDate = datetime.strptime(row[1]['start_time'], '%Y-%m-%dT%H:%M:%S.%f').strftime('%m/%d/%Y')  # want output format to be mm/dd/yyy
+                    ParentScenarioEndDate = datetime.strptime(row[1]['end_time'], '%Y-%m-%dT%H:%M:%S.%f').strftime('%m/%d/%Y')
+
+                except:
+
+                    ParentScenarioStartDate = datetime.strptime(row[1]['start_time'], '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')  # want output format to be mm/dd/yyy
+                    ParentScenarioEndDate = datetime.strptime(row[1]['end_time'], '%Y-%m-%d %H:%M:%S').strftime('%m/%d/%Y')
+
+            else: # deal with ordinal date (old OpenAgua)
+                ParentScenarioStartDate = date.fromordinal(int(row[1]['start_time'])).strftime("%m/%d/%Y")
+                ParentScenarioEndDate = date.fromordinal(int(row[1]['end_time'])).strftime("%m/%d/%Y")
+
+
             ParentTimeStepUnitCV = row[1]['time_step']
         # reset  Selected_scenario_id
         Selected_scenario_id = []
 
+        Selected_scenario_ids=Get_scenarios_metadata_df['id'].tolist()
+
+
+
         scenario_flag = False
         for Selected_scenario_id in Selected_scenario_ids:
             # only the parent and its children. Ignore other scenarios that neither parent nor children
-            if Selected_scenario_id == row[1]['id']:
+            if Selected_scenario_id == row[1]['id']: # the parent scenario
                 ScenarioName = row[1]['name']
                 # print ScenarioName
 
-                try:
-                    ScenarioStartDate = datetime.strptime(row['start_time'].split(' ')[0], '%Y-%m-%d').strftime("%m/%d/%Y")
-                except:
-                    ScenarioStartDate = ParentScenarioStartDate  # use the parent ScenarioStartDate value
-                try:
-                    ScenarioEndDate = datetime.strptime(row['end_time'].split(' ')[0], '%Y-%m-%d').strftime("%m/%d/%Y")
-                except:
-                    ScenarioEndDate = ParentScenarioEndDate  # use the parent ScenarioEndDate value
+                # try:
+                #     ScenarioStartDate = row[1]['start_time']
+                # except:
+                ScenarioStartDate = ParentScenarioStartDate  # use the parent ScenarioStartDate value
+                # try:
+                #     ScenarioEndDate = row[1]['end_time']
+                # except:
+                ScenarioEndDate = ParentScenarioEndDate  # use the parent ScenarioEndDate value
 
                 TimeStep = 1
 
@@ -165,9 +195,10 @@ def GetNetworkScenarios(conn, Selected_network_id, Selected_scenario_id, Dataset
 
 
                 try:
-                    ScenarioParentID = row[1]['layout.parent']
+                    ScenarioParentID = int(row[1]['parent_id'])
                     if ScenarioParentID:
-                        Scenario = conn.call('get_scenario', {'scenario_id': ScenarioParentID})
+                        Scenario = hydra.call('get_scenario', {'scenario_id': ScenarioParentID})
+
                         ScenarioParentName = Scenario['name']
                     else:
                         ScenarioParentName='self'

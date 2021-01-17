@@ -11,10 +11,9 @@ from controller.wamdamAPI.GetInstancesByScenario import GetInstancesBySenario
 from controller.wamdamAPI.GetAllValuesByScenario import GetAllValuesByScenario
 from controller.wamdamAPI.GetUnitCVs import GetUnits
 
-from controller.OpenAgua.HydraLib.PluginLib import JsonConnection, \
-    create_xml_response, \
-    write_progress, \
-    write_output
+from controller.OpenAgua.Download.NewOA2 import Hydra_OA
+from collections import OrderedDict
+
 
 # General library for working with JSON objects
 import json
@@ -23,13 +22,17 @@ import os, sys, datetime
 
 import logging
 
-def PrepareScenarioData(selectedResourceTypeAcro, selectedMasterNetworkName,selectedScenarioNames,scenario_sheet,dict_res_attr,Dataset_attr_Name_Dim_list,Dataset_attr_Name_Dim_unit):
+def PrepareScenarioData(selectedResourceTypeAcro, selectedMasterNetworkName,selectedScenarioNames,scenario_sheet,dict_res_attr,
+                        Dataset_attr_Name_Dim_list,Dataset_attr_Name_Dim_unit,HydraUnits):
     getValuesAll = GetAllValuesByScenario()
 
     list_scenario = []
     # STEP 5: Import Scenarios and Data Values of Attributes for Nodes and links
     # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
+
+
+    print 'reading and preparing scenarios'
     # 5.1 add the scenario
     for jjj ,selectedScenarioName in enumerate(selectedScenarioNames):
         for i in range(len(scenario_sheet)):
@@ -44,28 +47,29 @@ def PrepareScenarioData(selectedResourceTypeAcro, selectedMasterNetworkName,sele
                         description = ""
                 ###############################################################################################################
 
-                startdate =scenario_sheet.values[i][4].replace('-', '/')
+                startdate =str(scenario_sheet.values[i][4]) #.replace('-', '/')
 
                 try:
 
-                    ScenarioStartDate = datetime.datetime.strptime(str(startdate), "%Y/%m/%d").isoformat()
+                    ScenarioStartDate = datetime.datetime.strptime(startdate, "%Y-%m-%d").isoformat()
                 except:
                     ScenarioStartDate = startdate.isoformat()
 
                 # get month value from date (either numeric month like 1 or text month like January)
                 # we use the value later as a flag to check
                 ScenarioStartMonth = datetime.datetime.strptime(ScenarioStartDate, '%Y-%m-%dT%H:%M:%S').month
+
                 print ScenarioStartMonth
                 ###############################################################################################################
 
-                enddate =scenario_sheet.values[i][5].replace('-', '/')
+                enddate =str(scenario_sheet.values[i][5]) #.replace('-', '/')
 
 
                 try:
-                    ScenarioEndDate = datetime.datetime.strptime(str(enddate), "%Y/%m/%d").isoformat()
+                    ScenarioEndDate = datetime.datetime.strptime(enddate, "%Y-%m-%d").isoformat()
                 except:
                     ScenarioEndDate = enddate.isoformat()
-                ScenarioType =''
+                # ScenarioType =''
                 TimeStep = str(scenario_sheet.values[i][7])
 
 
@@ -73,13 +77,13 @@ def PrepareScenarioData(selectedResourceTypeAcro, selectedMasterNetworkName,sele
 
                 ScenarioType=scenario_sheet.values[i][9].lower()
 
-                if ScenarioType=='' or ScenarioType=='results':
+                if ScenarioType=='': #or ScenarioType=='results':
                     ScenarioType='scenario'
 
 
                 scenario = {'name': selectedScenarioName,
-                            'start_time' :ScenarioStartDate,
-                            'end_time' :ScenarioEndDate ,
+                            'start_time' :startdate,
+                            'end_time' :enddate ,
                             'time_step' :TimeStep,
                             'layout': {
                                 'class': ScenarioType,
@@ -87,6 +91,13 @@ def PrepareScenarioData(selectedResourceTypeAcro, selectedMasterNetworkName,sele
                                         },
                             'description': description,
                             'resourcescenarios': []}
+
+
+                # 1. Use unit ID (use the Hydra units tabel and their Ids
+                # 2. Check again on start and end dates of the scenario for WEAP and WASH. Download both to WaMDaM.
+                # 3. see how the download works for October water year.
+                # 4. Finish HydroShare upload
+
 
                 # Working with Datasets in Hydra which are equivalent to DataValues tables in WaMDaM
                 # http://umwrg.github.io/HydraPlatform/tutorials/webservice/datasets.html?highlight=datasets
@@ -113,6 +124,7 @@ def PrepareScenarioData(selectedResourceTypeAcro, selectedMasterNetworkName,sele
                     dimension =Dataset_attr_Name_Dim_list[ObjectType, Attr_name]
 
                     if (numerical_sheet.values[j][1], numerical_sheet.values[j][3]) in dict_res_attr.keys():
+
                         rs_num = {
                             'resource_attr_id': dict_res_attr[(numerical_sheet.values[j][1], numerical_sheet.values[j][3])][
                                 'id']}
@@ -124,17 +136,30 @@ def PrepareScenarioData(selectedResourceTypeAcro, selectedMasterNetworkName,sele
                     metadata = {'source': Source, 'method': Method}
                     attr_unit = Dataset_attr_Name_Dim_unit[(ObjectType,Attr_name)]
 
-                    dataset = {'type': 'scalar', 'name': Attr_name, 'metadata': json.dumps(metadata, ensure_ascii=True),
-                               'unit': attr_unit, 'dimension': dimension,
+                    # Get the unit_id from the Hydra server
+                    for uni in HydraUnits:
+                        if uni['name'] == attr_unit:
+                            unit_id = uni['id']
+                        # else:
+                        #     print "this unit does not exist in Hydra"
+                        #     print  attr_unit
+
+                    dataset = {'type': 'scalar', 'name': Attr_name, 'metadata': metadata,'unit_id':unit_id,
+                               # 'unit': attr_unit, 'dimension': dimension,
                                'hidden': 'N', 'value': str(numerical_sheet.values[j][6])}
+
                     # The provided dimension here must match the attribute as defined earlier.
 
-                    rs_num['value'] = dataset
+                    rs_num['dataset'] = dataset
                     list_rs_num.append(rs_num)
                 # associate the values, resources attributes to their scenario
+
                 scenario['resourcescenarios'] = list_rs_num
-                list_scenario.append(scenario)
-                print 'Done with numeric values'
+
+
+                list_scenario.append(scenario) # test
+
+                print 'Done with numeric values. Next is Free Text'
 
                 # ****************************************************
                 # 5.3 4_FreeText Values (4_FreeText )
@@ -166,18 +191,25 @@ def PrepareScenarioData(selectedResourceTypeAcro, selectedMasterNetworkName,sele
                             "Either the node or link names or the attribute provided in the free text sheet are not defined earlier\n"
                             "Unable to find resource_attr_id in Free Text sheet for %s" % Descriptor_sheet.values[j][3])
 
-                    dataset = {'type': 'descriptor', 'name': Attr_name, 'unit': attr_unit, 'dimension': dimension,
+                    # Get the unit_id from the Hydra server
+                    for uni in HydraUnits:
+                        if uni['name'] == attr_unit:
+                            unit_id = uni['id']
+
+                    dataset = {'type': 'descriptor', 'name': Attr_name,'unit_id':unit_id,
+                               # 'unit': attr_unit, 'dimension': dimension,
                                'metadata': json.dumps(metadata, ensure_ascii=True),
                                'hidden': 'N', 'value': str(Descriptor_sheet.values[j][6])}
                     # print dataset
                     # The provided dimension here must match the attribute as defined earlier.
 
-                    rs_desc['value'] = dataset
+                    rs_desc['dataset'] = dataset
                     list_rs_desc.append(rs_desc)
                 # associate the values, resources attributes to their scenario
 
                 list_scenario[len(list_scenario) - 1]['resourcescenarios'].extend(list_rs_desc)
-                print 'Done with Free text'
+
+                print 'Done with Free text. Next, is seasonal data'
 
                 # ******************************************************************************************************************
 
@@ -209,27 +241,37 @@ def PrepareScenarioData(selectedResourceTypeAcro, selectedMasterNetworkName,sele
                         seasonal_list[(SeasonalNumericValues_sheet.values[k][1], attr_name)] = values
                 # df = pd.DataFrame()
                 for key in seasonal_list.keys():
+
+                    # seasonals = OrderedDict()
                     seasonals = {"0": {}}
                     time_date = ''
                     for time, value in seasonal_list[key]:
                         try:
+                            # if time == 'October' and ScenarioStartMonth == 10:
+                            #     time_date = '9998/10/1'
+                            #
+                            # elif time == 'October' and ScenarioStartMonth == 1:
+                            #     time_date = '9999/10/1'
+                            #
+                            # elif time == 'November' and ScenarioStartMonth == 10:
+                            #     time_date = '9998/11/1'
+                            #
+                            # elif time == 'November' and ScenarioStartMonth == 1:
+                            #     time_date = '9999/11/1'
+                            #
+                            # elif time == 'December' and ScenarioStartMonth == 10:
+                            #     time_date = '9998/12/1'
+                            #
+                            # elif time == 'December' and ScenarioStartMonth == 1:
+                            #     time_date = '9999/12/1'
 
-                            if time == 'October' and ScenarioStartMonth == 10:
-                                time_date = '9998/10/1'
-
-                            elif time == 'October' and ScenarioStartMonth == 1:
+                            if time == 'October':
                                 time_date = '9999/10/1'
 
-                            elif time == 'November' and ScenarioStartMonth == 10:
-                                time_date = '9998/11/1'
-
-                            elif time == 'November' and ScenarioStartMonth == 1:
+                            elif time == 'November':
                                 time_date = '9999/11/1'
 
-                            elif time == 'December' and ScenarioStartMonth == 10:
-                                time_date = '9998/12/1'
-
-                            elif time == 'December' and ScenarioStartMonth == 1:
+                            elif time == 'December' :
                                 time_date = '9999/12/1'
 
                             elif time == 'January':
@@ -271,8 +313,8 @@ def PrepareScenarioData(selectedResourceTypeAcro, selectedMasterNetworkName,sele
                     ObjectType = SeasonalNumericValues_sheet.values[0][0]
 
                     dimension = Dataset_attr_Name_Dim_list[ObjectType, Attr_name]
-                    Source = SeasonalNumericValues_sheet.values[j][4]
-                    Method = SeasonalNumericValues_sheet.values[j][5]
+                    Source = SeasonalNumericValues_sheet.values[k][4]
+                    Method = SeasonalNumericValues_sheet.values[k][5]
                     metadata = {'source': Source, 'method': Method}
                     attr_unit = Dataset_attr_Name_Dim_unit[(ObjectType, Attr_name)]
 
@@ -283,20 +325,27 @@ def PrepareScenarioData(selectedResourceTypeAcro, selectedMasterNetworkName,sele
                             "Either the node or link names or the attribute provided in the seasonal sheet are not defined earlier\n"
                             "Unable to find resource_attr_id in seasonal sheet for %s" % key)
 
+                    # Get the unit_id from the Hydra server
+                    for uni in HydraUnits:
+                        if uni['name'] == attr_unit:
+                            unit_id = uni['id']
+
                     # rs = {'resource_attr_id': all_attr_dict[attr_name]['id']}
 
                     # print 'done with '+ Attr_name
-                    dataset = {'type': 'timeseries', 'name': Attr_name, 'unit': attr_unit, 'dimension': dimension,
+                    dataset = {'type': 'timeseries', 'name': Attr_name,'unit_id':unit_id,
+                               # 'unit': attr_unit, 'dimension': dimension,
                                'metadata': json.dumps(metadata, ensure_ascii=True),
                                'hidden': 'N', 'value': json.dumps(seasonals)}
                     # The provided dimension here must match the attribute as defined earlier.
 
-                    rs_seas['value'] = dataset
+                    rs_seas['dataset'] = dataset
                     list_rs_seas.append(rs_seas)
                 # associate the values, resources attributes to their scenario
 
                 list_scenario[len(list_scenario) - 1]['resourcescenarios'].extend(list_rs_seas)
-                print 'Done with seasonal values'
+
+                print 'Done with seasonal values. Next is time series data'
 
                 # 5.5 Time Series
                 # Iterate over the rows in the 4_TimeSeriesValues sheet and associate the value with its scenario, and resource attribute
@@ -361,18 +410,27 @@ def PrepareScenarioData(selectedResourceTypeAcro, selectedMasterNetworkName,sele
                             "Either the node or link names or the attribute provided in the time series sheet are not defined earlier\n"
                             "Unable to find resource_attr_id in time series values sheet for %s" % key)
 
-                    dataset = {'type': 'timeseries', 'name': Attr_name, 'unit': attr_unit, 'dimension': dimension,
+                    # Get the unit_id from the Hydra server
+                    for uni in HydraUnits:
+                        if uni['name'] == attr_unit:
+                            unit_id = uni['id']
+
+
+
+                    dataset = {'type': 'timeseries', 'name': Attr_name,'unit_id':unit_id,
+                               # 'unit': attr_unit, 'dimension': dimension,
                                'metadata': json.dumps(metadata, ensure_ascii=True),
                                'hidden': 'N', 'value': json.dumps(timeseries)}
                     # The provided dimension here must match the attribute as defined earlier.
 
-                    rs_ts['value'] = dataset
+                    rs_ts['dataset'] = dataset
                     list_rs_ts.append(rs_ts)
                     # print 'Done with Time Series for ' + Attr_name +'_' +ObjectType
                 # associate the values, resources attributes to their scenario
 
                 list_scenario[len(list_scenario) - 1]['resourcescenarios'].extend(list_rs_ts)
-                print 'Done with Time Series'
+
+                print 'Done with Time Series. Next is multi attribute data'
 
                 # ********************************************************
                 # 5.6 Arrays
@@ -425,13 +483,19 @@ def PrepareScenarioData(selectedResourceTypeAcro, selectedMasterNetworkName,sele
 
                             rs_multi = {'resource_attr_id': dict_res_attr[(InstanceName, Attribute_name)]['id']}
 
-                            dataset = {'type': 'array', 'name': Attribute_name, 'unit': attr_unit,
-                                       'dimension': dimension,
+                            # Get the unit_id from the Hydra server
+                            for uni in HydraUnits:
+                                if uni['name'] == attr_unit:
+                                    unit_id = uni['id']
+
+
+                            dataset = {'type': 'array', 'name': Attribute_name,'unit_id':unit_id,
+                                       # 'unit': attr_unit,'dimension': dimension,
                                        'metadata': json.dumps(metadata, ensure_ascii=True),
                                        'hidden': 'N', 'value': json.dumps(templist)}
-                            rs_multi['value'] = dataset
+                            rs_multi['dataset'] = dataset
                             list_rs_multi.append(rs_multi)
 
                 list_scenario[len(list_scenario) - 1]['resourcescenarios'].extend(list_rs_multi)
-                print 'Done with multi column arrays'
+                print 'Done with multi column arrays.'
     return list_scenario

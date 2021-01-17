@@ -3,7 +3,7 @@
 import wx
 import viewer.WaMDaMWizard
 from viewer.Messages_forms.msg_somethigWrong import msg_somethigWrong
-from controller.wamdamAPI.GetMetadata import GetMetadata
+from controller.wamdamAPI.GetMetadataByScenario import GetMetadataByScenario
 from xlrd import open_workbook
 # from xlutils.copy import copy
 from openpyxl import load_workbook
@@ -20,7 +20,7 @@ class dlg_query_metadata(viewer.WaMDaMWizard.dlg_query_metadata):
 				raise Exception(msg)
 
 			''' get metadata qurey object'''
-			self.getMetadata = GetMetadata()
+			self.getMetadata = GetMetadataByScenario()
 		except Exception as e:
 			message = msg_somethigWrong(None, msg=e.message)
 			message.ShowModal()
@@ -53,7 +53,7 @@ class dlg_query_metadata(viewer.WaMDaMWizard.dlg_query_metadata):
 		method_list = self.getMetadata.GetMethods()
 		self.write2excel(method_list, 19, 2)
 
-		from Messages_forms.msg_successLoadDatabase import msg_successLoadDatabase
+		from viewer.Messages_forms.msg_successLoadDatabase import msg_successLoadDatabase
 		instance = msg_successLoadDatabase(None)
 		instance.m_staticText1.SetLabel("The metadata excel export successful.")
 		instance.ShowModal()

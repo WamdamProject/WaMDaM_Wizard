@@ -1,0 +1,530 @@
+(base) C:\Users\Rosenberg\Documents\GitHub\WaMDaM_Wizard_1.05\src>conda list
+# packages in environment at C:\Users\Rosenberg\Anaconda2:
+#
+# Name                    Version                   Build  Channel
+_ipyw_jlab_nb_ext_conf    0.1.0              py27_0.conda
+alabaster                 0.7.9                     <pip>
+alabaster                 0.7.12             py27_0.conda
+alembic                   0.9.1                     <pip>
+altair                    2.2.2                     <pip>
+anaconda                  2019.10                  py27_0  []
+anaconda-client           1.6.0                     <pip>
+anaconda-client           1.7.2              py27_0.conda
+anaconda-navigator        1.5                       <pip>
+anaconda-navigator        1.9.7                    py27_0  []
+anaconda-project          0.4.1                     <pip>
+anaconda-project          0.8.3                      py_0  []
+appdirs                   1.4.3                     <pip>
+arc                       0.0.1b0                   <pip>
+argcomplete               1.0.0                     <pip>
+asn1crypto                1.0.1                    py27_0  []
+asn1crypto                0.22.0                    <pip>
+astroid                   1.4.9                     <pip>
+astroid                   1.6.5              py27_0.conda
+astropy                   1.3                       <pip>
+astropy                   2.0.9           py27hc997a72_0.conda
+astunparse                1.5.0                     <pip>
+atomicwrites              1.3.0              py27_1.conda
+attrdict                  2.0.0                     <pip>
+attrs                     19.2.0                     py_0  []
+Babel                     2.3.4                     <pip>
+babel                     2.7.0                      py_0  []
+backports                 1.0                        py_2  []
+backports.functools_lru_cache 1.5                        py_2  []
+backports.os              0.1.1              py27_0.conda
+backports.shutil-get-terminal-size 1.0.0                     <pip>
+backports.shutil_get_terminal_size 1.0.0              py27_2.conda
+backports.shutil_which    3.5.2              py27_0.conda
+backports.ssl-match-hostname 3.4.0.2                   <pip>
+backports.tempfile        1.0                        py_1  []
+backports.weakref         1.0.post1                  py_1  []
+backports_abc             0.5                       <pip>
+backports_abc             0.5             py27h0ec6b72_0.conda
+bcrypt                    3.1.3                     <pip>
+beautifulsoup4            4.8.0              py27_0.conda
+beautifulsoup4            4.5.3                     <pip>
+bitarray                  0.8.1                     <pip>
+bitarray                  1.0.1           py27h0c8e037_0.conda
+bkcharts                  0.2             py27h92b6de3_0.conda
+blas                      1.0                   mkl.conda
+blaze                     0.10.1                    <pip>
+bleach                    3.1.0              py27_0.conda
+blinker                   1.4                        py_1  []  conda-forge/label/gcc7
+blinker                   1.4                       <pip>
+blosc                     1.16.3          hc65f11a_0.conda
+bokeh                     0.12.4                    <pip>
+bokeh                     1.3.4              py27_0.conda
+boltons                   17.1.0                    <pip>
+boto                      2.49.0             py27_0.conda
+boto                      2.45.0                    <pip>
+boto3                     1.4.4                     <pip>
+botocore                  1.5.26                    <pip>
+Bottleneck                1.2.0                     <pip>
+bottleneck                1.2.1           py27hc997a72_1.conda
+bzip2                     1.0.8           h0c8e037_0.conda
+ca-certificates           2019.8.28                     0  []
+cdecimal                  2.3             py27h0c8e037_3.conda
+certifi                   2018.8.24                 <pip>
+certifi                   2019.9.11                py27_0  []
+cffi                      1.9.1                     <pip>
+cffi                      1.12.3          py27hcfb25f9_0.conda
+cfgmcc                    1                         <pip>
+chardet                   3.0.4           py27_1003.conda
+chest                     0.2.3                     <pip>
+click                     7.0                py27_0.conda
+click                     6.7                       <pip>
+cloudpickle               0.2.2                     <pip>
+cloudpickle               1.2.2                      py_0  []
+clyent                    1.2.2              py27_1.conda
+colorama                  0.4.1              py27_0.conda
+colorama                  0.3.7                     <pip>
+colour                    0.1.5                     <pip>
+comtypes                  1.1.7              py27_0.conda
+comtypes                  1.1.2                     <pip>
+conda                     4.4.10                    <pip>
+conda                     4.8.2              py27_0.conda
+conda-build               3.18.9             py27_3.conda
+conda-env                 2.6.0                   1.conda
+conda-package-handling    1.6.0           py27h3cc03e0_0.conda
+conda-verify              3.4.2                      py_1  []
+configobj                 5.0.6                     <pip>
+configparser              4.0.2              py27_0.conda
+configparser              3.5.0                     <pip>
+console_shortcut          0.1.1                   3.conda
+contextlib2               0.6.0                      py_0  []
+contextlib2               0.5.4                     <pip>
+cryptography              2.4.2           py27hc64555f_0.conda
+cryptography              1.8.1                     <pip>
+curl                      7.64.0          h7a46e7a_2.conda
+cx-Freeze                 5.0.2                     <pip>
+cycler                    0.10.0          py27h59acbbf_0.conda
+Cython                    0.25.2                    <pip>
+cython                    0.29.13         py27hc56fc5f_0.conda
+cytoolz                   0.8.2                     <pip>
+cytoolz                   0.10.0          py27h0c8e037_0.conda
+dask                      0.13.0                    <pip>
+dask                      1.2.2                      py_0  []
+dask-core                 1.2.2                      py_0  []
+datashape                 0.5.4                     <pip>
+dctmcc                    1                         <pip>
+decorator                 4.4.0              py27_1.conda
+decorator                 4.0.11                    <pip>
+defusedxml                0.6.0                      py_0  []
+dill                      0.2.5                     <pip>
+distributed               1.28.1             py27_0.conda
+docutils                  0.13.1                    <pip>
+docutils                  0.15.2             py27_0.conda
+earthengine-api           0.1.107                   <pip>
+entrypoints               0.3                py27_0.conda
+entrypoints               0.2.3                     <pip>
+enum34                    1.1.6              py27_1.conda
+et_xmlfile                1.0.1           py27h1de5d23_0.conda
+fastcache                 1.1.0           py27h0c8e037_0.conda
+fastcache                 1.0.2                     <pip>
+filelock                  3.0.12                     py_0  []
+Flask                     0.12                      <pip>
+flask                     1.1.1                      py_0  []
+Flask-Admin               1.5.0                     <pip>
+Flask-Babel               0.11.1                    <pip>
+Flask-Cors                3.0.2                     <pip>
+Flask-Login               0.3.2                     <pip>
+Flask-Mail                0.9.1                     <pip>
+Flask-Migrate             2.0.3                     <pip>
+Flask-Principal           0.4.0                     <pip>
+Flask-Script              2.0.5                     <pip>
+Flask-Security            1.7.5                     <pip>
+Flask-SQLAlchemy          2.2                       <pip>
+Flask-Uploads             0.2.1                     <pip>
+Flask-WTF                 0.14.2                    <pip>
+freetype                  2.9.1           h4d385ea_1.conda
+funcsigs                  1.0.2           py27h8885ae1_0.conda
+functools32               3.2.3.2            py27_1.conda
+future                    0.17.1             py27_0.conda
+future                    0.16.0                    <pip>
+futures                   3.0.5                     <pip>
+futures                   3.3.0              py27_0.conda
+GAMS                      1.0                       <pip>
+gamsxcc                   1                         <pip>
+gdxcc                     7                         <pip>
+gdxcc                     7.post2492                <pip>
+gdxpds                    1.0.4                     <pip>
+geojson                   2.4.0                     <pip>
+get_terminal_size         1.0.0           h38e98db_0.conda
+gevent                    1.4.0           py27h0c8e037_0.conda
+gevent                    1.2.1                     <pip>
+gevmcc                    6                         <pip>
+gity                      0.0.1                     <pip>
+glob2                     0.7                        py_0  []
+gmdcc                     2                         <pip>
+gmomcc                    15                        <pip>
+google-api-python-client  1.6.2                     <pip>
+greenlet                  0.4.11                    <pip>
+greenlet                  0.4.15          py27h0c8e037_0.conda
+grin                      1.2.1              py27_4.conda
+grin                      1.2.1                     <pip>
+h5py                      2.9.0           py27hb721d18_0.conda
+h5py                      2.6.0                     <pip>
+hdf5                      1.10.4          h530792d_0.conda
+heapdict                  1.0.1                py_0.conda
+HeapDict                  1.0.0                     <pip>
+hs-restclient             1.3.3                     <pip>
+hs_restclient             1.2.12                     py_0  []  conda-forge/label/gcc7
+html5lib                  1.0.1              py27_0.conda
+httplib2                  0.10.3                    <pip>
+icc_rt                    2019.0.0        h0cc432a_1.conda
+icu                       58.2            h2aa20d9_1.conda
+idna                      2.8                py27_0.conda
+idna                      2.7                       <pip>
+imageio                   2.6.0                    py27_0  []
+imagesize                 0.7.1                     <pip>
+imagesize                 1.1.0              py27_0.conda
+importlib_metadata        0.23                     py27_0  []
+intel-openmp              2019.4                245.conda
+ipaddress                 1.0.22             py27_0.conda
+ipaddress                 1.0.18                    <pip>
+ipykernel                 4.5.2                     <pip>
+ipykernel                 4.10.0             py27_0.conda
+ipython                   5.8.0              py27_0.conda
+ipython                   5.1.0                     <pip>
+ipython_genutils          0.1.0                     <pip>
+ipython_genutils          0.2.0           py27hbe997df_0.conda
+ipywidgets                7.5.1                      py_0  []
+ipywidgets                5.2.2                     <pip>
+isort                     4.3.21             py27_0.conda
+isort                     4.2.5                     <pip>
+itsdangerous              0.24                      <pip>
+itsdangerous              1.1.0              py27_0.conda
+jdcal                     1.3                       <pip>
+jdcal                     1.4.1                      py_0  []
+jedi                      0.9.0                     <pip>
+jedi                      0.15.1             py27_0.conda
+jinja2                    2.10.3                     py_0  []
+Jinja2                    2.9.5                     <pip>
+jmespath                  0.9.2                     <pip>
+jpeg                      9b              ha175dff_2.conda
+jsonschema                3.0.2              py27_0.conda
+jsonschema                2.6.0                     <pip>
+jupyter                   1.0.0                     <pip>
+jupyter                   1.0.0              py27_7.conda
+jupyter_client            4.4.0                     <pip>
+jupyter_client            5.3.3                    py27_1  []
+jupyter_console           5.2.0              py27_1.conda
+jupyter_console           5.0.0                     <pip>
+jupyter_core              4.5.0                      py_0  []
+jupyter_core              4.2.1                     <pip>
+jupyterlab                0.33.11            py27_0.conda
+jupyterlab                0.33.12                   <pip>
+jupyterlab                0.31.8                    <pip>
+jupyterlab-launcher       0.11.2                    <pip>
+jupyterlab-launcher       0.10.5                    <pip>
+jupyterlab_launcher       0.11.2          py27h28b3542_0.conda
+keyring                   18.0.0             py27_0.conda
+kiwisolver                1.1.0           py27hc56fc5f_0.conda
+krb5                      1.16.1          hb4d044e_6.conda
+lazy-object-proxy         1.2.2                     <pip>
+lazy-object-proxy         1.4.1           py27h0c8e037_0.conda
+libarchive                3.3.3           h96cdc4e_5.conda
+libcurl                   7.64.0          h7a46e7a_2.conda
+libiconv                  1.15            hda2e4ec_7.conda
+libpng                    1.6.37          h7a46e7a_0.conda
+libsodium                 1.0.16          h8b3e59e_0.conda
+libssh2                   1.8.0           h77a7533_4.conda
+libtiff                   4.0.10          h1c3b264_2.conda
+libxml2                   2.9.9           h325896a_0.conda
+libxslt                   1.1.33          h803002f_0.conda
+linecache2                1.0.0              py27_0.conda
+livereload                2.5.1                     <pip>
+llvmlite                  0.15.0                    <pip>
+llvmlite                  0.29.0          py27hc56fc5f_0.conda
+locket                    0.2.0           py27h1ca288a_1.conda
+lxml                      3.7.2                     <pip>
+lxml                      4.4.1           py27h31b8cb8_0.conda
+lz4-c                     1.8.1.2         h3cc03e0_0.conda
+lzo                       2.10            h0bb7fe3_2.conda
+m2w64-gcc-libgfortran     5.3.0                         6  []
+m2w64-gcc-libs            5.3.0                         7  []
+m2w64-gcc-libs-core       5.3.0                         7  []
+m2w64-gmp                 6.1.0                         2  []
+m2w64-libwinpthread-git   5.0.0.4634.697f757               2  []
+Mako                      1.0.6                     <pip>
+Markdown                  2.6.11                    <pip>
+markupsafe                1.1.1           py27h0c8e037_0.conda
+MarkupSafe                1.0                       <pip>
+matplotlib                2.0.0                     <pip>
+matplotlib                2.2.3           py27h263d877_0.conda
+mccabe                    0.6.1              py27_1.conda
+menuinst                  1.4.16          py27h0c8e037_0.conda
+menuinst                  1.4.4                     <pip>
+mistune                   0.7.3                     <pip>
+mistune                   0.8.4           py27h0c8e037_0.conda
+mkdocs                    0.17.2                    <pip>
+mkdocs-material           2.7.3                     <pip>
+mkl                       2019.4                245.conda
+mkl-service               2.3.0           py27h0b88c2a_0.conda
+mkl_fft                   1.0.14          py27h44c1dab_0.conda
+mock                      3.0.5              py27_0.conda
+more-itertools            5.0.0              py27_0.conda
+mpld3                     0.3                       <pip>
+mpmath                    0.19                      <pip>
+mpmath                    1.1.0              py27_0.conda
+msgpack-python            0.6.1           py27hdc96acc_1.conda
+msys2-conda-epoch         20160418                      1  []
+multipledispatch          0.4.9                     <pip>
+multipledispatch          0.6.0              py27_0.conda
+mysql-connector-python    2.0.4                     <pip>
+MySQL-python              1.2.5                     <pip>
+navigator-updater         0.2.1              py27_0.conda
+nbconvert                 4.2.0                     <pip>
+nbconvert                 5.6.0                    py27_1  []
+nbformat                  4.4.0           py27hf49b375_0.conda
+nbformat                  4.2.0                     <pip>
+networkx                  2.2                py27_1.conda
+networkx                  1.11                      <pip>
+nltk                      3.4.5              py27_0.conda
+nltk                      3.2.2                     <pip>
+nose                      1.3.7              py27_2.conda
+notebook                  5.7.8              py27_0.conda
+notebook                  4.3.1                     <pip>
+numba                     0.30.1+0.g8c1033f.dirty           <pip>
+numba                     0.45.1          py27h39f3610_0.conda
+numexpr                   2.6.1                     <pip>
+numexpr                   2.7.0           py27haac76bc_0.conda
+numpy                     1.14.2                    <pip>
+numpy                     1.12.0                    <pip>
+numpy                     1.16.5           py27h5fc8d92_0  []
+numpy-base                1.16.5           py27hb1d0314_0  []
+numpydoc                  0.9.1                      py_0  []
+numpydoc                  0.6.0                     <pip>
+oauth2client              4.0.0                     <pip>
+oauthlib                  2.0.6                     <pip>
+oauthlib                  2.1.0                      py_0  []  conda-forge/label/gcc7
+odo                       0.5.0                     <pip>
+olefile                   0.45.1                    <pip>
+olefile                   0.46               py27_0.conda
+openpyxl                  2.5.3                     <pip>
+openssl                   1.0.2t            vc9h3cc03e0_0  []
+optcc                     2                         <pip>
+packaging                 16.8                      <pip>
+packaging                 19.2                       py_0  []
+pandas                    0.23.4                    <pip>
+pandas                    0.24.2          py27hc56fc5f_0.conda
+pandas                    0.19.2                    <pip>
+pandas-datareader         0.5.0                     <pip>
+pandoc                    2.2.3.2                 0.conda
+pandocfilters             1.4.2              py27_1.conda
+paramiko                  2.1.2                     <pip>
+parso                     0.5.1                      py_0  []
+partd                     1.0.0                      py_0  []
+partd                     0.3.7                     <pip>
+passlib                   1.7.1                     <pip>
+path.py                   11.5.0             py27_0.conda
+path.py                   0.0.0                     <pip>
+pathlib2                  2.3.5                    py27_0  []
+pathlib2                  2.2.0                     <pip>
+patsy                     0.4.1                     <pip>
+patsy                     0.5.1              py27_0.conda
+pefile                    2016.3.28                 <pip>
+pep8                      1.7.0                     <pip>
+pep8                      1.7.1              py27_0.conda
+pickleshare               0.7.4                     <pip>
+pickleshare               0.7.5              py27_0.conda
+Pillow                    4.0.0                     <pip>
+pillow                    6.2.0            py27h5b88493_0  []
+pip                       18.1                      <pip>
+pip                       19.2.3                   py27_0  []
+pixiedust                 1.1.11                    <pip>
+pkginfo                   1.5.0.1            py27_0.conda
+plotly                    4.4.1                      py_0  []  conda-forge
+plotly                    2.7.0                     <pip>
+pluggy                    0.13.0                   py27_0  []
+ply                       3.11               py27_0.conda
+ply                       3.10                      <pip>
+powershell_shortcut       0.0.1                   2.conda
+proj4                     5.2.0           hc56fc5f_1.conda
+prometheus_client         0.7.1                      py_0  []
+prompt-toolkit            1.0.9                     <pip>
+prompt_toolkit            1.0.15          py27h3a8ec6a_0.conda
+psutil                    5.6.3           py27h0c8e037_0.conda
+psutil                    5.2.0                     <pip>
+py                        1.8.0              py27_0.conda
+py                        1.4.32                    <pip>
+pyasn1                    0.2.3                     <pip>
+pyasn1-modules            0.0.8                     <pip>
+pycodestyle               2.5.0              py27_0.conda
+pycosat                   0.6.3           py27h0c8e037_0.conda
+pycparser                 2.19               py27_0.conda
+pycparser                 2.17                      <pip>
+pycrypto                  2.6.1           py27h0c8e037_9.conda
+pycurl                    7.43.0.2        py27hc64555f_0.conda
+pycurl                    7.43.0                    <pip>
+pyflakes                  2.1.1              py27_0.conda
+pyflakes                  1.5.0                     <pip>
+Pygments                  2.2.0                     <pip>
+pygments                  2.4.2                      py_0  []
+PyInstaller               3.2.1                     <pip>
+pyjwt                     1.6.4                      py_0  []  conda-forge/label/gcc7
+pylint                    1.6.4                     <pip>
+pylint                    1.9.2              py27_0.conda
+pymdown-extensions        4.10.2                    <pip>
+PyMySQL                   0.7.9                     <pip>
+PyMySQL                   0.7.10                    <pip>
+pyodbc                    4.0.27          py27hc56fc5f_0.conda
+Pyomo                     5.1.1                     <pip>
+pyopenssl                 19.0.0             py27_0.conda
+pyOpenSSL                 16.2.0                    <pip>
+pyparsing                 2.4.2                      py_0  []
+pyparsing                 2.2.0                     <pip>
+pypiwin32                 219                       <pip>
+pyproj                    1.9.6           py27haf8c3ea_0.conda
+pyproj                    1.9.6                     <pip>
+Pypubsub                  4.0.0                     <pip>
+pypxlib                   1.9                       <pip>
+pyqt                      5.6.0           py27h6e61f57_6.conda
+pyreadline                2.1                py27_1.conda
+pyrsistent                0.15.4           py27h0c8e037_0  []
+pyshp                     1.2.10                    <pip>
+pysocks                   1.7.1                    py27_0  []
+pytables                  3.5.2           py27h6a9b274_1.conda
+pytest                    3.0.5                     <pip>
+pytest                    4.6.2              py27_0.conda
+python                    2.7.16          hcb6e200_0.conda
+python-dateutil           2.6.0                     <pip>
+python-dateutil           2.8.0              py27_0.conda
+python-editor             1.0.3                     <pip>
+python-libarchive-c       2.8               py27_13.conda
+pytz                      2016.10                   <pip>
+pytz                      2017.2                    <pip>
+pytz                      2019.3                     py_0  []
+PyUtilib                  5.4.1                     <pip>
+pywavelets                1.0.3           py27hc997a72_1.conda
+pywin32                   223             py27h0c8e037_1.conda
+pywin32                   222                       <pip>
+pywinpty                  0.5.5           py27_1000.conda
+pyyaml                    5.1.2           py27h0c8e037_0.conda
+PyYAML                    3.12                      <pip>
+pyzmq                     16.0.2                    <pip>
+qt                        5.6.2           vc9hc26998b_12.conda
+qtawesome                 0.6.0                      py_0  []
+QtAwesome                 0.4.3                     <pip>
+qtconsole                 4.2.1                     <pip>
+qtconsole                 4.5.5                      py_0  []
+QtPy                      1.2.1                     <pip>
+qtpy                      1.9.0                      py_0  []
+requests                  2.19.1                    <pip>
+requests                  2.22.0             py27_0.conda
+requests-file             1.4.1                     <pip>
+requests-ftp              0.3.1                     <pip>
+requests-oauthlib         1.0.0                      py_1  []  conda-forge/label/gcc7
+requests-oauthlib         0.8.0                     <pip>
+requests-toolbelt         0.8.0                      py_1  []  conda-forge/label/gcc7
+requests-toolbelt         0.8.0                     <pip>
+retrying                  1.3.3                      py_2  []  conda-forge
+rope                      0.9.4                     <pip>
+rope                      0.14.0                     py_0  []
+rsa                       3.4.2                     <pip>
+ruamel_yaml               0.15.46         py27h0c8e037_0.conda
+s3transfer                0.1.10                    <pip>
+scandir                   1.10.0          py27h0c8e037_0.conda
+scandir                   1.4                       <pip>
+scikit-image              0.14.2          py27hc56fc5f_0.conda
+scikit-image              0.12.3                    <pip>
+scikit-learn              0.20.3          py27hf381715_0.conda
+scikit-learn              0.18.1                    <pip>
+scipy                     1.2.1           py27h4c3ab11_0.conda
+scipy                     0.18.1                    <pip>
+seaborn                   0.9.0              py27_0.conda
+seaborn                   0.7.1                     <pip>
+send2trash                1.5.0              py27_0.conda
+setuptools                39.0.1                    <pip>
+setuptools                41.4.0                   py27_0  []
+simplegeneric             0.8.1              py27_2.conda
+simplegeneric             0.8.1                     <pip>
+singledispatch            3.4.0.3         py27h3f9d112_0.conda
+sip                       4.18.1          py27hc56fc5f_2.conda
+six                       1.11.0                    <pip>
+six                       1.12.0             py27_0.conda
+slacker                   0.9.42                    <pip>
+snappy                    1.1.7           he46498f_3.conda
+snowballstemmer           2.0.0                      py_0  []
+snowballstemmer           1.2.1                     <pip>
+sockjs-tornado            1.0.3                     <pip>
+sortedcollections         1.1.2              py27_0.conda
+sortedcontainers          2.1.0              py27_0.conda
+soupsieve                 1.9.3                    py27_0  []
+sphinx                    1.8.5              py27_0.conda
+Sphinx                    1.5.1                     <pip>
+sphinxcontrib             1.0                py27_1.conda
+sphinxcontrib-websupport  1.1.2                      py_0  []
+spyder                    3.1.2                     <pip>
+spyder                    3.3.6              py27_0.conda
+spyder-kernels            0.5.2                    py27_0  []
+SQLAlchemy                1.1.6                     <pip>
+sqlalchemy                1.3.9            py27h0c8e037_0  []
+SQLAlchemy                1.1.11                    <pip>
+sqlite                    3.30.0               h0c8e037_0  []
+ssl_match_hostname        3.7.0.1            py27_0.conda
+statsmodels               0.10.1          py27hc997a72_0.conda
+statsmodels               0.6.1                     <pip>
+subprocess32              3.2.7                     <pip>
+subprocess32              3.5.4           py27h0c8e037_0.conda
+suds                      0.4                       <pip>
+sympy                     1.4                py27_0.conda
+sympy                     1.0                       <pip>
+tables                    3.2.2                     <pip>
+tblib                     1.4.0                      py_0  []
+terminado                 0.8.2              py27_0.conda
+testpath                  0.4.2              py27_0.conda
+tk                        8.6.8           h0c8e037_0.conda
+toolz                     0.8.2                     <pip>
+toolz                     0.10.0                     py_0  []
+tornado                   4.4.2                     <pip>
+tornado                   5.1.1           py27h0c8e037_0.conda
+tqdm                      4.36.1               py_0.conda
+traceback2                1.4.0              py27_0.conda
+traitlets                 4.3.3                    py27_0  []
+traitlets                 4.3.1                     <pip>
+typing                    3.6.4                     <pip>
+typing                    3.7.4.1                  py27_0  []
+typing                    3.6.6                     <pip>
+unicodecsv                0.14.1          py27h0bf7bb0_0.conda
+unicodecsv                0.14.1                    <pip>
+unittest2                 1.1.0              py27_0.conda
+uritemplate               3.0.0                     <pip>
+urllib3                   1.24.2             py27_0.conda
+urllib3                   1.23                      <pip>
+vc                        9               h7299396_1.conda
+vega-datasets             0.5.0                     <pip>
+vs2008_runtime            9.00.30729.1    hfaea7d5_1.conda
+vs2015_runtime            14.16.27012     hf0eaf9b_0.conda
+wcwidth                   0.1.7           py27hb1a0d82_0.conda
+webcolors                 1.7                       <pip>
+webencodings              0.5.1              py27_1.conda
+Werkzeug                  0.12.1                    <pip>
+werkzeug                  0.16.0                     py_0  []
+wheel                     0.33.6                   py27_0  []
+wheel                     0.29.0                    <pip>
+widgetsnbextension        1.2.6                     <pip>
+widgetsnbextension        3.5.1              py27_0.conda
+win_inet_pton             1.1.0              py27_0.conda
+win_unicode_console       0.5             py27hc037021_0.conda
+wincertstore              0.2             py27hf04cefb_0.conda
+winpaths                  0.2                       <pip>
+winpty                    0.4.3                   4.conda
+wrapt                     1.11.2          py27h0c8e037_0.conda
+wrapt                     1.10.8                    <pip>
+WTForms                   2.1                       <pip>
+xlrd                      1.0.0                     <pip>
+xlsxwriter                1.2.1                      py_0  []
+XlsxWriter                0.9.6                     <pip>
+xlutils                   2.0.0                     <pip>
+xlwings                   0.10.2                    <pip>
+xlwings                   0.15.10                  py27_0  []
+xlwt                      1.3.0           py27h2271735_0.conda
+xlwt                      1.2.0                     <pip>
+xz                        5.2.4           h3cc03e0_4.conda
+yaml                      0.1.7           h3e6d941_2.conda
+zeromq                    4.3.1           h2880e7c_3.conda
+zict                      1.0.0                      py_0  []
+zipp                      0.6.0                      py_0  []
+zlib                      1.2.11          h3cc03e0_3.conda
+zstd                      1.3.7           h1b0e4d7_0.conda
